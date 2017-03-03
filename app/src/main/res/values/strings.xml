@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Material天气</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <!--风和天气Url和Key，采用Post的方式-->
+    <string name="weatherUrl">https://free-api.heweather.com/v5/</string>
+
+    <string-array name="weatherUrlAppend">
+        <item>forecast</item>
+        <item>now</item>
+        <item>hourly</item>
+        <item>suggestion</item>
+        <item>alarm</item>
+        <item>weather</item>
+        <item>scenic</item>
+        <item>historical</item>
+        <item>search</item>
+    </string-array>
+
+    <string name="weatherKey">115779cde0654623af70fdd34fa52ea1</string>
+
+    <string-array name="weatherUrlPostParams">
+        <item>city</item>
+        <item>key</item>
+    </string-array>
+
+</resources>
