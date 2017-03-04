@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import com.hy.materialweather.R;
 import com.hy.materialweather.basemvpcomponent.MVPActivity;
+import com.hy.materialweather.model.WeatherRequestPackage;
+import com.hy.materialweather.model.json.HeWeather5;
 import com.hy.materialweather.presenter.WeatherPresenter;
 import com.hy.materialweather.ui.baseui.WeatherUI;
 
@@ -81,7 +83,7 @@ public class MainActivity extends MVPActivity<WeatherUI, WeatherPresenter>
 
         initView();
 
-//        mPresenter.weatherReportOnInternet(new WeatherRequestPackage("广州"));
+        mPresenter.weatherReportOnInternet(new WeatherRequestPackage("广州"));
     }
 
     @Override
@@ -93,6 +95,18 @@ public class MainActivity extends MVPActivity<WeatherUI, WeatherPresenter>
     public void showMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
+
+    /**
+     * 把天气信息全部展现在卡片上
+     * @param heWeather5
+     */
+    @Override
+    public void CityOnCard(HeWeather5 heWeather5) {
+
+    }
+
+
+
 
     @Override
     public void onBackPressed() {

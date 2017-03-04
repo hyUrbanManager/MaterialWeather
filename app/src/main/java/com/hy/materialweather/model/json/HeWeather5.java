@@ -3,6 +3,12 @@ package com.hy.materialweather.model.json;
 import java.util.List;
 
 public class HeWeather5 {
+
+    /**
+     * 警报
+     */
+    public final List<Alarms> alarms;
+
     /**
      *
      */
@@ -38,8 +44,9 @@ public class HeWeather5 {
      */
     public final Suggestion suggestion;
 
-    public HeWeather5(Aqi aqi, Basic basic, List<DailyForecast> daily_forecast
-            , List<HourlyForecast> hourly_forecast, Now now, String status, Suggestion suggestion) {
+    public HeWeather5(List<Alarms> alarms, Aqi aqi, Basic basic, List<DailyForecast> daily_forecast,
+                      List<HourlyForecast> hourly_forecast, Now now, String status, Suggestion suggestion) {
+        this.alarms = alarms;
         this.aqi = aqi;
         this.basic = basic;
         this.daily_forecast = daily_forecast;
@@ -48,4 +55,5 @@ public class HeWeather5 {
         this.status = status;
         this.suggestion = suggestion;
     }
+
 }
