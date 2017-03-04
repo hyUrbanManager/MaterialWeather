@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cardview"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    android:layout_marginTop="8dp"
+    android:clickable="false"
+    android:focusable="false"
+    android:stateListAnimator="@animator/touch_raise"
+    android:foreground="?attr/selectableItemBackground">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/cond"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@mipmap/materialweather" />
+
+        <TextView
+            android:id="@+id/city"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/cond"
+            android:layout_margin="8dp"
+            android:layout_toRightOf="@+id/cond"
+            android:text="广州"
+            android:textColor="@color/normal_text_color"
+            android:textSize="@dimen/Material_large_title" />
+
+        <TextView
+            android:id="@+id/tmp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/cond"
+            android:layout_marginRight="@dimen/Material_large_title"
+            android:text="23"
+            android:textSize="@dimen/Material_super_large3" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/tmp"
+            android:text="°C"
+            android:textSize="@dimen/Material_app_bar" />
+
+        <TextView
+            android:id="@+id/desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tmp"
+            android:layout_below="@+id/tmp"
+            android:text="多云"
+            android:textSize="@dimen/Material_article_button" />
+
+        <TextView
+            android:id="@+id/pm2_5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/cond"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@+id/cond"
+            android:text="pm2.5 : 77 ug /cm3" />
+
+    </RelativeLayout>
+
+
+</android.support.v7.widget.CardView>

@@ -14,41 +14,11 @@
     tools:context="com.hy.materialweather.ui.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <!--城市基础信息-->
-    <android.support.v7.widget.CardView
-        app:contentPadding="8dp"
+    <!--城市列表-->
+    <ListView
+        android:id="@+id/listView1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <RelativeLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                style="@style/normal_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/materialweather"/>
-
-        </RelativeLayout>
-    </android.support.v7.widget.CardView>
-
-    <android.support.v7.widget.CardView
-        app:contentPadding="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-
-
-        </RelativeLayout>
-    </android.support.v7.widget.CardView>
+        android:layout_height="match_parent">
+    </ListView>
 
 </LinearLayout>

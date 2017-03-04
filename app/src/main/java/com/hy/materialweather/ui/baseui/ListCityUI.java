@@ -5,15 +5,10 @@ import com.hy.materialweather.model.json.HeWeather5;
 /**
  * Activity View要实现的接口
  */
-public interface WeatherUI {
-
-    //常量标志
-    int PASS_STRING = 1;
-
-    int CLOSE_TOAST = 2;
+public interface ListCityUI extends FinalMessageWhatInt {
 
     void showMessage(String message);
 
-    void CityOnCard(HeWeather5 heWeather5);
+    void addCity(HeWeather5 heWeather5);
 
 }

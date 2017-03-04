@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <array name="cond">
+        <item>@drawable/sun_weather</item>
+        <item>@drawable/sun_weather</item>
+        <item>@drawable/sun_weather</item>
+        <item>@drawable/sun_weather</item>
+        <item>@drawable/sun_weather</item>
+        <item>@drawable/sun_weather</item>
+        <item>@drawable/sun_weather</item>
+        <item>@drawable/sun_weather</item>
+        <item>@drawable/sun_weather</item>
+        <item>@drawable/sun_weather</item>
+    </array>
+
+
+
+</resources>

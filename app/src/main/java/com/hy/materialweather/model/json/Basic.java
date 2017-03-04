@@ -28,7 +28,7 @@ public class Basic {
     public final String lon;
 
     /** 城市所属省份（仅限国内城市）,测试到实际返回的数据没有这一项 */
-//    public String prov;
+    public final String prov;
 
     /**
      * 更新时间
@@ -65,19 +65,20 @@ public class Basic {
 
     /**
      * 构造器，没什么用，仅为了final不报错
-     *
-     * @param city
+     *  @param city
      * @param cnty
      * @param id
      * @param lon
+     * @param prov
      * @param update
      */
-    public Basic(String city, String cnty, String id, String lat, String lon, Update update) {
+    public Basic(String city, String cnty, String id, String lat, String lon, String prov, Update update) {
         this.city = city;
         this.cnty = cnty;
         this.id = id;
         this.lat = lat;
         this.lon = lon;
+        this.prov = prov;
         this.update = update;
     }
 }

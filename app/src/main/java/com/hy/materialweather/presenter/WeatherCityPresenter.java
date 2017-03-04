@@ -6,11 +6,12 @@ import android.util.Log;
 import com.hy.materialweather.Utils;
 import com.hy.materialweather.basemvpcomponent.BasePresenter;
 import com.hy.materialweather.basemvpcomponent.MVPActivity;
+import com.hy.materialweather.model.HeWeather5Map;
 import com.hy.materialweather.model.WeatherDataModelImpl;
 import com.hy.materialweather.model.WeatherRequestPackage;
 import com.hy.materialweather.model.basemodel.WeatherDataModel;
 import com.hy.materialweather.model.json.HeWeather5;
-import com.hy.materialweather.ui.baseui.WeatherUI;
+import com.hy.materialweather.ui.baseui.ListCityUI;
 
 import java.io.IOException;
 
@@ -19,10 +20,10 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 
-public class WeatherPresenter extends BasePresenter<WeatherUI> {
+public class WeatherCityPresenter extends BasePresenter<ListCityUI> {
 
     WeatherDataModel model;
-    WeatherUI viewInterface;
+    ListCityUI viewInterface;
 
     MVPActivity.MVPHandler handler;
 
@@ -33,7 +34,7 @@ public class WeatherPresenter extends BasePresenter<WeatherUI> {
      * @param viewInterface
      * @param handler
      */
-    public WeatherPresenter(Context context, WeatherUI viewInterface, MVPActivity.MVPHandler handler) {
+    public WeatherCityPresenter(Context context, ListCityUI viewInterface, MVPActivity.MVPHandler handler) {
         this.model = new WeatherDataModelImpl(context);
         this.viewInterface = viewInterface;
         this.handler = handler;
@@ -44,8 +45,8 @@ public class WeatherPresenter extends BasePresenter<WeatherUI> {
         model.weatherInternetService(requestPackage, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Utils.sendMessage(handler, WeatherUI.PASS_STRING, e.getMessage());
-                Utils.sendEmptyMessage(handler, WeatherUI.CLOSE_TOAST);
+                Utils.sendMessage(handler, ListCityUI.PASS_STRING, e.getMessage());
+                Utils.sendEmptyMessage(handler, ListCityUI.CLOSE_TOAST);
             }
 
             @Override
@@ -57,10 +58,13 @@ public class WeatherPresenter extends BasePresenter<WeatherUI> {
                     result = response.body().string();
                     heWeather5 = model.parseWeahterJson(result);
                 } catch (Exception e) {
-                    Utils.sendMessage(handler, WeatherUI.PASS_STRING, e.getMessage());
-                    Utils.sendEmptyMessage(handler, WeatherUI.CLOSE_TOAST);
+                    Utils.sendMessage(handler, ListCityUI.PASS_STRING, e.getMessage());
+                    Utils.sendEmptyMessage(handler, ListCityUI.CLOSE_TOAST);
                     return;
                 }
+
+                //把数据保存到全局Map
+                HeWeather5Map.HE_WEATHER_5_MAP.put(heWeather5.basic.city, heWeather5);
 
                 //把收到的数据保存在本地数据库
 
@@ -77,8 +81,10 @@ public class WeatherPresenter extends BasePresenter<WeatherUI> {
 
                 Log.d("-----------------",sb.toString());
 
-                Utils.sendMessage(handler, WeatherUI.PASS_STRING, sb);
-                Utils.sendEmptyMessage(handler, WeatherUI.CLOSE_TOAST);
+//                Utils.sendMessage(handler, ListCityUI.PASS_STRING, sb);
+                Utils.sendEmptyMessage(handler, ListCityUI.CLOSE_TOAST);
+
+                viewInterface.addCity(heWeather5);
             }
         });
     }

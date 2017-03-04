@@ -27,5 +27,7 @@
         <item>city</item>
         <item>key</item>
     </string-array>
+    <string name="title_activity_scrolling_info">城市</string>
+
 
 </resources>

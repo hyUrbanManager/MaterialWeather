@@ -1,8 +1,9 @@
 package com.hy.materialweather.model.json;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class HeWeather5 {
+public class HeWeather5 implements Serializable {
 
     /**
      * 警报

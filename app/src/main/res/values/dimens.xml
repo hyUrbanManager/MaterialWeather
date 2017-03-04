@@ -24,6 +24,9 @@
     <dimen name="Material_super_large3">56sp</dimen>
     <dimen name="Material_super_large4">112sp</dimen>
     <dimen name="text_margin">16dp</dimen>
+    <dimen name="app_bar_height">180dp</dimen>
 
+    <!--按下弹起的高度-->
+    <dimen name="touch_raise_size">30dp</dimen>
 
 </resources>

@@ -11,12 +11,16 @@ public class WeatherRequestPackage {
     //城市指定，可以用各种指定，现在先用String类型
     public String city;
 
-    public WeatherRequestPackage(String city) {
-        this(5, city);
+    //显示的位置
+    public int list_position;
+
+    public WeatherRequestPackage(String city, int list_position) {
+        this(5, city, list_position);
     }
 
-    public WeatherRequestPackage(int index, String city) {
+    public WeatherRequestPackage(int index, String city, int list_position) {
         this.index = index;
         this.city = city;
+        this.list_position = list_position;
     }
 }
