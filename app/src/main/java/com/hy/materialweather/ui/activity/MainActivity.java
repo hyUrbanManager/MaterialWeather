@@ -12,7 +12,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -51,7 +50,10 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
                         showMessage(msg.obj.toString());
                         break;
                     case CLOSE_TOAST:
-                        Toast.makeText(MainActivity.this, "更新完成", Toast.LENGTH_SHORT).show();
+                        if(mToast != null) {
+                            mToast.cancel();
+                            mToast = null;
+                        }
                         break;
                     case NOTIFY_CHANGED:
                         cityAdapter.notifyDataSetChanged();
@@ -69,6 +71,7 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
 
     /* View类引用 */
     protected ListView mListView;
+    Toast mToast;
 
     /* 数据引用 */
     List<Map<String, Object>> cityList = new ArrayList<>();
@@ -112,7 +115,7 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
         mListView.setDividerHeight(30);
         mListView.setAdapter(cityAdapter);
 
-
+        mToast = Toast.makeText(this,"更新数据中",Toast.LENGTH_LONG);
     }
 
     @Override
@@ -122,28 +125,17 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
         //初始化View
         initView();
 
-        //初始化数据
+        //初始化全局数据
         HeWeather5Map.initCondMap();
 
-        //读出储存的城市，异步读取数据
-//        mPresenter
-//        List<String> list = new ArrayList<>();
-//        list.add("广州");
-//        list.add("深圳");
-//        list.add("珠海");
-//        mPresenter.saveCitiesOnSQLite(list);
-        List<String> list1 = mPresenter.getCitiesOnSQLite();
-        Iterator<String> iterator = list1.iterator();
-        int i = 1;
+        //读出储存的城市，保存到全局集合中
+        HeWeather5Map.chosenCities = mPresenter.getCitiesOnSQLite();
+        Iterator<String> iterator = HeWeather5Map.chosenCities.iterator();
+        int i = 0;
         while(iterator.hasNext()) {
             mPresenter.weatherReportOnInternet(new WeatherRequestPackage(iterator.next(), i++));
 
         }
-
-//        mPresenter.weatherReportOnInternet(new WeatherRequestPackage("广州", 1));
-//        mPresenter.weatherReportOnInternet(new WeatherRequestPackage("长沙", 2));
-//        mPresenter.weatherReportOnInternet(new WeatherRequestPackage("湛江", 3));
-
 
         //设置listView监听
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -153,12 +145,10 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
                 Intent intent = new Intent(MainActivity.this, ScrollingInfoActivity.class);
                 intent.putExtra("city", cityName);
                 startActivity(intent);
-                Log.d("---------------", "*-*-*-**---------------");
             }
         });
 
-//        List<BasicCity> cities = GsonUtils.getObjectList(getString(R.string.cities_json), BasicCity.class);
-
+        mToast.show();
     }
 
     @Override

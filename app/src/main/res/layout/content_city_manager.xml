@@ -13,4 +13,9 @@
     tools:context="com.hy.materialweather.ui.activity.CityManagerActivity"
     tools:showIn="@layout/activity_city_manager">
 
+    <ListView
+        android:id="@+id/listView1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></ListView>
+
 </RelativeLayout>

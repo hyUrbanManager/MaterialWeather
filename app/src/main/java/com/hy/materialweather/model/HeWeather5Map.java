@@ -8,11 +8,10 @@ import com.hy.materialweather.model.json.BasicCity;
 import com.hy.materialweather.model.json.GsonUtils;
 import com.hy.materialweather.model.json.HeWeather5;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * 全局的数据列表
@@ -26,7 +25,7 @@ public class HeWeather5Map {
     public static List<BasicCity> basicCities2560 = null;
 
     //设置要求查看的城市
-    public static Set<String> citiesChosen = new HashSet<>();
+    public static List<String> chosenCities = new ArrayList<>();
 
     //天气状况代码
     public static SparseIntArray condMap = new SparseIntArray();

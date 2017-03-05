@@ -15,4 +15,7 @@ public class CityManagerModelImpl implements CityManagerModel {
     public CityManagerModelImpl(Context context) {
         this.context = context;
     }
+
+
+
 }

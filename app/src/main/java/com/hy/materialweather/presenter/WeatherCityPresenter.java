@@ -1,7 +1,6 @@
 package com.hy.materialweather.presenter;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.hy.materialweather.Utils;
 import com.hy.materialweather.basemvpcomponent.BasePresenter;
@@ -64,7 +63,7 @@ public class WeatherCityPresenter extends BasePresenter<ListCityUI> {
                     return;
                 }
 
-                //把数据保存到全局Map
+                //把数据保存到全局Map，当前获取到的实时信息
                 HeWeather5Map.heWeather5HashMap.put(heWeather5.basic.city, heWeather5);
 
                 //把收到的数据保存在本地数据库
@@ -79,8 +78,6 @@ public class WeatherCityPresenter extends BasePresenter<ListCityUI> {
                 sb.append(heWeather5.basic.city);
                 sb.append(heWeather5.daily_forecast.get(0).wind);
                 sb.append('\n' + heWeather5.suggestion.sport.txt);
-
-                Log.d("-----------------",sb.toString());
 
                 Utils.sendEmptyMessage(handler, ListCityUI.CLOSE_TOAST);
 
