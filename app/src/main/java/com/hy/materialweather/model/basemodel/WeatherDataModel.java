@@ -26,5 +26,10 @@ public interface WeatherDataModel {
     //把城市信息存入数据库
     boolean saveWeatherOnSQLite(List<CityInfo> cityInfo);
 
+    //读取记录，用户要查看哪些城市
+    List<String> getCitiesOnSQLite();
+
+    //存入记录，用户要查看哪些城市
+    void saveCitiesOnSQLite(List<String> list);
 
 }

@@ -1,4 +1,4 @@
-package com.hy.materialweather.ui;
+package com.hy.materialweather.ui.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,7 +22,6 @@ import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.hy.materialweather.R;
-import com.hy.materialweather.ScrollingInfoActivity;
 import com.hy.materialweather.basemvpcomponent.MVPActivity;
 import com.hy.materialweather.model.HeWeather5Map;
 import com.hy.materialweather.model.WeatherRequestPackage;
@@ -32,6 +31,7 @@ import com.hy.materialweather.ui.baseui.ListCityUI;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -80,6 +80,7 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
     @Override
     protected void initView() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("");
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -125,9 +126,24 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
         HeWeather5Map.initCondMap();
 
         //读出储存的城市，异步读取数据
-        mPresenter.weatherReportOnInternet(new WeatherRequestPackage("广州", 1));
-        mPresenter.weatherReportOnInternet(new WeatherRequestPackage("长沙", 2));
-        mPresenter.weatherReportOnInternet(new WeatherRequestPackage("湛江", 3));
+//        mPresenter
+//        List<String> list = new ArrayList<>();
+//        list.add("广州");
+//        list.add("深圳");
+//        list.add("珠海");
+//        mPresenter.saveCitiesOnSQLite(list);
+        List<String> list1 = mPresenter.getCitiesOnSQLite();
+        Iterator<String> iterator = list1.iterator();
+        int i = 1;
+        while(iterator.hasNext()) {
+            mPresenter.weatherReportOnInternet(new WeatherRequestPackage(iterator.next(), i++));
+
+        }
+
+//        mPresenter.weatherReportOnInternet(new WeatherRequestPackage("广州", 1));
+//        mPresenter.weatherReportOnInternet(new WeatherRequestPackage("长沙", 2));
+//        mPresenter.weatherReportOnInternet(new WeatherRequestPackage("湛江", 3));
+
 
         //设置listView监听
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -140,6 +156,9 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
                 Log.d("---------------", "*-*-*-**---------------");
             }
         });
+
+//        List<BasicCity> cities = GsonUtils.getObjectList(getString(R.string.cities_json), BasicCity.class);
+
     }
 
     @Override
@@ -194,7 +213,7 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.heart) {
             //初始化提示框
             AlertDialog mAlertDialog = new AlertDialog.Builder(this)
                     .setTitle(R.string.about_title)
@@ -226,7 +245,9 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
         int id = item.getItemId();
 
         if (id == R.id.nav_city_manager) {
-
+            //所选城市管理器
+            Intent intent = new Intent(MainActivity.this, CityManagerActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_material_show) {
 
         } else if (id == R.id.nav_raw_data_show) {

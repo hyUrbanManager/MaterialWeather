@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,7 @@ public class GsonUtils {
     }
 
     /**
-     * 新的方法,获取到数组
+     * 新的方法,获取到数组， list
      *
      * @param jsonString
      * @param cls
@@ -43,6 +44,22 @@ public class GsonUtils {
             Log.e(GsonUtils.class.getName(),e.getMessage());
         }
         return list;
+    }
+
+    /**
+     * 将Json数组解析成相应的映射对象列表，解析纯数组，2500个城市,linkTree
+     *
+     * @param jsonData
+     * @param type
+     * @param <T>
+     * @return
+     */
+    public static <T> List<T> parseJsonArrayWithGson(String jsonData,
+                                                     Class<T> type) {
+        Gson gson = new Gson();
+        List<T> result = gson.fromJson(jsonData, new TypeToken<List<T>>() {
+        }.getType());
+        return result;
     }
 
     /**

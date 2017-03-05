@@ -1,12 +1,18 @@
 package com.hy.materialweather.model;
 
+import android.content.Context;
 import android.util.SparseIntArray;
 
 import com.hy.materialweather.R;
+import com.hy.materialweather.model.json.BasicCity;
+import com.hy.materialweather.model.json.GsonUtils;
 import com.hy.materialweather.model.json.HeWeather5;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 全局的数据列表
@@ -14,11 +20,20 @@ import java.util.Map;
 public class HeWeather5Map {
 
     //当前网络已经获取过的对象集合
-    public static Map<String, HeWeather5> HE_WEATHER_5_MAP = new HashMap<>();
+    public static Map<String, HeWeather5> heWeather5HashMap = new HashMap<>();
+
+    //存在本地的节点,2560个城市，选择城市的时候再从String中读取 String大小，572K
+    public static List<BasicCity> basicCities2560 = null;
+
+    //设置要求查看的城市
+    public static Set<String> citiesChosen = new HashSet<>();
 
     //天气状况代码
     public static SparseIntArray condMap = new SparseIntArray();
 
+    /**
+     * 初始化天气代码和图片的对应表
+     */
     public static final void initCondMap() {
 
         //读取入所有的列表
@@ -76,6 +91,11 @@ public class HeWeather5Map {
 
     }
 
-    //所有城市集合
+    /**
+     * 2560城市List初始化，全局对象，占500k内存
+     */
+    public static final void init2560Cities(Context context) {
+        basicCities2560 = GsonUtils.getObjectList(context.getString(R.string.cities_json), BasicCity.class);
+    }
 
 }

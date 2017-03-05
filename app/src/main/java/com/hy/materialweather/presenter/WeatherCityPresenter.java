@@ -14,6 +14,7 @@ import com.hy.materialweather.model.json.HeWeather5;
 import com.hy.materialweather.ui.baseui.ListCityUI;
 
 import java.io.IOException;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -64,7 +65,7 @@ public class WeatherCityPresenter extends BasePresenter<ListCityUI> {
                 }
 
                 //把数据保存到全局Map
-                HeWeather5Map.HE_WEATHER_5_MAP.put(heWeather5.basic.city, heWeather5);
+                HeWeather5Map.heWeather5HashMap.put(heWeather5.basic.city, heWeather5);
 
                 //把收到的数据保存在本地数据库
 
@@ -88,9 +89,20 @@ public class WeatherCityPresenter extends BasePresenter<ListCityUI> {
         });
     }
 
-    public void weatherReportOnSQLite(WeatherRequestPackage requestPackage) {
-        //获取本地数据，先展示在UI上
+    /**
+     * 获取记录，用户要查看的城市
+     * @return
+     */
+    public List<String> getCitiesOnSQLite() {
+        return model.getCitiesOnSQLite();
+    }
 
+    /**
+     * 把list转换成json字符串传入
+     * @param list
+     */
+    public void saveCitiesOnSQLite(List<String> list) {
+        model.saveCitiesOnSQLite(list);
     }
 
 }

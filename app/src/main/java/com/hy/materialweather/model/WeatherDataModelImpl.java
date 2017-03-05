@@ -3,6 +3,7 @@ package com.hy.materialweather.model;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.util.Log;
 
 import com.hy.materialweather.R;
 import com.hy.materialweather.model.basemodel.WeatherDataModel;
@@ -39,9 +40,10 @@ public class WeatherDataModelImpl implements WeatherDataModel {
     final String[] params;
     final String rawUrl;
     final String weatherKey;
+    final String cities_manager;
 
     //SQLite对象
-    SharedPreferences preferences;
+    SharedPreferences mPreferences;
 
     /**
      * 传入Activity对象获取Context进而获取到字符串资源
@@ -54,9 +56,10 @@ public class WeatherDataModelImpl implements WeatherDataModel {
         params = resources.getStringArray(R.array.weatherUrlPostParams);
         rawUrl = resources.getString(R.string.weatherUrl);
         weatherKey = resources.getString(R.string.weatherKey);
+        cities_manager = resources.getString(R.string.cities_manager);
 
         //获取文件，文件名为App的名字
-        preferences = context.getSharedPreferences(resources.getString(R.string.app_name)
+        mPreferences = context.getSharedPreferences(resources.getString(R.string.app_name)
                 , Context.MODE_PRIVATE);
     }
 
@@ -75,7 +78,7 @@ public class WeatherDataModelImpl implements WeatherDataModel {
     @Override
     public List<CityInfo> getWeatherFromSQLite(String city) {
         //查找数据
-        String json = preferences.getString(city, "null");
+        String json = mPreferences.getString(city, "null");
         if(json.equals("null")) {
             return null;
         } else {
@@ -87,7 +90,7 @@ public class WeatherDataModelImpl implements WeatherDataModel {
     @Override
     public boolean saveWeatherOnSQLite(List<CityInfo> cityInfo) {
         //获取引用
-        SharedPreferences.Editor editor = preferences.edit();
+        SharedPreferences.Editor editor = mPreferences.edit();
 
         //存入Json字符串
         String info = GsonUtils.toJson(cityInfo);
@@ -98,6 +101,41 @@ public class WeatherDataModelImpl implements WeatherDataModel {
         editor.commit();
         return false;
     }
+
+    /**
+     * 获取记录，用户要查看的城市
+     * @return
+     */
+    @Override
+    public List<String> getCitiesOnSQLite() {
+        //把json字符串读出来
+        List<String> list;
+        String json = mPreferences.getString(cities_manager, null);
+        Log.d("-----------","--------  " + json);
+        if(json != null) {
+            list = GsonUtils.parseJsonArrayWithGson(json, String.class);
+            return list;
+        }
+        return null;
+    }
+
+    /**
+     * 把list转换成json字符串传入
+     * @param list
+     */
+    @Override
+    public void saveCitiesOnSQLite(List<String> list) {
+        //获取引用
+        SharedPreferences.Editor editor = mPreferences.edit();
+        //存入Json字符串
+        String info = GsonUtils.toJson(list);
+        mPreferences.edit();
+        editor.putString(cities_manager, info);
+
+        //提交
+        editor.commit();
+    }
+
 
     /**
      * Callback为空的时候，访问网络数据

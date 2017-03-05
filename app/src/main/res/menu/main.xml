@@ -2,7 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_settings"
-        android:icon="@drawable/ic_menu_about"
-        android:title="" />
+        android:id="@+id/heart"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_menu_heart"
+        android:title="捐赠"
+        app:showAsAction="always"/>
 </menu>

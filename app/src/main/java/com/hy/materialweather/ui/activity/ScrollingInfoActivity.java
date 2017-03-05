@@ -1,4 +1,4 @@
-package com.hy.materialweather;
+package com.hy.materialweather.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,8 +7,10 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hy.materialweather.R;
 import com.hy.materialweather.basemvpcomponent.MVPActivity;
 import com.hy.materialweather.model.HeWeather5Map;
 import com.hy.materialweather.model.json.HeWeather5;
@@ -37,11 +39,22 @@ public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInf
         return new WeatherInfoPresenter(this, mHandler);
     }
 
+    /* View 引用*/
     private Toolbar toolbar;
+    private TextView title;
 
     @Override
     protected void initView() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
+        title = (TextView) findViewById(R.id.title);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -66,9 +79,10 @@ public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInf
         Toast.makeText(this, cityName, Toast.LENGTH_LONG).show();
 
         //查全局Map获得对象
-        HeWeather5 heWeather5 = HeWeather5Map.HE_WEATHER_5_MAP.get(cityName);
+        HeWeather5 heWeather5 = HeWeather5Map.heWeather5HashMap.get(cityName);
         infoOnCard(heWeather5);
 
+//        title.setText((heWeather5.basic.prov == null ? "" : heWeather5.basic.prov) + heWeather5.basic.city);
     }
 
     //TODO 这一块有bug
