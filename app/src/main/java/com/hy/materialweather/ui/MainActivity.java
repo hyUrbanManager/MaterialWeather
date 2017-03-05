@@ -1,5 +1,6 @@
 package com.hy.materialweather.ui;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
@@ -9,6 +10,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -22,6 +24,7 @@ import android.widget.Toast;
 import com.hy.materialweather.R;
 import com.hy.materialweather.ScrollingInfoActivity;
 import com.hy.materialweather.basemvpcomponent.MVPActivity;
+import com.hy.materialweather.model.HeWeather5Map;
 import com.hy.materialweather.model.WeatherRequestPackage;
 import com.hy.materialweather.model.json.HeWeather5;
 import com.hy.materialweather.presenter.WeatherCityPresenter;
@@ -31,8 +34,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static com.hy.materialweather.model.HeWeather5Map.condIds;
 
 public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
         implements NavigationView.OnNavigationItemSelectedListener, ListCityUI {
@@ -104,11 +105,13 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
         cityAdapter = new SimpleAdapter(this,
                 cityList,
                 R.layout.citys_cardview,
-                new String[]{"city", "tmp", "desc", "pm2_5","cond"},
-                new int[]{R.id.city, R.id.tmp, R.id.desc, R.id.pm2_5,R.id.cond});
+                new String[]{"city", "tmp", "desc", "pm2_5", "cond"},
+                new int[]{R.id.city, R.id.tmp, R.id.desc, R.id.pm2_5, R.id.cond});
         mListView.setDivider(null);
         mListView.setDividerHeight(30);
         mListView.setAdapter(cityAdapter);
+
+
     }
 
     @Override
@@ -119,6 +122,7 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
         initView();
 
         //初始化数据
+        HeWeather5Map.initCondMap();
 
         //读出储存的城市，异步读取数据
         mPresenter.weatherReportOnInternet(new WeatherRequestPackage("广州", 1));
@@ -133,7 +137,7 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
                 Intent intent = new Intent(MainActivity.this, ScrollingInfoActivity.class);
                 intent.putExtra("city", cityName);
                 startActivity(intent);
-                Log.d("---------------","*-*-*-**---------------");
+                Log.d("---------------", "*-*-*-**---------------");
             }
         });
     }
@@ -160,8 +164,7 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
         map.put("tmp", heWeather5.now.tmp);
         map.put("desc", heWeather5.now.cond.txt);
         map.put("pm2_5", "pm2.5: " + heWeather5.aqi.city.pm25 + " ug/cm3");
-//        map.put("cond", condIds[Integer.parseInt(heWeather5.now.cond.code) - 100]);
-        Log.d("----------",heWeather5.basic.city + (Integer.parseInt(heWeather5.now.cond.code) - 100));
+        map.put("cond", HeWeather5Map.condMap.get(Integer.parseInt(heWeather5.now.cond.code)));
         cityList.add(map);
         mHandler.sendEmptyMessage(NOTIFY_CHANGED);
     }
@@ -192,6 +195,24 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            //初始化提示框
+            AlertDialog mAlertDialog = new AlertDialog.Builder(this)
+                    .setTitle(R.string.about_title)
+                    .setMessage(R.string.about_message)
+                    .setPositiveButton(R.string.about_positive_button, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    })
+                    .setNegativeButton(R.string.about_negative_button, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    })
+                    .create();
+            mAlertDialog.show();
             return true;
         }
 
@@ -204,17 +225,15 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_city_manager) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_material_show) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_raw_data_show) {
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_setting) {
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_about) {
 
         }
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/cardview"
+    android:id="@+id/cardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="8dp"
@@ -16,9 +16,10 @@
 
         <ImageView
             android:id="@+id/cond"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@mipmap/materialweather" />
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/w100" />
 
         <TextView
             android:id="@+id/city"
@@ -62,9 +63,10 @@
             android:id="@+id/pm2_5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/cond"
+            android:layout_alignBottom="@+id/desc"
             android:layout_marginLeft="8dp"
             android:layout_toRightOf="@+id/cond"
+            android:layout_toLeftOf="@+id/desc"
             android:text="pm2.5 : 77 ug /cm3" />
 
     </RelativeLayout>

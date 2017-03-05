@@ -71,6 +71,7 @@ public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInf
 
     }
 
+    //TODO 这一块有bug
     @Override
     public void infoOnCard(HeWeather5 heWeather5) {
 
@@ -79,18 +80,7 @@ public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInf
         setSupportActionBar(toolbar);
 
 
-
     }
 
-//    void fun(char* s, int[] t) {
-//        int i = 0;
-//        for(;*s != '\0';*s++) {
-//            if(*s % 2 == 0) {
-//                t[i] = *s;
-//                i++;
-//            }
-//        }
-//        t[i] = "\0";
-//    }
 
 }

@@ -81,7 +81,6 @@ public class WeatherCityPresenter extends BasePresenter<ListCityUI> {
 
                 Log.d("-----------------",sb.toString());
 
-//                Utils.sendMessage(handler, ListCityUI.PASS_STRING, sb);
                 Utils.sendEmptyMessage(handler, ListCityUI.CLOSE_TOAST);
 
                 viewInterface.addCity(heWeather5);
