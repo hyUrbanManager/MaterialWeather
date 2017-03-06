@@ -1,18 +1,19 @@
 package com.hy.materialweather.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import com.hy.materialweather.R;
 import com.hy.materialweather.basemvpcomponent.MVPActivity;
 import com.hy.materialweather.model.HeWeather5Map;
-import com.hy.materialweather.model.json.BasicCity;
 import com.hy.materialweather.presenter.CityManagerPresenter;
 import com.hy.materialweather.ui.baseui.CityManagerUI;
 
@@ -47,6 +48,7 @@ public class CityManagerActivity extends MVPActivity<CityManagerUI, CityManagerP
 
     /* view引用 */
     protected ListView mListView;
+    protected TextView title;
 
     /* 数据引用 */
     SimpleAdapter simpleAdapter;
@@ -55,14 +57,17 @@ public class CityManagerActivity extends MVPActivity<CityManagerUI, CityManagerP
     @Override
     protected void initView() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("");
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
+        title = (TextView) findViewById(R.id.title);
+        title.setText("城市管理");
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        //返回监听，在setSupportActionBar之后
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onClick(View v) {
+                CityManagerActivity.this.finish();
             }
         });
 
@@ -77,29 +82,36 @@ public class CityManagerActivity extends MVPActivity<CityManagerUI, CityManagerP
         initView();
 
         mapList = new ArrayList<>();
-//        Iterator<String> iterator = HeWeather5Map.chosenCities.iterator();
-
-        if (HeWeather5Map.basicCities2560 == null) {
-            HeWeather5Map.init2560Cities(this);
-        }
-        Iterator<BasicCity> iterator = HeWeather5Map.basicCities2560.iterator();
+        Iterator<String> iterator = HeWeather5Map.chosenCities.iterator();
 
         while (iterator.hasNext()) {
             Map<String, Object> map = new HashMap<>();
             map.put("icon", R.drawable.ic_city);
-            BasicCity basicCity = iterator.next();
-            map.put("text", basicCity.provinceZh + " " + basicCity.cityZh);
-//            map.put("text", iterator.next());
+            map.put("text", iterator.next());
             mapList.add(map);
         }
 
         simpleAdapter = new SimpleAdapter(this,
                 mapList,
-                android.R.layout.activity_list_item,
+                R.layout.material_simple_list_item,
                 new String[]{"icon", "text"},
-                new int[]{android.R.id.icon, android.R.id.text1});
+                new int[]{R.id.image, R.id.text});
         mListView.setAdapter(simpleAdapter);
 
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_city_manager, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.operate) {
+            Intent intent = new Intent(CityManagerActivity.this, ListCityActivity.class);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

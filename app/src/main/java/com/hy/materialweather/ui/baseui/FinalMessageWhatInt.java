@@ -8,8 +8,11 @@ public interface FinalMessageWhatInt {
     //Message标志
     int PASS_STRING = 1;
 
-    int CLOSE_TOAST = 2;
+    int SHOW_TOAST = 2;
 
-    int NOTIFY_CHANGED = 3;
+    int CLOSE_TOAST = 3;
+
+    int NOTIFY_CHANGED = 4;
+
 
 }
