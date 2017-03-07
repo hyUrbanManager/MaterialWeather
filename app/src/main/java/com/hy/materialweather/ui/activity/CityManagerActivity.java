@@ -109,7 +109,7 @@ public class CityManagerActivity extends MVPActivity<CityManagerUI, CityManagerP
             map.put("text", cityName);
             HeWeather5 heWeather5 = HeWeather5Map.heWeather5HashMap.get(cityName);
             Tmp tmp =  heWeather5 == null ? null : heWeather5.daily_forecast.get(0).tmp;
-            map.put("tmp", tmp == null ? "N/A" : tmp.min + " ~ " + tmp.max);
+            map.put("tmp", tmp == null ? "N/A" : tmp.min + "°C ~ " + tmp.max + "°C");
             mapList.add(map);
         }
         simpleAdapter.notifyDataSetChanged();

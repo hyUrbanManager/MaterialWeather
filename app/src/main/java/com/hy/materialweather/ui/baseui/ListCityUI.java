@@ -12,4 +12,7 @@ public interface ListCityUI extends FinalMessageWhatInt {
     //显示列表在index位置加入城市
     void addCity(HeWeather5 heWeather5, int list_position);
 
+    //接收到了所有的城市信息
+    void onReceiveAll();
+
 }

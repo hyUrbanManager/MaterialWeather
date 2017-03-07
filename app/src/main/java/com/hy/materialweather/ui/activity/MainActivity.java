@@ -73,6 +73,11 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
 
                         cityList.set(p.list_position, map);
                         cityAdapter.notifyDataSetChanged();
+
+                        receiveCnt++;
+                        if(receiveCnt >= HeWeather5Map.chosenCities.size() && receiveCnt != 0) {
+                            onReceiveAll();
+                        }
                         break;
                     case CLEAR_ADAPTER:
                         cityList.clear();
@@ -99,6 +104,8 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
     /* 数据引用 */
     List<Map<String, Object>> cityList = new ArrayList<>();
     SimpleAdapter cityAdapter;
+
+    int receiveCnt = 0;
 
     /**
      * View相关的初始化都在这里
@@ -169,6 +176,8 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
     protected void onStart() {
         super.onStart();
         Log.d(TAG, "onStart方法调用，查看数据");
+        //读到的数据个数，用于调用完成方法
+        receiveCnt = 0;
 
         //读出储存的城市，保存到全局集合中。如果有数据，则为再次启动，更新listView数据
         if (HeWeather5Map.chosenCities.size() == 0) {
@@ -202,6 +211,7 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
                 if(HeWeather5Map.heWeather5HashMap.containsKey(cityName)) {
                     Log.d(TAG, "获取 " + cityName + " 城市内存中的天气数据");
                     addCity(HeWeather5Map.heWeather5HashMap.get(cityName), i++);
+                    receiveCnt++;
                 } else {
                     Log.d(TAG, "申请 " + cityName + " 城市的天气数据");
                     mPresenter.weatherReportOnInternet(new WeatherRequestPackage(cityName, i++));
@@ -247,6 +257,13 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
     @Override
     public void addCity(HeWeather5 heWeather5, int list_position) {
         Utils.sendMessage(mHandler, NOTIFY_CHANGED, new Package(heWeather5, list_position));
+    }
+
+    @Override
+    public void onReceiveAll() {
+        if(mToast != null) {
+            mToast.cancel();
+        }
     }
 
     private class Package {
