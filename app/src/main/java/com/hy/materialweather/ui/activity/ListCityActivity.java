@@ -1,17 +1,24 @@
 package com.hy.materialweather.ui.activity;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Message;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Filter;
-import android.widget.ListView;
+import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hy.materialweather.R;
+import com.hy.materialweather.Utils;
 import com.hy.materialweather.basemvpcomponent.MVPActivity;
 import com.hy.materialweather.model.HeWeather5Map;
 import com.hy.materialweather.model.json.BasicCity;
@@ -22,9 +29,13 @@ import com.hy.materialweather.ui.baseui.CityManagerUI;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
+import java.util.Set;
+
+import static com.hy.materialweather.model.HeWeather5Map.basicCities2560;
 
 public class ListCityActivity extends MVPActivity<CityManagerUI, CityManagerPresenter>
-        implements CityManagerUI, SearchView.OnQueryTextListener{
+        implements CityManagerUI, SearchView.OnQueryTextListener, AdapterView.OnItemClickListener{
 
     private MVPHandler mHandler;
 
@@ -42,10 +53,12 @@ public class ListCityActivity extends MVPActivity<CityManagerUI, CityManagerPres
                         break;
                     case NOTIFY_CHANGED:
                         //添加ListView数据
-                        Iterator<BasicCity> iterator = HeWeather5Map.basicCities2560.iterator();
+                        Set<String> set = HeWeather5Map.basicCities2560.keySet();
+                        Iterator<String> iterator = set.iterator();
 
                         while (iterator.hasNext()) {
-                            BasicCity basicCity = iterator.next();
+                            String key = iterator.next();
+                            BasicCity basicCity = HeWeather5Map.basicCities2560.get(key);
                             stringList.add(basicCity.cityZh);
                         }
 
@@ -63,10 +76,9 @@ public class ListCityActivity extends MVPActivity<CityManagerUI, CityManagerPres
     }
 
     /* view引用 */
-    protected ListView mListView;
+    protected GridView mGridView;
     protected Toast mToast;
     protected SearchView mSearchView;
-    protected SearchView.SearchAutoComplete mEditView;
 
     /* 数据引用 */
     CitiesAdapter citiesAdapter;
@@ -87,11 +99,11 @@ public class ListCityActivity extends MVPActivity<CityManagerUI, CityManagerPres
             }
         });
 
-        mListView = (ListView) findViewById(R.id.listView1);
-        mListView.setTextFilterEnabled(true);
+        mGridView = (GridView) findViewById(R.id.gridView1);
+        mGridView.setTextFilterEnabled(true);
+        mGridView.setOnItemClickListener(this);
 
         mSearchView = (SearchView) findViewById(R.id.searchView1);
-        mSearchView.setIconifiedByDefault(false);
         mSearchView.setOnQueryTextListener(this);
 
         mToast = Toast.makeText(this, "正在加载全国城市，请稍候...", Toast.LENGTH_LONG);
@@ -108,12 +120,12 @@ public class ListCityActivity extends MVPActivity<CityManagerUI, CityManagerPres
         stringList = new ArrayList<>();
         citiesAdapter = new CitiesAdapter(this, stringList);
 
-        mListView.setAdapter(citiesAdapter);
+        mGridView.setAdapter(citiesAdapter);
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if (HeWeather5Map.basicCities2560 == null) {
+                if (basicCities2560 == null) {
                     mHandler.sendEmptyMessage(SHOW_TOAST);
                     //解析超长字符串，耗时操作
                     HeWeather5Map.init2560Cities(ListCityActivity.this);
@@ -130,6 +142,12 @@ public class ListCityActivity extends MVPActivity<CityManagerUI, CityManagerPres
 
     }
 
+    /**
+     * 搜索框响应搜索，列表对应发生变化
+     *
+     * @param query
+     * @return
+     */
     @Override
     public boolean onQueryTextSubmit(String query) {
         return false;
@@ -138,12 +156,68 @@ public class ListCityActivity extends MVPActivity<CityManagerUI, CityManagerPres
     @Override
     public boolean onQueryTextChange(String newText) {
         Log.d(ListCityActivity.class.getName(), "监听函数执行了");
-
+        mGridView.setFilterText(newText);
         //交给过滤器去过滤
         Filter filter;
         filter = citiesAdapter.getFilter();
         filter.filter(newText);
 
         return true;
+    }
+
+    /**
+     * 城市点击事件，弹出一个Material AlertDialog，显示城市的详细信息
+     *
+     * @param parent
+     * @param view
+     * @param position
+     * @param id
+     */
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        mGridView.clearTextFilter();
+
+        String key = citiesAdapter.getItem(position);
+        final BasicCity basicCity = HeWeather5Map.basicCities2560.get(key);
+
+        final View showView = LayoutInflater.from(this).inflate(R.layout.alert_dialog_basic_city_info, null);
+        ImageView imag = (ImageView) showView.findViewById(R.id.image);
+        TextView nameZH = (TextView) showView.findViewById(R.id.cityNameZN);
+        TextView nameEH = (TextView) showView.findViewById(R.id.cityNameEN);
+        TextView lat = (TextView) showView.findViewById(R.id.lat);
+        TextView lon = (TextView) showView.findViewById(R.id.lon);
+
+        nameZH.setText(basicCity.countryZh + " - " + basicCity.provinceZh + " - " + basicCity.cityZh);
+        nameEH.setText(basicCity.countryEn + " - " + basicCity.provinceEn + " - " + basicCity.cityEn);
+        lat.setText("维度lat: " + basicCity.lat);
+        lon.setText("经度lon: " + basicCity.lon);
+
+        int[] src = new int[]{R.drawable.background1, R.drawable.background2, R.drawable.background3,
+                R.drawable.background4};
+        Random random = new Random(System.currentTimeMillis());
+        imag.setImageResource(src[random.nextInt(4)]);
+
+        new AlertDialog.Builder(this)
+                .setView(showView)
+                .setPositiveButton("添加", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //是否包含该城市
+                        if(HeWeather5Map.chosenCities.contains(basicCity.cityZh)) {
+                            showMessage("该城市已被加入，请选择其他城市");
+                        } else {
+                            HeWeather5Map.chosenCities.add(basicCity.cityZh);
+                            showMessage("添加成功");
+                            //存入数据库
+                            mPresenter.saveCitiesOnSQLite(HeWeather5Map.chosenCities);
+                        }
+                    }
+                })
+                .create().show();
+    }
+
+    @Override
+    public void showMessage(String message) {
+        Utils.SnackBarTip(getWindow().getDecorView(), message);
     }
 }

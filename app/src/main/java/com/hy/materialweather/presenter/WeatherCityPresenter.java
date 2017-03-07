@@ -40,7 +40,7 @@ public class WeatherCityPresenter extends BasePresenter<ListCityUI> {
         this.handler = handler;
     }
 
-    public void weatherReportOnInternet(WeatherRequestPackage requestPackage) {
+    public void weatherReportOnInternet(final WeatherRequestPackage requestPackage) {
         //网络获取数据，Callback中对UI更新
         model.weatherInternetService(requestPackage, new Callback() {
             @Override
@@ -81,7 +81,7 @@ public class WeatherCityPresenter extends BasePresenter<ListCityUI> {
 
                 Utils.sendEmptyMessage(handler, ListCityUI.CLOSE_TOAST);
 
-                viewInterface.addCity(heWeather5);
+                viewInterface.addCity(heWeather5, requestPackage.list_position);
             }
         });
     }

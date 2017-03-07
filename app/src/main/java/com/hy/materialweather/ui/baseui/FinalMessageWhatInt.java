@@ -14,5 +14,9 @@ public interface FinalMessageWhatInt {
 
     int NOTIFY_CHANGED = 4;
 
+    int CLEAR_ADAPTER = 5;
+
+    int SORT_LIST = 6;
+
 
 }

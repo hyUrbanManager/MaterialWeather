@@ -15,6 +15,7 @@ import java.util.List;
  * 封装的GSON解析工具，提供泛型参数
  */
 public class GsonUtils {
+    public static final String TAG = GsonUtils.class.getName() + "类下";
 
     // 将Json数据解析成相应的映射对象
     public static <T> T parseJsonWithGson(String jsonData, Class<T> type) {
@@ -41,7 +42,7 @@ public class GsonUtils {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e(GsonUtils.class.getName(),e.getMessage());
+            Log.e(TAG,e.getMessage());
         }
         return list;
     }

@@ -2,6 +2,8 @@ package com.hy.materialweather;
 
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.Snackbar;
+import android.view.View;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -18,6 +20,7 @@ public class Utils implements Closeable {
 
     /**
      * 发送消息，两个方法
+     *
      * @param handler
      * @param what
      * @return
@@ -38,4 +41,17 @@ public class Utils implements Closeable {
         }
     }
 
+    /**
+     * 显示给用户的提示消息
+     *
+     * @param message
+     */
+    @Deprecated
+    public static final void SnackBarTip(String message) {
+        SnackBarTip(null, message);
+    }
+
+    public static final void SnackBarTip(View root, String message) {
+        Snackbar.make(root, message, Snackbar.LENGTH_LONG).show();
+    }
 }

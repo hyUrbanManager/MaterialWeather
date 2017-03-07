@@ -10,6 +10,7 @@ import com.hy.materialweather.model.json.HeWeather5;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +23,7 @@ public class HeWeather5Map {
     public static Map<String, HeWeather5> heWeather5HashMap = new HashMap<>();
 
     //存在本地的节点,2560个城市，选择城市的时候再从String中读取 String大小，572K
-    public static List<BasicCity> basicCities2560 = null;
+    public static Map<String, BasicCity> basicCities2560 = null;
 
     //设置要求查看的城市
     public static List<String> chosenCities = new ArrayList<>();
@@ -94,7 +95,16 @@ public class HeWeather5Map {
      * 2560城市List初始化，全局对象，占500k内存
      */
     public static final void init2560Cities(Context context) {
-        basicCities2560 = GsonUtils.getObjectList(context.getString(R.string.cities_json), BasicCity.class);
+        basicCities2560 = new HashMap<>();
+
+        List<BasicCity> mList = GsonUtils.getObjectList(context.getString(R.string.cities_json), BasicCity.class);
+
+        Iterator<BasicCity> iterator = mList.iterator();
+        while (iterator.hasNext()) {
+            BasicCity basicCity = iterator.next();
+            String key = basicCity.cityZh;
+            basicCities2560.put(key, basicCity);
+        }
     }
 
 }

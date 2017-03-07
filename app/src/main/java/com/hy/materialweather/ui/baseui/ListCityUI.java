@@ -9,6 +9,7 @@ public interface ListCityUI extends FinalMessageWhatInt {
 
     void showMessage(String message);
 
-    void addCity(HeWeather5 heWeather5);
+    //显示列表在index位置加入城市
+    void addCity(HeWeather5 heWeather5, int list_position);
 
 }

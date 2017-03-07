@@ -11,6 +11,7 @@ import com.hy.materialweather.model.json.CityInfo;
 import com.hy.materialweather.model.json.GsonUtils;
 import com.hy.materialweather.model.json.HeWeather5;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -27,6 +28,7 @@ import static com.hy.materialweather.model.json.GsonUtils.getObjectList;
  *
  */
 public class WeatherDataModelImpl implements WeatherDataModel {
+    public final String TAG = WeatherDataModelImpl.class.getName() + "类下";
 
     //OkHttp连接类
     public static final OkHttpClient client = new OkHttpClient.Builder()
@@ -80,7 +82,7 @@ public class WeatherDataModelImpl implements WeatherDataModel {
         //查找数据
         String json = mPreferences.getString(city, "null");
         if(json.equals("null")) {
-            return null;
+            return new ArrayList<>();
         } else {
             //解析Json
             return getObjectList(json, CityInfo.class);
@@ -111,7 +113,7 @@ public class WeatherDataModelImpl implements WeatherDataModel {
         //把json字符串读出来
         List<String> list;
         String json = mPreferences.getString(cities_manager, null);
-        Log.d("-----------","--------  " + json);
+        Log.d(TAG,"解析城市列表，List<String>类型，解析到的Json数据是： " + json);
         if(json != null) {
             list = GsonUtils.parseJsonArrayWithGson(json, String.class);
             return list;

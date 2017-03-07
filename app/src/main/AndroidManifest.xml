@@ -31,7 +31,12 @@
         <activity
             android:name=".ui.activity.ListCityActivity"
             android:label="@string/title_activity_list_city"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="addcities"></action>
+            </intent-filter>
+
+        </activity>
     </application>
 
 </manifest>

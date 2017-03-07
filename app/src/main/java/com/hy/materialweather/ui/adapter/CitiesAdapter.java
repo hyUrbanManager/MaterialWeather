@@ -11,6 +11,8 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
+import com.hy.materialweather.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +20,7 @@ import java.util.List;
  * 城市适配器
  */
 public class CitiesAdapter extends BaseAdapter implements Filterable {
+    public final String TAG = CitiesAdapter.class.getName() + "类下";
 
     List<String> rawCities;
     List<String> showCities;
@@ -57,7 +60,7 @@ public class CitiesAdapter extends BaseAdapter implements Filterable {
         final TextView city;
 
         public ViewHolder(View root) {
-            this.city = (TextView) root.findViewById(android.R.id.text1);
+            this.city = (TextView) root.findViewById(R.id.text1);
         }
     }
 
@@ -65,13 +68,13 @@ public class CitiesAdapter extends BaseAdapter implements Filterable {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
-            convertView = inflater.inflate(android.R.layout.activity_list_item, null);
+            convertView = inflater.inflate(R.layout.material_grid_city_item, null);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.city.setText(rawCities.get(position));
+        holder.city.setText(showCities.get(position));
 
         return convertView;
     }
@@ -128,11 +131,11 @@ public class CitiesAdapter extends BaseAdapter implements Filterable {
             if (filterResults.count > 0) {
                 //通知数据发生了改变
                 notifyDataSetChanged();
-                Log.d(CitiesAdapter.class.getName(), "结果：notifyDataSetChanged提示更改");
+                Log.d(TAG, "结果：notifyDataSetChanged提示更改");
             } else {
                 //通知数据失效
                 notifyDataSetInvalidated();
-                Log.d(CitiesAdapter.class.getName(), "结果:notifyDataSetInvalidated查询到的数据小鱼0，失败");
+                Log.d(TAG, "结果:notifyDataSetInvalidated查询到的数据小于0，失败");
             }
         }
     }

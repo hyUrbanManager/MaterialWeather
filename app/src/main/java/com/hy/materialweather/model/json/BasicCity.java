@@ -16,7 +16,7 @@ public class BasicCity {
     //China
     public final String countryEn;
     //中国
-    public final String countryZn;
+    public final String countryZh;
     //beijing
     public final String provinceEn;
     //北京
@@ -25,9 +25,9 @@ public class BasicCity {
     public final String leaderEn;
     //北京
     public final String leaderZh;
-    //39.904
+    //39.904 维度
     public final String lat;
-    //116.391
+    //116.391 经度
     public final String lon;
 
     public BasicCity(String id, String cityEn, String cityZh, String countryCode, String countryEn,
@@ -38,7 +38,7 @@ public class BasicCity {
         this.cityZh = cityZh;
         this.countryCode = countryCode;
         this.countryEn = countryEn;
-        this.countryZn = countryZn;
+        this.countryZh = countryZn;
         this.provinceEn = provinceEn;
         this.provinceZh = provinceZh;
         this.leaderEn = leaderEn;

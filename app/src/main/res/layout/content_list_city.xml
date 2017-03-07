@@ -9,9 +9,16 @@
     tools:context="com.hy.materialweather.ui.activity.ListCityActivity"
     tools:showIn="@layout/activity_list_city">
 
-    <ListView
-        android:id="@+id/listView1"
+    <!--<ListView-->
+        <!--android:id="@+id/listView1"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"></ListView>-->
+
+    <GridView
+        android:id="@+id/gridView1"
+        android:numColumns="4"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></ListView>
+        android:layout_height="match_parent"></GridView>
+
 
 </RelativeLayout>
