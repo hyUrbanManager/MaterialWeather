@@ -9,7 +9,10 @@ import com.hy.materialweather.model.HeWeather5Map;
 import com.hy.materialweather.model.WeatherDataModelImpl;
 import com.hy.materialweather.model.WeatherRequestPackage;
 import com.hy.materialweather.model.basemodel.WeatherDataModel;
+import com.hy.materialweather.model.json.Basic;
+import com.hy.materialweather.model.json.CondOne;
 import com.hy.materialweather.model.json.HeWeather5;
+import com.hy.materialweather.model.json.Now;
 import com.hy.materialweather.ui.baseui.ListCityUI;
 
 import java.io.IOException;
@@ -42,6 +45,7 @@ public class WeatherCityPresenter extends BasePresenter<ListCityUI> {
 
     /**
      * 从网络中获取数据
+     *
      * @param requestPackage
      */
     public void weatherReportOnInternet(final WeatherRequestPackage requestPackage) {
@@ -68,9 +72,15 @@ public class WeatherCityPresenter extends BasePresenter<ListCityUI> {
                 }
 
                 //Key不正确
-                if(heWeather5.status.equals("invalid key")) {
-
+                if (heWeather5.status.equals("invalid key")) {
+                    //和MainActivity的Handle耦合，相应比一些不设置为Null
+                    HeWeather5 h = new HeWeather5(null, null,
+                            new Basic("封闭KEY", null, null, null, null, null, null),
+                            null, null,
+                            new Now(new CondOne(null, null), null, null, null, null, null, null, null), null, null);
+                    viewInterface.addCity(h, requestPackage.list_position);
                     return;
+
                 } else {
 
                     //把数据保存到全局Map，当前获取到的实时信息
@@ -99,6 +109,7 @@ public class WeatherCityPresenter extends BasePresenter<ListCityUI> {
 
     /**
      * 连接个人服务器获取我的key
+     *
      * @return
      */
     public void getKeyFromMyServer() {
@@ -111,7 +122,7 @@ public class WeatherCityPresenter extends BasePresenter<ListCityUI> {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
-                if(result.equals("password error")) {
+                if (result.equals("password error")) {
                     //密码错误
                     Utils.sendMessage(handler, ListCityUI.PASS_STRING, "服务器获取密码失败 " + result);
                     Utils.d("获取密码失败");
@@ -125,14 +136,16 @@ public class WeatherCityPresenter extends BasePresenter<ListCityUI> {
 
     /**
      * Api key有没有获取到
+     *
      * @return
      */
-    public boolean isKeyGet(){
+    public boolean isKeyGet() {
         return model.isKeyGet();
     }
 
     /**
      * 获取记录，用户要查看的城市
+     *
      * @return
      */
     public List<String> getCitiesOnSQLite() {
@@ -141,6 +154,7 @@ public class WeatherCityPresenter extends BasePresenter<ListCityUI> {
 
     /**
      * 把list转换成json字符串传入
+     *
      * @param list
      */
     public void saveCitiesOnSQLite(List<String> list) {
