@@ -170,55 +170,34 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
             }
         });
 
+        //异步获取key
+        mPresenter.getKeyFromMyServer();
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         Log.d(TAG, "onStart方法调用，查看数据");
-        //读到的数据个数，用于调用完成方法
-        receiveCnt = 0;
 
-        //读出储存的城市，保存到全局集合中。如果有数据，则为再次启动，更新listView数据
-        if (HeWeather5Map.chosenCities.size() == 0) {
-            Log.d(TAG, "第一次查看数据为空");
-            HeWeather5Map.chosenCities = mPresenter.getCitiesOnSQLite();
-        }
-        //如果的确是数据库为空
-        if (HeWeather5Map.chosenCities.size() == 0) {
-            Log.d(TAG, "第二次查看数据为空，SQLite里面没有数据");
-            showMessage("快点开右下角菜单选择城市吧");
-        } else {
-            Log.d(TAG, "数据列表有城市，查看内存数据，没有再提交网络申请 " + cityList.size());
-
-            //分配list空间
-            for (int i = 0; i < HeWeather5Map.chosenCities.size(); i++) {
-                Map<String, Object> map = new HashMap<>();
-                map.put("city", HeWeather5Map.chosenCities.get(i));
-                map.put("tmp", "wait");
-                map.put("desc", "wait");
-                map.put("pm2_5", "wait" + " ug/cm3");
-                map.put("cond", HeWeather5Map.condMap.get(999));
-                Log.d(TAG, "预显示的城市名： " + map.get("city"));
-                cityList.add(map);
-            }
-
-            Log.d(TAG, "分配List空间，空间为 " + cityList.size() + " " + HeWeather5Map.chosenCities.size());
-            Iterator<String> iterator = HeWeather5Map.chosenCities.iterator();
-            int i = 0;
-            while (iterator.hasNext()) {
-                String cityName = iterator.next();
-                if(HeWeather5Map.heWeather5HashMap.containsKey(cityName)) {
-                    Log.d(TAG, "获取 " + cityName + " 城市内存中的天气数据");
-                    addCity(HeWeather5Map.heWeather5HashMap.get(cityName), i++);
-                    receiveCnt++;
-                } else {
-                    Log.d(TAG, "申请 " + cityName + " 城市的天气数据");
-                    mPresenter.weatherReportOnInternet(new WeatherRequestPackage(cityName, i++));
+        //开启一个线程等待Key拿到
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    try {
+                        Thread.sleep(300);
+                        if(mPresenter.isKeyGet()) {
+                            //刷新列表
+                            flashCitiesList();
+                            break;
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
-            showMessage("更新数据中");
-        }
+        }).start();
 
     }
 
@@ -263,6 +242,53 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
     public void onReceiveAll() {
         if(mToast != null) {
             mToast.cancel();
+        }
+    }
+
+    @Override
+    public void flashCitiesList() {
+        //读到的数据个数，用于调用完成方法
+        receiveCnt = 0;
+
+        //读出储存的城市，保存到全局集合中。如果有数据，则为再次启动，更新listView数据
+        if (HeWeather5Map.chosenCities.size() == 0) {
+            Log.d(TAG, "第一次查看数据为空");
+            HeWeather5Map.chosenCities = mPresenter.getCitiesOnSQLite();
+        }
+        //如果的确是数据库为空
+        if (HeWeather5Map.chosenCities.size() == 0) {
+            Log.d(TAG, "第二次查看数据为空，SQLite里面没有数据");
+            showMessage("快点开右下角菜单选择城市吧");
+        } else {
+            Log.d(TAG, "数据列表有城市，查看内存数据，没有再提交网络申请 " + cityList.size());
+
+            //分配list空间
+            for (int i = 0; i < HeWeather5Map.chosenCities.size(); i++) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("city", HeWeather5Map.chosenCities.get(i));
+                map.put("tmp", "wait");
+                map.put("desc", "wait");
+                map.put("pm2_5", "wait" + " ug/cm3");
+                map.put("cond", HeWeather5Map.condMap.get(999));
+                Log.d(TAG, "预显示的城市名： " + map.get("city"));
+                cityList.add(map);
+            }
+
+            Log.d(TAG, "分配List空间，空间为 " + cityList.size() + " " + HeWeather5Map.chosenCities.size());
+            Iterator<String> iterator = HeWeather5Map.chosenCities.iterator();
+            int i = 0;
+            while (iterator.hasNext()) {
+                String cityName = iterator.next();
+                if(HeWeather5Map.heWeather5HashMap.containsKey(cityName)) {
+                    Log.d(TAG, "获取 " + cityName + " 城市内存中的天气数据");
+                    addCity(HeWeather5Map.heWeather5HashMap.get(cityName), i++);
+                    receiveCnt++;
+                } else {
+                    Log.d(TAG, "申请 " + cityName + " 城市的天气数据");
+                    mPresenter.weatherReportOnInternet(new WeatherRequestPackage(cityName, i++));
+                }
+            }
+            Utils.sendMessage(mHandler, PASS_STRING, "更新数据中");
         }
     }
 

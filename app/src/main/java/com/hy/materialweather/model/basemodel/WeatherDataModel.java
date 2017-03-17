@@ -32,4 +32,13 @@ public interface WeatherDataModel {
     //存入记录，用户要查看哪些城市
     void saveCitiesOnSQLite(List<String> list);
 
+    void getKeyFromMyServer(Callback callback);
+
+    //数据模型里设置ApiKey
+    void setKey(String key);
+
+    //返回是否已经获取到key了
+    boolean isKeyGet();
+
+
 }

@@ -30,6 +30,8 @@ import static com.hy.materialweather.model.json.GsonUtils.getObjectList;
 public class WeatherDataModelImpl implements WeatherDataModel {
     public final String TAG = WeatherDataModelImpl.class.getName() + "类下";
 
+    public static final String NO_KEY = "no key";
+
     //OkHttp连接类
     public static final OkHttpClient client = new OkHttpClient.Builder()
             .connectTimeout(5, TimeUnit.SECONDS)
@@ -41,8 +43,9 @@ public class WeatherDataModelImpl implements WeatherDataModel {
     final String[] UrlAppend;
     final String[] params;
     final String rawUrl;
-    final String weatherKey;
+    private String weatherKey = NO_KEY;
     final String cities_manager;
+    final String myServerAdreess;
 
     //SQLite对象
     SharedPreferences mPreferences;
@@ -57,8 +60,8 @@ public class WeatherDataModelImpl implements WeatherDataModel {
         UrlAppend = resources.getStringArray(R.array.weatherUrlAppend);
         params = resources.getStringArray(R.array.weatherUrlPostParams);
         rawUrl = resources.getString(R.string.weatherUrl);
-        weatherKey = resources.getString(R.string.weatherKey);
         cities_manager = resources.getString(R.string.cities_manager);
+        myServerAdreess = resources.getString(R.string.myserveraddress);
 
         //获取文件，文件名为App的名字
         mPreferences = context.getSharedPreferences(resources.getString(R.string.app_name)
@@ -147,6 +150,11 @@ public class WeatherDataModelImpl implements WeatherDataModel {
      */
     @Override
     public void weatherInternetService(WeatherRequestPackage requestPackage, Callback callback) {
+        //没有获取到key的时候返回
+        if(weatherKey.equals(NO_KEY)) {
+            return;
+        }
+
         //获取Url
         String url = rawUrl + UrlAppend[requestPackage.index];
 
@@ -163,6 +171,43 @@ public class WeatherDataModelImpl implements WeatherDataModel {
 
         call = client.newCall(request);
         call.enqueue(callback);
+    }
+
+    /**
+     * 从服务器获取我的api key
+     */
+    public void getKeyFromMyServer(Callback callback) {
+        //获取Url
+        String url = myServerAdreess;
+
+        //加入Post参数
+        RequestBody formBody = new FormBody.Builder()
+                .add("user", "h")
+                .add("password", "huangye")
+                .build();
+
+        Request request = new Request.Builder()
+                .post(formBody)
+                .url(url)
+                .build();
+
+        call = client.newCall(request);
+        call.enqueue(callback);
+    }
+
+    /**
+     * 数据模型里设置ApiKey
+     */
+    public void setKey(String key) {
+        this.weatherKey = key;
+    }
+
+    /**
+     * 返回是否已经获取到key了
+     * @return
+     */
+    public boolean isKeyGet() {
+        return !(this.weatherKey == NO_KEY);
     }
 
 }

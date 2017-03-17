@@ -15,4 +15,7 @@ public interface ListCityUI extends FinalMessageWhatInt {
     //接收到了所有的城市信息
     void onReceiveAll();
 
+    //刷新城市列表
+    void flashCitiesList();
+
 }
