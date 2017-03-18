@@ -11,7 +11,7 @@
     <!--设置starting windows 背景-->
     <style name="FirstTheme" parent="AppTheme.NoActionBar">
         <item name="android:windowNoTitle">true</item>
-        <item name="android:windowBackground">@mipmap/first_backpng</item>
+        <item name="android:windowBackground">@mipmap/material_weather_background</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

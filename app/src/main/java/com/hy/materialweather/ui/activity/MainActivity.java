@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -19,7 +20,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -33,6 +33,7 @@ import com.hy.materialweather.model.WeatherRequestPackage;
 import com.hy.materialweather.model.json.HeWeather5;
 import com.hy.materialweather.presenter.WeatherCityPresenter;
 import com.hy.materialweather.ui.baseui.ListCityUI;
+import com.hy.materialweather.ui.view.UpdateView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,9 +58,9 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
                         showMessage(msg.obj.toString());
                         break;
                     case CLOSE_TOAST:
-                        if (mToast != null) {
-                            mToast.cancel();
-                            mToast = null;
+                        if (mSnackbar != null) {
+                            mSnackbar.dismiss();
+                            mSnackbar = null;
                         }
                         break;
                     case NOTIFY_CHANGED:
@@ -104,11 +105,13 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
 
     /* View类引用 */
     protected ListView mListView;
-    Toast mToast;
+    protected FloatingActionButton fab;
+    public Snackbar mSnackbar;
+    public UpdateView updateView;
 
     /* 数据引用 */
-    List<Map<String, Object>> cityList = new ArrayList<>();
-    SimpleAdapter cityAdapter;
+    public List<Map<String, Object>> cityList = new ArrayList<>();
+    public SimpleAdapter cityAdapter;
 
     int receiveCnt = 0;
 
@@ -122,7 +125,7 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
         setSupportActionBar(toolbar);
 
         //添加城市
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -151,7 +154,10 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
         mListView.setDividerHeight(30);
         mListView.setAdapter(cityAdapter);
 
-        mToast = Toast.makeText(this, "更新数据中", Toast.LENGTH_LONG);
+        mSnackbar = Snackbar.make(fab, "更新数据中", Snackbar.LENGTH_LONG);
+
+        updateView = (UpdateView) findViewById(R.id.updateView);
+        updateView.show();
     }
 
     @Override
@@ -216,8 +222,8 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
     @Override
     protected void onPause() {
         super.onPause();
-        if (mToast != null) {
-            mToast.cancel();
+        if (mSnackbar != null) {
+            mSnackbar.dismiss();
         }
     }
 
@@ -236,8 +242,8 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
 
     @Override
     public void showMessage(String message) {
-        mToast = Toast.makeText(this, message, Toast.LENGTH_LONG);
-        mToast.show();
+        mSnackbar = Snackbar.make(fab, message, Snackbar.LENGTH_SHORT);
+        mSnackbar.show();
     }
 
     /**
@@ -252,8 +258,8 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
 
     @Override
     public void onReceiveAll() {
-        if (mToast != null) {
-            mToast.cancel();
+        if (mSnackbar != null) {
+            mSnackbar.dismiss();
         }
     }
 
@@ -321,13 +327,35 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
         }
     }
 
+    protected Snackbar quitSnackBar;
+
+    /**
+     * 返回
+     */
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            //真的要退出吗？
+            if(quitSnackBar == null) {
+                quitSnackBar = Snackbar.make(fab, "真的要退出吗", Snackbar.LENGTH_SHORT)
+                        .setAction("退出", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+//                                MainActivity.super.onBackPressed();
+                                Utils.sendEmptyMessage(mHandler, CLOSE_TOAST);
+                                MainActivity.this.finish();
+                            }
+                        });
+                Utils.d(TAG + " 创建退出的SnackBar");
+            }
+            if(quitSnackBar.isShown()) {
+                quitSnackBar.dismiss();
+            } else {
+                quitSnackBar.show();
+            }
         }
     }
 
