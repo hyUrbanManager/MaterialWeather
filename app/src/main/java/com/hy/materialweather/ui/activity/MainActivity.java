@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -126,6 +127,8 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
     public SimpleAdapter cityAdapter;
 
     int receiveCnt = 0;
+
+    private StringBuilder locationMessage;
 
     /**
      * View相关的初始化都在这里
@@ -448,6 +451,25 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
             startActivity(intent);
         } else if (id == R.id.nav_material_show) {
 
+        } else if(id == R.id.location_message) {
+            AlertDialog dialog = new AlertDialog.Builder(
+//                    new ContextThemeWrapper(MainActivity.this, R.style.myAlertDialog))
+                    MainActivity.this)
+                    .setTitle("当前地理位置")
+                    .setMessage(locationMessage.toString())
+                    .setPositiveButton("重新获取位置", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            baiduLocation.mLocationClient.start();
+                        }
+                    })
+                    .create();
+            dialog.show();
+            //设置窗体大小
+            WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();
+            layoutParams.alpha = 0.8f;
+            dialog.getWindow().setAttributes(layoutParams);
+
         } else if (id == R.id.nav_raw_data_show) {
 
         } else if (id == R.id.nav_setting) {
@@ -474,95 +496,96 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
 
     @Override
     public void onReceiveLocation(BDLocation location) {
+        //清空上次数据
+        locationMessage = new StringBuilder();
 
         //获取定位结果
-        StringBuffer sb = new StringBuffer(256);
+//        locationMessage.append("time : ");
+//        locationMessage.append(location.getTime());    //获取定位时间
 
-        sb.append("time : ");
-        sb.append(location.getTime());    //获取定位时间
+//        locationMessage.append("\nerror code : ");
+//        locationMessage.append(location.getLocType());    //获取类型类型
 
-        sb.append("\nerror code : ");
-        sb.append(location.getLocType());    //获取类型类型
+        locationMessage.append("\nlatitude : ");
+        locationMessage.append(location.getLatitude());    //获取纬度信息
 
-        sb.append("\nlatitude : ");
-        sb.append(location.getLatitude());    //获取纬度信息
+        locationMessage.append("\nlontitude : ");
+        locationMessage.append(location.getLongitude());    //获取经度信息
 
-        sb.append("\nlontitude : ");
-        sb.append(location.getLongitude());    //获取经度信息
-
-        sb.append("\nradius : ");
-        sb.append(location.getRadius());    //获取定位精准度
+//        locationMessage.append("\nradius : ");
+//        locationMessage.append(location.getRadius());    //获取定位精准度
 
         if (location.getLocType() == BDLocation.TypeGpsLocation) {
 
             // GPS定位结果
-            sb.append("\nspeed : ");
-            sb.append(location.getSpeed());    // 单位：公里每小时
+            locationMessage.append("\nspeed : ");
+            locationMessage.append(location.getSpeed());    // 单位：公里每小时
 
-            sb.append("\nsatellite : ");
-            sb.append(location.getSatelliteNumber());    //获取卫星数
+            locationMessage.append("\nsatellite : ");
+            locationMessage.append(location.getSatelliteNumber());    //获取卫星数
 
-            sb.append("\nheight : ");
-            sb.append(location.getAltitude());    //获取海拔高度信息，单位米
+            locationMessage.append("\nheight : ");
+            locationMessage.append(location.getAltitude());    //获取海拔高度信息，单位米
 
-            sb.append("\ndirection : ");
-            sb.append(location.getDirection());    //获取方向信息，单位度
+            locationMessage.append("\ndirection : ");
+            locationMessage.append(location.getDirection());    //获取方向信息，单位度
 
-            sb.append("\naddr : ");
-            sb.append(location.getAddrStr());    //获取地址信息
+            locationMessage.append("\naddr : ");
+            locationMessage.append(location.getAddrStr());    //获取地址信息
 
-            sb.append("\ndescribe : ");
-            sb.append("gps定位成功");
+            locationMessage.append("\ndescribe : ");
+            locationMessage.append("gps定位成功");
 
         } else if (location.getLocType() == BDLocation.TypeNetWorkLocation) {
 
             // 网络定位结果
-            sb.append("\naddr : ");
-            sb.append(location.getAddrStr());    //获取地址信息
+            locationMessage.append("\naddr : ");
+            locationMessage.append(location.getAddrStr());    //获取地址信息
 
-            sb.append("\noperationers : ");
-            sb.append(location.getOperators());    //获取运营商信息
+            locationMessage.append("\noperationers : ");
+            locationMessage.append(location.getOperators());    //获取运营商信息
 
-            sb.append("\ndescribe : ");
-            sb.append("网络定位成功");
+            locationMessage.append("\ndescribe : ");
+            locationMessage.append("网络定位成功");
 
         } else if (location.getLocType() == BDLocation.TypeOffLineLocation) {
 
             // 离线定位结果
-            sb.append("\ndescribe : ");
-            sb.append("离线定位成功，离线定位结果也是有效的");
+            locationMessage.append("\ndescribe : ");
+            locationMessage.append("离线定位成功，离线定位结果也是有效的");
 
         } else if (location.getLocType() == BDLocation.TypeServerError) {
 
-            sb.append("\ndescribe : ");
-            sb.append("服务端网络定位失败，可以反馈IMEI号和大体定位时间到loc-bugs@baidu.com，会有人追查原因");
+            locationMessage.append("\ndescribe : ");
+            locationMessage.append("服务端网络定位失败，可以反馈IMEI号和大体定位时间到loc-bugs@baidu.com，会有人追查原因");
 
         } else if (location.getLocType() == BDLocation.TypeNetWorkException) {
 
-            sb.append("\ndescribe : ");
-            sb.append("网络不同导致定位失败，请检查网络是否通畅");
+            locationMessage.append("\ndescribe : ");
+            locationMessage.append("网络不同导致定位失败，请检查网络是否通畅");
 
         } else if (location.getLocType() == BDLocation.TypeCriteriaException) {
 
-            sb.append("\ndescribe : ");
-            sb.append("无法获取有效定位依据导致定位失败，一般是由于手机的原因，处于飞行模式下一般会造成这种结果，可以试着重启手机");
+            locationMessage.append("\ndescribe : ");
+            locationMessage.append("无法获取有效定位依据导致定位失败，一般是由于手机的原因，处于飞行模式下一般会造成这种结果，可以试着重启手机");
 
         }
 
-        sb.append("\nlocationdescribe : ");
-        sb.append(location.getLocationDescribe());    //位置语义化信息
+        locationMessage.append("\nlocationdescribe : ");
+        locationMessage.append(location.getLocationDescribe());    //位置语义化信息
 
         List<Poi> list = location.getPoiList();    // POI数据
         if (list != null) {
-            sb.append("\npoilist size = : ");
-            sb.append(list.size());
+//            locationMessage.append("\npoilist size = : ");
+//            locationMessage.append(list.size());
             for (Poi p : list) {
-                sb.append("\npoi= : ");
-                sb.append(p.getId() + " " + p.getName() + " " + p.getRank());
+//                locationMessage.append("\npoi= : ");
+//                locationMessage.append(p.getId() + " " + p.getName() + " " + p.getRank());
+                locationMessage.append("\n" + p.getName());
             }
         }
 
-        Utils.d(sb.toString());
+        Utils.d(locationMessage.toString());
 
         //停止搜索
         baiduLocation.mLocationClient.stop();

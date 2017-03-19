@@ -85,7 +85,7 @@ public class WeatherCityPresenter extends BasePresenter<ListCityUI> {
             if (result.equals("password error")) {
                 //密码错误
                 Utils.sendMessage(mHandler, ListCityUI.PASS_STRING, "服务器获取key失败\n" + result);
-                Utils.d("获取key失败");
+                Utils.d("获取key错误");
                 HeWeather5Map.isKeyCorrect = false;
             } else {
                 model.setKey(result);
@@ -94,7 +94,8 @@ public class WeatherCityPresenter extends BasePresenter<ListCityUI> {
                 HeWeather5Map.isKeyCorrect = true;
             }
         } catch (IOException e) {
-            Utils.d(TAG + " " + e.getMessage());
+            Utils.d(TAG + " 获取key失败" + e.getMessage());
+            HeWeather5Map.isKeyCorrect = false;
             Utils.sendMessage(mHandler, ListCityUI.PASS_STRING, "网络出错\n" + e.getMessage());
             Utils.sendEmptyMessage(mHandler, ListCityUI.STOP_REFRESHING);
         }

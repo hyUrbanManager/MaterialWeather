@@ -14,6 +14,10 @@
             android:id="@+id/nav_raw_data_show"
             android:icon="@drawable/ic_menu_raw_data"
             android:title="原生数据显示风格" />
+        <item
+            android:id="@+id/location_message"
+            android:icon="@drawable/ic_place_black_24dp"
+            android:title="当前位置" />
     </group>
 
     <item android:title="通用">

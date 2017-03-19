@@ -21,6 +21,7 @@
 
             <!--通过插入TextView来实现title居中-->
             <TextView
+                android:id="@+id/title"
                 android:text="Material Weahter"
                 android:textSize="@dimen/Material_app_bar"
                 android:textColor="@color/white"

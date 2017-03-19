@@ -46,5 +46,8 @@
         <item name="android:layout_marginRight">8dp</item>
     </style>
 
-
+    <!--AlertDialog样式-->
+    <style name="myAlertDialog" parent="@android:style/Theme.Material.Light.Dialog.Alert">
+    </style>
+    
 </resources>
