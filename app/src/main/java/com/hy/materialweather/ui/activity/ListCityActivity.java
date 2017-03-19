@@ -51,7 +51,7 @@ public class ListCityActivity extends MVPActivity<CityManagerUI, CityManagerPres
                     case CLOSE_TOAST:
                         mToast.cancel();
                         break;
-                    case NOTIFY_CHANGED:
+                    case NOTIFY_CHANGED_ONE_CITY:
                         //添加ListView数据
                         Set<String> set = HeWeather5Map.basicCities2560.keySet();
                         Iterator<String> iterator = set.iterator();
@@ -134,7 +134,7 @@ public class ListCityActivity extends MVPActivity<CityManagerUI, CityManagerPres
                 Log.d(ListCityActivity.class.getName(),"ListView适配器数据的大小：" + stringList.size());
                 if(stringList.size() != 2560) {
                     stringList.clear();
-                    mHandler.sendEmptyMessage(NOTIFY_CHANGED);
+                    mHandler.sendEmptyMessage(NOTIFY_CHANGED_ONE_CITY);
                 }
                 mHandler.sendEmptyMessage(CLOSE_TOAST);
             }

@@ -12,11 +12,14 @@ public interface FinalMessageWhatInt {
 
     int CLOSE_TOAST = 3;
 
-    int NOTIFY_CHANGED = 4;
+    int NOTIFY_CHANGED_ONE_CITY = 4;
 
     int CLEAR_ADAPTER = 5;
 
-    int SORT_LIST = 6;
+    int UPDATE_LIST_VIEW = 6;
 
+    int START_REFRESHING = 7;
+
+    int STOP_REFRESHING = 8;
 
 }

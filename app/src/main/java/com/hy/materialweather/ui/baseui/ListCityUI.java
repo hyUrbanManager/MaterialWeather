@@ -10,12 +10,12 @@ public interface ListCityUI extends FinalMessageWhatInt {
     void showMessage(String message);
 
     //显示列表在index位置加入城市
-    void addCity(HeWeather5 heWeather5, int list_position);
+    void addOneCity(HeWeather5 heWeather5, int list_position);
 
     //接收到了所有的城市信息
     void onReceiveAll();
 
-    //刷新城市列表
-    void flashCitiesList();
+    //刷新城市列表，从网络更新
+    void refreshCityList(boolean isAllReconnect);
 
 }

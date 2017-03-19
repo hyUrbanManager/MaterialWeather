@@ -24,23 +24,24 @@ import okhttp3.Response;
 
 
 public class WeatherCityPresenter extends BasePresenter<ListCityUI> {
+    public static final String TAG = WeatherCityPresenter.class.getName() + "类";
 
     protected WeatherDataModel model;
     protected ListCityUI viewInterface;
 
-    protected MVPActivity.MVPHandler handler;
+    protected MVPActivity.MVPHandler mHandler;
 
     /**
      * 构造器，把Handler和View实例都获取到
      *
      * @param context
      * @param viewInterface
-     * @param handler
+     * @param mHandler
      */
-    public WeatherCityPresenter(Context context, ListCityUI viewInterface, MVPActivity.MVPHandler handler) {
+    public WeatherCityPresenter(Context context, ListCityUI viewInterface, MVPActivity.MVPHandler mHandler) {
         this.model = new WeatherDataModelImpl(context);
         this.viewInterface = viewInterface;
-        this.handler = handler;
+        this.mHandler = mHandler;
     }
 
     /**
@@ -49,62 +50,26 @@ public class WeatherCityPresenter extends BasePresenter<ListCityUI> {
      * @param requestPackage
      */
     public void weatherReportOnInternet(final WeatherRequestPackage requestPackage) {
+        //首先检查Key，同步耗时方法
+        if (!HeWeather5Map.isKeyCorrect) {
+            //异步方法获取key，再异步方法递交请求
+            getKeyFromMyServer();
+        }
         //网络获取数据，Callback中对UI更新
         model.weatherInternetService(requestPackage, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Utils.sendMessage(handler, ListCityUI.PASS_STRING, e.getMessage());
-                Utils.sendEmptyMessage(handler, ListCityUI.CLOSE_TOAST);
+                Utils.sendMessage(mHandler, ListCityUI.PASS_STRING, e.getMessage());
+                Utils.sendEmptyMessage(mHandler, ListCityUI.CLOSE_TOAST);
+                Utils.sendEmptyMessage(mHandler, ListCityUI.STOP_REFRESHING);
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                //调用Model来解析数据，变成数据对象
-                HeWeather5 heWeather5;
-                String result;
-                try {
-                    result = response.body().string();
-                    heWeather5 = model.parseWeahterJson(result);
-                } catch (Exception e) {
-                    Utils.sendMessage(handler, ListCityUI.PASS_STRING, e.getMessage());
-                    Utils.sendEmptyMessage(handler, ListCityUI.CLOSE_TOAST);
-                    return;
-                }
-
-                //Key不正确
-                if (heWeather5.status.equals("invalid key")) {
-                    //和MainActivity的Handle耦合，相应比一些不设置为Null
-                    HeWeather5 h = new HeWeather5(null, null,
-                            new Basic("封闭KEY", null, null, null, null, null, null),
-                            null, null,
-                            new Now(new CondOne(null, null), null, null, null, null, null, null, null), null, null);
-                    viewInterface.addCity(h, requestPackage.list_position);
-                    return;
-
-                } else {
-
-                    //把数据保存到全局Map，当前获取到的实时信息
-                    HeWeather5Map.heWeather5HashMap.put(heWeather5.basic.city, heWeather5);
-
-                    //把收到的数据保存在本地数据库
-
-
-                    //发送数据对象给UI界面，UI细致化处理界面数据
-                    StringBuilder sb = new StringBuilder();
-                    sb.append(heWeather5.toString());
-                    sb.append("\n\n" + "成功获取到对象");
-
-                    //报异常的语句，解决
-                    sb.append(heWeather5.basic.city);
-                    sb.append(heWeather5.daily_forecast.get(0).wind);
-                    sb.append('\n' + heWeather5.suggestion.sport.txt);
-
-                    Utils.sendEmptyMessage(handler, ListCityUI.CLOSE_TOAST);
-
-                    viewInterface.addCity(heWeather5, requestPackage.list_position);
-                }
+                handlerHeWeather5Response(response, requestPackage);
             }
         });
+
     }
 
     /**
@@ -113,25 +78,82 @@ public class WeatherCityPresenter extends BasePresenter<ListCityUI> {
      * @return
      */
     public void getKeyFromMyServer() {
-        model.getKeyFromMyServer(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Utils.sendMessage(handler, ListCityUI.PASS_STRING, e.getMessage());
+        Utils.d(TAG + " 执行了一次获取Key");
+        try {
+            Response response = model.getKeyFromMyServer();
+            String result = response.body().string();
+            if (result.equals("password error")) {
+                //密码错误
+                Utils.sendMessage(mHandler, ListCityUI.PASS_STRING, "服务器获取key失败\n" + result);
+                Utils.d("获取key失败");
+                HeWeather5Map.isKeyCorrect = false;
+            } else {
+                model.setKey(result);
+                Utils.d("获取key成功 " + result);
+                //首先设定为有效
+                HeWeather5Map.isKeyCorrect = true;
             }
+        } catch (IOException e) {
+            Utils.d(TAG + " " + e.getMessage());
+            Utils.sendMessage(mHandler, ListCityUI.PASS_STRING, "网络出错\n" + e.getMessage());
+            Utils.sendEmptyMessage(mHandler, ListCityUI.STOP_REFRESHING);
+        }
+    }
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String result = response.body().string();
-                if (result.equals("password error")) {
-                    //密码错误
-                    Utils.sendMessage(handler, ListCityUI.PASS_STRING, "服务器获取密码失败 " + result);
-                    Utils.d("获取密码失败");
-                } else {
-                    model.setKey(result);
-                    Utils.d("获取密码成功 " + result);
-                }
-            }
-        });
+    /**
+     * Http回调时，处理回调的数据
+     *
+     * @param response
+     * @param requestPackage
+     */
+    void handlerHeWeather5Response(Response response, WeatherRequestPackage requestPackage) {
+        //调用Model来解析数据，变成数据对象
+        HeWeather5 heWeather5;
+        String result;
+        try {
+            result = response.body().string();
+            heWeather5 = model.parseWeahterJson(result);
+        } catch (Exception e) {
+            Utils.sendMessage(mHandler, ListCityUI.PASS_STRING, e.getMessage());
+            Utils.sendEmptyMessage(mHandler, ListCityUI.CLOSE_TOAST);
+            return;
+        }
+
+        //Key无效
+        if (heWeather5.status.equals("invalid key")) {
+            //和MainActivity的Handle耦合，相应比一些不设置为Null
+            HeWeather5 h = new HeWeather5(null, null,
+                    new Basic("封闭KEY", null, null, null, null, null, null),
+                    null, null,
+                    new Now(new CondOne(null, null), null, null, null, null, null, null, null), null, null);
+            viewInterface.addOneCity(h, requestPackage.list_position);
+            HeWeather5Map.isKeyCorrect = false;
+            return;
+
+        } else {
+            //Key有效
+            HeWeather5Map.isKeyCorrect = true;
+
+            //把数据保存到全局Map，当前获取到的实时信息
+            HeWeather5Map.heWeather5HashMap.put(heWeather5.basic.city, heWeather5);
+
+            //把收到的数据保存在本地数据库
+
+
+            //发送数据对象给UI界面，UI细致化处理界面数据
+            StringBuilder sb = new StringBuilder();
+            sb.append(heWeather5.toString());
+            sb.append("\n\n" + "成功获取到对象");
+
+            //报异常的语句，解决
+            sb.append(heWeather5.basic.city);
+            sb.append(heWeather5.daily_forecast.get(0).wind);
+            sb.append('\n' + heWeather5.suggestion.sport.txt);
+
+            Utils.sendEmptyMessage(mHandler, ListCityUI.CLOSE_TOAST);
+
+            viewInterface.addOneCity(heWeather5, requestPackage.list_position);
+        }
     }
 
     /**

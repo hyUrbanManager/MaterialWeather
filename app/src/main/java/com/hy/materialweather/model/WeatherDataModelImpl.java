@@ -11,6 +11,7 @@ import com.hy.materialweather.model.json.CityInfo;
 import com.hy.materialweather.model.json.GsonUtils;
 import com.hy.materialweather.model.json.HeWeather5;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -21,6 +22,7 @@ import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 
 import static com.hy.materialweather.model.json.GsonUtils.getObjectList;
 
@@ -143,7 +145,7 @@ public class WeatherDataModelImpl implements WeatherDataModel {
 
 
     /**
-     * Callback为空的时候，访问网络数据
+     * 异步访问天气数据，访问网络数据
      *
      * @param requestPackage 请求的数据，封装成包
      * @param callback
@@ -174,9 +176,10 @@ public class WeatherDataModelImpl implements WeatherDataModel {
     }
 
     /**
-     * 从服务器获取我的api key
+     * 同步从服务器获取我的api key
+     * 耗时方法。
      */
-    public void getKeyFromMyServer(Callback callback) {
+    public Response getKeyFromMyServer() throws IOException {
         //获取Url
         String url = myServerAdreess;
 
@@ -192,7 +195,7 @@ public class WeatherDataModelImpl implements WeatherDataModel {
                 .build();
 
         call = client.newCall(request);
-        call.enqueue(callback);
+        return call.execute();
     }
 
     /**

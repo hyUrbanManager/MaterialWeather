@@ -90,7 +90,12 @@ public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInf
     public void infoOnCard(HeWeather5 heWeather5) {
 
         //设置标题栏
-        toolbar.setTitle((heWeather5.basic.prov == null ? "" : heWeather5.basic.prov) + heWeather5.basic.city);
+        try {
+            toolbar.setTitle((heWeather5.basic.prov == null ? "" : heWeather5.basic.prov) + heWeather5.basic.city);
+        } catch (NullPointerException e) {
+            toolbar.setTitle("未知城市");
+        }
+
         setSupportActionBar(toolbar);
 
 

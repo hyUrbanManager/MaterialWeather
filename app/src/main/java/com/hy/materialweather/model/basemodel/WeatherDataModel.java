@@ -4,9 +4,11 @@ import com.hy.materialweather.model.WeatherRequestPackage;
 import com.hy.materialweather.model.json.CityInfo;
 import com.hy.materialweather.model.json.HeWeather5;
 
+import java.io.IOException;
 import java.util.List;
 
 import okhttp3.Callback;
+import okhttp3.Response;
 
 /**
  * Created by Administrator on 2017/3/3.
@@ -32,7 +34,8 @@ public interface WeatherDataModel {
     //存入记录，用户要查看哪些城市
     void saveCitiesOnSQLite(List<String> list);
 
-    void getKeyFromMyServer(Callback callback);
+    //同步方法获取Key
+    Response getKeyFromMyServer() throws IOException;
 
     //数据模型里设置ApiKey
     void setKey(String key);
