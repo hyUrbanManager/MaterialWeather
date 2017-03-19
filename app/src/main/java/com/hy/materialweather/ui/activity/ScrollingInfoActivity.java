@@ -5,9 +5,10 @@ import android.os.Bundle;
 import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hy.materialweather.R;
@@ -15,7 +16,11 @@ import com.hy.materialweather.basemvpcomponent.MVPActivity;
 import com.hy.materialweather.model.HeWeather5Map;
 import com.hy.materialweather.model.json.HeWeather5;
 import com.hy.materialweather.presenter.WeatherInfoPresenter;
+import com.hy.materialweather.ui.adapter.InfoAdapter;
 import com.hy.materialweather.ui.baseui.CityAllInfoUI;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInfoPresenter>
         implements CityAllInfoUI {
@@ -40,8 +45,13 @@ public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInf
     }
 
     /* View 引用*/
+    private RecyclerView mRecycleView;
     private Toolbar toolbar;
-    private TextView title;
+
+    /* 数据引用 */
+    List<String> list = new ArrayList<>();
+    InfoAdapter mAdapter;
+
 
     @Override
     protected void initView() {
@@ -54,8 +64,6 @@ public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInf
             }
         });
 
-        title = (TextView) findViewById(R.id.title);
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,6 +72,8 @@ public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInf
                         .setAction("Action", null).show();
             }
         });
+
+        mRecycleView = (RecyclerView) findViewById(R.id.recyclerView);
     }
 
     @Override
@@ -82,10 +92,9 @@ public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInf
         HeWeather5 heWeather5 = HeWeather5Map.heWeather5HashMap.get(cityName);
         infoOnCard(heWeather5);
 
-//        title.setText((heWeather5.basic.prov == null ? "" : heWeather5.basic.prov) + heWeather5.basic.city);
+        initRecyclerView();
     }
 
-    //TODO 这一块有bug
     @Override
     public void infoOnCard(HeWeather5 heWeather5) {
 
@@ -95,11 +104,23 @@ public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInf
         } catch (NullPointerException e) {
             toolbar.setTitle("未知城市");
         }
-
         setSupportActionBar(toolbar);
 
 
     }
 
+    /**
+     * 初始化RecyclerView
+     */
+    private void initRecyclerView() {
+        for (int i = 0; i < 20; i++) {
+            list.add("item " + i + " 热爱祖国");
+        }
+        mAdapter = new InfoAdapter(this, list);
+
+        mRecycleView.setAdapter(mAdapter);
+        mRecycleView.setLayoutManager(new LinearLayoutManager(this));
+
+    }
 
 }
