@@ -115,6 +115,17 @@ public class CityManagerActivity extends MVPActivity<CityManagerUI, CityManagerP
         simpleAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * 即将退出此Activity的时候保存下状态
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //保存到内存数据里，和当前定位的城市
+        mPresenter.setLocationCity(HeWeather5Map.locationCity);
+        mPresenter.saveCitiesOnSQLite(HeWeather5Map.chosenCities);
+    }
+
     @Override
     protected void onStop() {
         super.onStop();

@@ -94,9 +94,9 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
                         cityDataList.clear();
                         cityAdapter.notifyDataSetChanged();
                         break;
-                    //数据已经装填好，更新
+                    //更新，调用Refresh
                     case UPDATE_LIST_VIEW:
-                        cityAdapter.notifyDataSetChanged();
+                        refreshCityList(true);
                         break;
                     case START_REFRESHING:
                         mSwipeRefreshLayout.setRefreshing(true);
@@ -213,7 +213,7 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
 
         //百度定位API
         baiduLocation = new BaiduLocation(getApplicationContext(), this);
-        baiduLocation.mLocationClient.start();
+        startLocation();
     }
 
     private BaiduLocation baiduLocation;
@@ -460,7 +460,7 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
                     .setPositiveButton("重新获取位置", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            baiduLocation.mLocationClient.start();
+                            startLocation();
                         }
                     })
                     .create();
@@ -489,9 +489,24 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
      *
      * @param context
      */
-
     public static void launch(Context context) {
         context.startActivity(new Intent(context, MainActivity.class));
+    }
+
+    /**
+     * 启动搜索
+     */
+    private void startLocation() {
+        //防止意外
+        try {
+            baiduLocation.mLocationClient.start();
+        } catch (Exception e) {
+            if(Looper.myLooper() == Looper.getMainLooper()) {
+                showMessage(e.getMessage());
+            } else {
+                Utils.sendMessage(mHandler, PASS_STRING, e.getMessage());
+            }
+        }
     }
 
     @Override
@@ -585,11 +600,12 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
             }
         }
 
-        Utils.d(locationMessage.toString());
+        Utils.d(TAG + locationMessage.toString());
 
         //停止搜索
         baiduLocation.mLocationClient.stop();
-
+        //把定位到的城市加入列表
+        HeWeather5Map.locationCity = "广州";
     }
 
     @Override

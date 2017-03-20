@@ -2,8 +2,10 @@ package com.hy.materialweather.presenter;
 
 import android.content.Context;
 
+import com.hy.materialweather.Utils;
 import com.hy.materialweather.basemvpcomponent.BasePresenter;
 import com.hy.materialweather.basemvpcomponent.MVPActivity;
+import com.hy.materialweather.model.HeWeather5Map;
 import com.hy.materialweather.model.WeatherDataModelImpl;
 import com.hy.materialweather.model.basemodel.WeatherDataModel;
 import com.hy.materialweather.ui.baseui.CityManagerUI;
@@ -20,6 +22,22 @@ public class CityManagerPresenter extends BasePresenter<CityManagerUI> {
         this.model = new WeatherDataModelImpl(context);
         this.view = view;
         this.mHandler = mHandler;
+    }
+
+    /**
+     * 定位到的城市添加进列表里
+     *
+     * @param cityName
+     */
+    public void setLocationCity(String cityName) {
+        if (cityName != null) {
+            //如果已经在列表里，移到第一位，否则添加到第一位
+            if (HeWeather5Map.chosenCities.contains(cityName)) {
+                HeWeather5Map.chosenCities.remove(cityName);
+            }
+            Utils.d(" 添加定位城市到显示列表");
+            HeWeather5Map.chosenCities.add(0, cityName);
+        }
     }
 
     /**

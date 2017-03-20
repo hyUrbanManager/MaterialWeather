@@ -22,6 +22,9 @@ public class HeWeather5Map {
     //上一次获取天气是否成功
     public static boolean isKeyCorrect = false;
 
+    //当前定位的城市
+    public static String locationCity;
+
     //当前网络已经获取过的对象集合
     public static Map<String, HeWeather5> heWeather5HashMap = new HashMap<>();
 

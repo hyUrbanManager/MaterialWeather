@@ -113,7 +113,7 @@ public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInf
      * 初始化RecyclerView
      */
     private void initRecyclerView() {
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 50; i++) {
             list.add("item " + i + " 热爱祖国");
         }
         mAdapter = new InfoAdapter(this, list);
