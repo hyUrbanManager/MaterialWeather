@@ -210,6 +210,7 @@ public class ListCityActivity extends MVPActivity<CityManagerUI, CityManagerPres
                             showMessage("添加成功");
                             //存入数据库
                             mPresenter.saveCitiesOnSQLite(HeWeather5Map.chosenCities);
+                            Utils.d("成功添加了一个请求城市");
                         }
                     }
                 })

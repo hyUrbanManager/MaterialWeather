@@ -94,9 +94,9 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
                         cityDataList.clear();
                         cityAdapter.notifyDataSetChanged();
                         break;
-                    //更新，调用Refresh
+                    //异步刷新列表数据
                     case UPDATE_LIST_VIEW:
-                        refreshCityList(true);
+                        cityAdapter.notifyDataSetChanged();
                         break;
                     case START_REFRESHING:
                         mSwipeRefreshLayout.setRefreshing(true);
@@ -311,6 +311,13 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
                 Log.d(TAG, "预显示的城市名： " + map.get("city"));
                 cityDataList.add(map);
             }
+            //列表先显示未知
+            if(Looper.myLooper() == Looper.getMainLooper()) {
+                cityAdapter.notifyDataSetChanged();
+            } else {
+                Utils.sendEmptyMessage(mHandler, UPDATE_LIST_VIEW);
+            }
+            Utils.d(TAG + " 默认数据装载完毕，全部设置为未知信息");
 
             Log.d(TAG, "分配List空间，空间为 " + cityDataList.size() + " " + HeWeather5Map.chosenCities.size());
 
