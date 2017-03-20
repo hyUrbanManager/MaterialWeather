@@ -19,6 +19,10 @@ import java.util.Map;
  */
 public class HeWeather5Map {
 
+    //显示风格常量
+    public static final int RAW_STYLE = 0;
+    public static final int MATERIAL_STYLE = 1;
+
     //当前的网络状态码
     public static int networkType = 0;
 
@@ -39,6 +43,9 @@ public class HeWeather5Map {
 
     //天气状况代码
     public static SparseIntArray condMap = new SparseIntArray();
+
+    //当前显示的风格
+    public static int style = MATERIAL_STYLE;
 
     /**
      * 初始化天气代码和图片的对应表

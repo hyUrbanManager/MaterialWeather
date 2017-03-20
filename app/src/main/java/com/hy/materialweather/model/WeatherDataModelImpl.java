@@ -25,6 +25,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static com.hy.materialweather.Utils.d;
 import static com.hy.materialweather.model.json.GsonUtils.getObjectList;
 
 /**
@@ -48,6 +49,7 @@ public class WeatherDataModelImpl implements WeatherDataModel {
     final String rawUrl;
     private String weatherKey = NO_KEY;
     final String cities_manager;
+    final String style_key;
     final String myServerAdreess;
 
     //SQLite对象
@@ -64,6 +66,7 @@ public class WeatherDataModelImpl implements WeatherDataModel {
         params = resources.getStringArray(R.array.weatherUrlPostParams);
         rawUrl = resources.getString(R.string.weatherUrl);
         cities_manager = resources.getString(R.string.cities_manager);
+        style_key = resources.getString(R.string.style_key);
         myServerAdreess = resources.getString(R.string.myserveraddress);
 
         //获取文件，文件名为App的名字
@@ -137,7 +140,6 @@ public class WeatherDataModelImpl implements WeatherDataModel {
         SharedPreferences.Editor editor = mPreferences.edit();
         //存入Json字符串
         String info = GsonUtils.toJson(list);
-        mPreferences.edit();
         editor.putString(cities_manager, info);
 
         //提交
@@ -176,7 +178,7 @@ public class WeatherDataModelImpl implements WeatherDataModel {
         try {
             call.enqueue(callback);
         } catch (IllegalStateException e) {
-            Utils.d(TAG + " 发生了重复递交申请" + e.getMessage());
+            d(TAG + " 发生了重复递交申请" + e.getMessage());
         }
     }
 
@@ -218,4 +220,33 @@ public class WeatherDataModelImpl implements WeatherDataModel {
         return !(this.weatherKey == NO_KEY);
     }
 
+    /**
+     * 读取显示的风格，没有保存则返回Raw
+     *
+     * @return
+     */
+    @Override
+    public int getStyleOnSQLite() {
+        //把json字符串读出来
+        List<String> list;
+        int style = mPreferences.getInt(style_key, 0);
+        Utils.d(TAG + "读取到的显示风格为： " + style);
+        return style;
+    }
+
+    /**
+     * 存入显示的风格
+     *
+     * @param style
+     */
+    @Override
+    public void saveStyleOnSQLite(int style) {
+        //获取引用
+        SharedPreferences.Editor editor = mPreferences.edit();
+        //存入Json字符串
+        editor.putInt(style_key, style);
+
+        //提交
+        editor.commit();
+    }
 }

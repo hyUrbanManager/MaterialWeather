@@ -48,7 +48,8 @@ import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
-        implements NavigationView.OnNavigationItemSelectedListener, ListCityUI, BDLocationListener {
+        implements MVPActivity.MVPHandler.onHandleMessageListener,
+        NavigationView.OnNavigationItemSelectedListener, ListCityUI, BDLocationListener {
     public final String TAG = MainActivity.class.getName() + "类下";
 
     //自己创建的Handler
@@ -56,63 +57,63 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
 
     @Override
     protected MVPHandler createHandler() {
-        return new MVPHandler(new MVPHandler.onHandleMessageListener() {
-            @Override
-            public void handleMessage(Message msg) {
-                switch (msg.what) {
-                    case PASS_STRING:
-                        showMessage(msg.obj.toString());
-                        break;
-                    case CLOSE_TOAST:
-                        if (mSnackbar != null) {
-                            mSnackbar.dismiss();
-                            mSnackbar = null;
-                        }
-                        break;
-                    //展示一个城市的信息
-                    case NOTIFY_CHANGED_ONE_CITY:
-                        Package p = (Package) msg.obj;
+        return new MVPHandler(this);
+    }
 
-                        Log.d(TAG, "查找数据是否出错： " + p.heWeather5);
-                        Map<String, Object> map = new HashMap<>();
-                        map.put("city", p.heWeather5.basic.city == null ? "未知" : p.heWeather5.basic.city);
-                        map.put("tmp", p.heWeather5.now.tmp == null ? "未知" : p.heWeather5.now.tmp);
-                        map.put("desc", p.heWeather5.now.cond.txt == null ? "未知" : p.heWeather5.now.cond.txt);
-                        //有的城市没有AQI，修复此bug
-                        map.put("pm2_5", "pm2.5: " + (p.heWeather5.aqi == null ?
-                                " 未知" : p.heWeather5.aqi.city.pm25) + " ug/cm3");
-                        map.put("cond", HeWeather5Map.condMap.get(Integer.parseInt(p.heWeather5.now.cond.code == null ?
-                                "999" : p.heWeather5.now.cond.code)));
-
-                        cityDataList.set(p.list_position, map);
-                        cityAdapter.notifyDataSetChanged();
-
-                        receiveCnt++;
-                        if (receiveCnt >= HeWeather5Map.chosenCities.size() && receiveCnt != 0) {
-                            onReceiveAll();
-                        }
-                        break;
-                    //把ListView清空
-                    case CLEAR_ADAPTER:
-                        cityDataList.clear();
-                        cityAdapter.notifyDataSetChanged();
-                        break;
-                    //异步刷新列表数据
-                    case UPDATE_LIST_VIEW:
-                        cityAdapter.notifyDataSetChanged();
-                        break;
-                    case START_REFRESHING:
-                        mSwipeRefreshLayout.setRefreshing(true);
-                        break;
-                    case STOP_REFRESHING:
-                        mSwipeRefreshLayout.setRefreshing(false);
-                        break;
-                    case RECEIVER_QUIRE_REFRESH:
-                        refreshCityList(true);
-                        break;
+    @Override
+    public void handleMessage(Message msg) {
+        switch (msg.what) {
+            case PASS_STRING:
+                showMessage(msg.obj.toString());
+                break;
+            case CLOSE_TOAST:
+                if (mSnackbar != null) {
+                    mSnackbar.dismiss();
+                    mSnackbar = null;
                 }
-            }
-        });
+                break;
+            //展示一个城市的信息
+            case NOTIFY_CHANGED_ONE_CITY:
+                Package p = (Package) msg.obj;
+
+                Log.d(TAG, "查找数据是否出错： " + p.heWeather5);
+                Map<String, Object> map = new HashMap<>();
+                map.put("city", p.heWeather5.basic.city == null ? "未知" : p.heWeather5.basic.city);
+                map.put("tmp", p.heWeather5.now.tmp == null ? "未知" : p.heWeather5.now.tmp);
+                map.put("desc", p.heWeather5.now.cond.txt == null ? "未知" : p.heWeather5.now.cond.txt);
+                //有的城市没有AQI，修复此bug
+                map.put("pm2_5", "pm2.5: " + (p.heWeather5.aqi == null ?
+                        " 未知" : p.heWeather5.aqi.city.pm25) + " ug/cm3");
+                map.put("cond", HeWeather5Map.condMap.get(Integer.parseInt(p.heWeather5.now.cond.code == null ?
+                        "999" : p.heWeather5.now.cond.code)));
+
+                cityDataList.set(p.list_position, map);
+                cityAdapter.notifyDataSetChanged();
+
+                receiveCnt++;
+                if (receiveCnt >= HeWeather5Map.chosenCities.size() && receiveCnt != 0) {
+                    onReceiveAll();
+                }
+                break;
+            //把ListView清空
+            case CLEAR_ADAPTER:
+                cityDataList.clear();
+                cityAdapter.notifyDataSetChanged();
+                break;
+            //异步刷新列表数据
+            case UPDATE_LIST_VIEW:
+                cityAdapter.notifyDataSetChanged();
+                break;
+            case START_REFRESHING:
+                mSwipeRefreshLayout.setRefreshing(true);
+                break;
+            case STOP_REFRESHING:
+                mSwipeRefreshLayout.setRefreshing(false);
+                break;
+            case RECEIVER_QUIRE_REFRESH:
+                refreshCityList(true);
+                break;
+        }
     }
 
     @Override
@@ -150,7 +151,10 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, ListCityActivity.class);
+                //根据风格不同启动不同的Activity
+                Class<?> ac = HeWeather5Map.style == HeWeather5Map.RAW_STYLE ?
+                        ListCityActivityRaw.class : ListCityActivityMaterial.class;
+                Intent intent = new Intent(MainActivity.this, ac);
                 startActivity(intent);
             }
         });
@@ -195,6 +199,8 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
         HeWeather5Map.initCondMap();
         //读数据库选择的城市
         HeWeather5Map.chosenCities = mPresenter.getCitiesOnSQLite();
+        //读取显示的风格
+        HeWeather5Map.style = mPresenter.getStyleOnSQLite();
 
         //动态注册广播接收者
         IntentFilter mFilter = new IntentFilter();
@@ -326,7 +332,7 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
                 cityDataList.add(map);
             }
             //列表先显示未知
-            if(Looper.myLooper() == Looper.getMainLooper()) {
+            if (Looper.myLooper() == Looper.getMainLooper()) {
                 cityAdapter.notifyDataSetChanged();
             } else {
                 Utils.sendEmptyMessage(mHandler, UPDATE_LIST_VIEW);
@@ -467,14 +473,24 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
         int id = item.getItemId();
 
         if (id == R.id.nav_city_manager) {
-            //所选城市管理器
-            Intent intent = new Intent(MainActivity.this, CityManagerActivity.class);
+            //所选城市管理器，根据风格启动不同的Activity
+            Class<?> activityClass = CityManagerActivity.class;
+            Intent intent = new Intent(MainActivity.this, activityClass);
             startActivity(intent);
         } else if (id == R.id.nav_material_show) {
-
-        } else if(id == R.id.location_message) {
+            //设置风格
+            HeWeather5Map.style = HeWeather5Map.MATERIAL_STYLE;
+            mPresenter.saveStyleOnSQLite(HeWeather5Map.style);
+            Utils.d(TAG + " 设置了Material风格");
+            Utils.sendMessage(mHandler, PASS_STRING, "Material风格");
+        } else if (id == R.id.nav_raw_data_show) {
+            //设置风格
+            HeWeather5Map.style = HeWeather5Map.RAW_STYLE;
+            mPresenter.saveStyleOnSQLite(HeWeather5Map.style);
+            Utils.d(TAG + " 设置了Raw风格");
+            Utils.sendMessage(mHandler, PASS_STRING, "Raw风格");
+        } else if (id == R.id.location_message) {
             AlertDialog dialog = new AlertDialog.Builder(
-//                    new ContextThemeWrapper(MainActivity.this, R.style.myAlertDialog))
                     MainActivity.this)
                     .setTitle("当前地理位置")
                     .setMessage(locationMessage.toString())
@@ -486,22 +502,17 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
                     })
                     .create();
             dialog.show();
-            //设置窗体大小
+            //设置窗体
             WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();
             layoutParams.alpha = 0.8f;
             dialog.getWindow().setAttributes(layoutParams);
 
-        } else if (id == R.id.nav_raw_data_show) {
-
         } else if (id == R.id.nav_setting) {
 
         } else if (id == R.id.nav_about) {
+            //Lib界面
 
         }
-
-        //不关闭drawer
-//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
@@ -522,7 +533,7 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
         try {
             baiduLocation.mLocationClient.start();
         } catch (Exception e) {
-            if(Looper.myLooper() == Looper.getMainLooper()) {
+            if (Looper.myLooper() == Looper.getMainLooper()) {
                 showMessage(e.getMessage());
             } else {
                 Utils.sendMessage(mHandler, PASS_STRING, e.getMessage());

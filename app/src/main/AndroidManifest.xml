@@ -48,17 +48,18 @@
             android:name=".ui.activity.ScrollingInfoActivity"
             android:label="@string/title_activity_scrolling_info"
             android:theme="@style/AppTheme.NoActionBar">
-            <!--<intent-filter>-->
-            <!--<action android:name="android.intent.action.MAIN" />-->
-            <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".ui.activity.CityManagerActivity"
             android:label="@string/title_activity_city_manager"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.activity.ListCityActivity"
+            android:name=".ui.activity.ListCityActivityRaw"
             android:label="@string/title_activity_list_city"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -70,9 +71,11 @@
             android:theme="@style/FirstTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.activity.ListCityActivityMaterial"></activity>
     </application>
 
 </manifest>

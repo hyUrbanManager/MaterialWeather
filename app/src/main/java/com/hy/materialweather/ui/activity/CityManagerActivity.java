@@ -29,21 +29,22 @@ import java.util.List;
 import java.util.Map;
 
 public class CityManagerActivity extends MVPActivity<CityManagerUI, CityManagerPresenter>
-        implements CityManagerUI, AdapterView.OnItemLongClickListener {
+        implements MVPActivity.MVPHandler.onHandleMessageListener,
+        CityManagerUI, AdapterView.OnItemLongClickListener {
     public final String TAG = CityManagerActivity.class.getName() + "类下";
 
     private MVPHandler mHandler;
 
     @Override
     protected MVPHandler createHandler() {
-        return new MVPHandler(new MVPHandler.onHandleMessageListener() {
-            @Override
-            public void handleMessage(Message msg) {
-                switch (msg.what) {
+        return new MVPHandler(this);
+    }
 
-                }
-            }
-        });
+    @Override
+    public void handleMessage(Message msg) {
+        switch (msg.what) {
+
+        }
     }
 
     @Override
@@ -142,7 +143,10 @@ public class CityManagerActivity extends MVPActivity<CityManagerUI, CityManagerP
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.operate) {
-            Intent intent = new Intent(CityManagerActivity.this, ListCityActivity.class);
+            //更具风格不同启动不同的Activity
+            Class<?> ac = HeWeather5Map.style == HeWeather5Map.RAW_STYLE ?
+                    ListCityActivityRaw.class : ListCityActivityMaterial.class;
+            Intent intent = new Intent(CityManagerActivity.this, ac);
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);

@@ -19,8 +19,8 @@ import java.util.List;
 /**
  * 城市适配器
  */
-public class CitiesAdapter extends BaseAdapter implements Filterable {
-    public final String TAG = CitiesAdapter.class.getName() + "类下";
+public class CitiesAdapterRaw extends BaseAdapter implements Filterable {
+    public final String TAG = CitiesAdapterRaw.class.getName() + "类下";
 
     List<String> rawCities;
     List<String> showCities;
@@ -28,7 +28,7 @@ public class CitiesAdapter extends BaseAdapter implements Filterable {
     LayoutInflater inflater;
     Filter mFilter;
 
-    public CitiesAdapter(Context context, List<String> cities) {
+    public CitiesAdapterRaw(Context context, List<String> cities) {
         this.rawCities = cities;
         this.showCities = cities;
         inflater = LayoutInflater.from(context);
@@ -106,7 +106,7 @@ public class CitiesAdapter extends BaseAdapter implements Filterable {
                 for (String str : rawCities) {
                     if(str.contains(charSequence)) {
                         list.add(str);
-                        Log.d(CitiesAdapter.class.getName(), "查找到了数据 " + str);
+                        Log.d(CitiesAdapterRaw.class.getName(), "查找到了数据 " + str);
                     }
                 }
             }
@@ -127,7 +127,7 @@ public class CitiesAdapter extends BaseAdapter implements Filterable {
         @Override
         protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
             showCities = (List<String>) filterResults.values;
-            Log.d(CitiesAdapter.class.getName(), "要推出去的数据个数:" + filterResults.count);
+            Log.d(CitiesAdapterRaw.class.getName(), "要推出去的数据个数:" + filterResults.count);
             if (filterResults.count > 0) {
                 //通知数据发生了改变
                 notifyDataSetChanged();

@@ -14,9 +14,9 @@ import java.util.List;
 
 public class CityManagerPresenter extends BasePresenter<CityManagerUI> {
 
-    WeatherDataModel model;
-    CityManagerUI view;
-    MVPActivity.MVPHandler mHandler;
+    private WeatherDataModel model;
+    private CityManagerUI view;
+    private MVPActivity.MVPHandler mHandler;
 
     public CityManagerPresenter(Context context, CityManagerUI view, MVPActivity.MVPHandler mHandler) {
         this.model = new WeatherDataModelImpl(context);

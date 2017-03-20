@@ -23,7 +23,7 @@ import com.hy.materialweather.basemvpcomponent.MVPActivity;
 import com.hy.materialweather.model.HeWeather5Map;
 import com.hy.materialweather.model.json.BasicCity;
 import com.hy.materialweather.presenter.CityManagerPresenter;
-import com.hy.materialweather.ui.adapter.CitiesAdapter;
+import com.hy.materialweather.ui.adapter.CitiesAdapterRaw;
 import com.hy.materialweather.ui.baseui.CityManagerUI;
 
 import java.util.ArrayList;
@@ -34,41 +34,41 @@ import java.util.Set;
 
 import static com.hy.materialweather.model.HeWeather5Map.basicCities2560;
 
-public class ListCityActivity extends MVPActivity<CityManagerUI, CityManagerPresenter>
-        implements CityManagerUI, SearchView.OnQueryTextListener, AdapterView.OnItemClickListener{
+public class ListCityActivityRaw extends MVPActivity<CityManagerUI, CityManagerPresenter>
+        implements MVPActivity.MVPHandler.onHandleMessageListener,
+        CityManagerUI, SearchView.OnQueryTextListener, AdapterView.OnItemClickListener{
 
     private MVPHandler mHandler;
 
     @Override
     protected MVPHandler createHandler() {
-        return new MVPHandler(new MVPHandler.onHandleMessageListener() {
-            @Override
-            public void handleMessage(Message msg) {
-                switch (msg.what) {
-                    case SHOW_TOAST:
-                        mToast.show();
-                        break;
-                    case CLOSE_TOAST:
-                        mToast.cancel();
-                        break;
-                    case NOTIFY_CHANGED_ONE_CITY:
-                        //添加ListView数据
-                        Set<String> set = HeWeather5Map.basicCities2560.keySet();
-                        Iterator<String> iterator = set.iterator();
-
-                        while (iterator.hasNext()) {
-                            String key = iterator.next();
-                            BasicCity basicCity = HeWeather5Map.basicCities2560.get(key);
-                            stringList.add(basicCity.cityZh);
-                        }
-
-                        citiesAdapter.notifyDataSetChanged();
-                        break;
-                }
-            }
-        });
+        return new MVPHandler(this);
     }
 
+    @Override
+    public void handleMessage(Message msg) {
+        switch (msg.what) {
+            case SHOW_TOAST:
+                mToast.show();
+                break;
+            case CLOSE_TOAST:
+                mToast.cancel();
+                break;
+            case NOTIFY_CHANGED_ONE_CITY:
+                //添加ListView数据
+                Set<String> set = HeWeather5Map.basicCities2560.keySet();
+                Iterator<String> iterator = set.iterator();
+
+                while (iterator.hasNext()) {
+                    String key = iterator.next();
+                    BasicCity basicCity = HeWeather5Map.basicCities2560.get(key);
+                    stringList.add(basicCity.cityZh);
+                }
+
+                citiesAdapterRaw.notifyDataSetChanged();
+                break;
+        }
+    }
     @Override
     protected CityManagerPresenter createPresenterRefHandler() {
         mHandler = createHandler();
@@ -81,7 +81,7 @@ public class ListCityActivity extends MVPActivity<CityManagerUI, CityManagerPres
     protected SearchView mSearchView;
 
     /* 数据引用 */
-    CitiesAdapter citiesAdapter;
+    CitiesAdapterRaw citiesAdapterRaw;
     List<String> stringList;
 
     @Override
@@ -95,7 +95,7 @@ public class ListCityActivity extends MVPActivity<CityManagerUI, CityManagerPres
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ListCityActivity.this.finish();
+                ListCityActivityRaw.this.finish();
             }
         });
 
@@ -118,9 +118,9 @@ public class ListCityActivity extends MVPActivity<CityManagerUI, CityManagerPres
         initView();
 
         stringList = new ArrayList<>();
-        citiesAdapter = new CitiesAdapter(this, stringList);
+        citiesAdapterRaw = new CitiesAdapterRaw(this, stringList);
 
-        mGridView.setAdapter(citiesAdapter);
+        mGridView.setAdapter(citiesAdapterRaw);
 
         new Thread(new Runnable() {
             @Override
@@ -128,10 +128,10 @@ public class ListCityActivity extends MVPActivity<CityManagerUI, CityManagerPres
                 if (basicCities2560 == null) {
                     mHandler.sendEmptyMessage(SHOW_TOAST);
                     //解析超长字符串，耗时操作
-                    HeWeather5Map.init2560Cities(ListCityActivity.this);
+                    HeWeather5Map.init2560Cities(ListCityActivityRaw.this);
                 }
 
-                Log.d(ListCityActivity.class.getName(),"ListView适配器数据的大小：" + stringList.size());
+                Log.d(ListCityActivityRaw.class.getName(),"ListView适配器数据的大小：" + stringList.size());
                 if(stringList.size() != 2560) {
                     stringList.clear();
                     mHandler.sendEmptyMessage(NOTIFY_CHANGED_ONE_CITY);
@@ -155,11 +155,11 @@ public class ListCityActivity extends MVPActivity<CityManagerUI, CityManagerPres
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        Log.d(ListCityActivity.class.getName(), "监听函数执行了");
+        Log.d(ListCityActivityRaw.class.getName(), "监听函数执行了");
         mGridView.setFilterText(newText);
         //交给过滤器去过滤
         Filter filter;
-        filter = citiesAdapter.getFilter();
+        filter = citiesAdapterRaw.getFilter();
         filter.filter(newText);
 
         return true;
@@ -177,7 +177,7 @@ public class ListCityActivity extends MVPActivity<CityManagerUI, CityManagerPres
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         mGridView.clearTextFilter();
 
-        String key = citiesAdapter.getItem(position);
+        String key = citiesAdapterRaw.getItem(position);
         final BasicCity basicCity = HeWeather5Map.basicCities2560.get(key);
 
         final View showView = LayoutInflater.from(this).inflate(R.layout.alert_dialog_basic_city_info, null);

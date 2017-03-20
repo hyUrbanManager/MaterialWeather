@@ -32,6 +32,9 @@
     <!--用户要查看的城市储存键值-->
     <string name="cities_manager">cities_manager_save_on_sharePreference</string>
 
+    <!--显示的风格-->
+    <string name="style_key">style_key</string>
+
     <!--关于作者，GitHub-->
     <string name="about_title">关于</string>
     <string name="about_message">给作者一个鼓励呗</string>

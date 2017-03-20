@@ -176,6 +176,24 @@ public class WeatherCityPresenter extends BasePresenter<ListCityUI> {
     }
 
     /**
+     * 读取显示的风格，没有保存则返回Raw
+     *
+     * @return
+     */
+    public int getStyleOnSQLite() {
+        return model.getStyleOnSQLite();
+    }
+
+    /**
+     * 存入显示的风格
+     *
+     * @param style
+     */
+    public void saveStyleOnSQLite(int style) {
+        model.saveStyleOnSQLite(style);
+    }
+
+    /**
      * 把list转换成json字符串传入
      *
      * @param list

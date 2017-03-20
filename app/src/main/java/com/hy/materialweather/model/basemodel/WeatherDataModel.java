@@ -43,5 +43,9 @@ public interface WeatherDataModel {
     //返回是否已经获取到key了
     boolean isKeyGet();
 
+    //读取显示的风格
+    int getStyleOnSQLite();
 
+    //保存显示的风格
+    void saveStyleOnSQLite(int style);
 }
