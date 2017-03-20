@@ -9,10 +9,13 @@ import com.hy.materialweather.Utils;
 
 import java.lang.ref.WeakReference;
 
+/**
+ * 启动Activity，显示静态画面
+ */
 public class SplashActivity extends AppCompatActivity {
     public static final String TAG = SplashActivity.class.getName();
     private SwitchHandler mHandler = new SwitchHandler(this);
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //activity切换的淡入淡出效果

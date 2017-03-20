@@ -19,6 +19,9 @@ import java.util.Map;
  */
 public class HeWeather5Map {
 
+    //当前的网络状态码
+    public static int networkType = 0;
+
     //上一次获取天气是否成功
     public static boolean isKeyCorrect = false;
 

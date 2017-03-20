@@ -22,4 +22,6 @@ public interface FinalMessageWhatInt {
 
     int STOP_REFRESHING = 8;
 
+    int RECEIVER_QUIRE_REFRESH = 9;
+
 }

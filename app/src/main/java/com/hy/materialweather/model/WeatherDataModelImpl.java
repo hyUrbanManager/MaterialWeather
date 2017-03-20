@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.util.Log;
 
 import com.hy.materialweather.R;
+import com.hy.materialweather.Utils;
 import com.hy.materialweather.model.basemodel.WeatherDataModel;
 import com.hy.materialweather.model.json.CityInfo;
 import com.hy.materialweather.model.json.GsonUtils;
@@ -172,7 +173,11 @@ public class WeatherDataModelImpl implements WeatherDataModel {
                 .build();
 
         call = client.newCall(request);
-        call.enqueue(callback);
+        try {
+            call.enqueue(callback);
+        } catch (IllegalStateException e) {
+            Utils.d(TAG + " 发生了重复递交申请" + e.getMessage());
+        }
     }
 
     /**

@@ -3,6 +3,8 @@ package com.hy.materialweather.ui.activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Looper;
 import android.os.Message;
@@ -36,6 +38,7 @@ import com.hy.materialweather.model.WeatherRequestPackage;
 import com.hy.materialweather.model.json.HeWeather5;
 import com.hy.materialweather.presenter.WeatherCityPresenter;
 import com.hy.materialweather.ui.baseui.ListCityUI;
+import com.hy.materialweather.ui.receiver.NetworkReceiver;
 import com.hy.materialweather.ui.view.UpdateView;
 
 import java.util.ArrayList;
@@ -103,6 +106,9 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
                         break;
                     case STOP_REFRESHING:
                         mSwipeRefreshLayout.setRefreshing(false);
+                        break;
+                    case RECEIVER_QUIRE_REFRESH:
+                        refreshCityList(true);
                         break;
                 }
             }
@@ -190,6 +196,12 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
         //读数据库选择的城市
         HeWeather5Map.chosenCities = mPresenter.getCitiesOnSQLite();
 
+        //动态注册广播接收者
+        IntentFilter mFilter = new IntentFilter();
+        mFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        NetworkReceiver mReceiver = new NetworkReceiver(mHandler);
+        registerReceiver(mReceiver, mFilter);
+
         //设置listView监听
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -272,7 +284,9 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
             mSnackbar.dismiss();
         }
         //全部收到，停止刷新。
+        receiveCnt = 0;
         mSwipeRefreshLayout.setRefreshing(false);
+        Utils.d(TAG + " 停止刷新列表动画");
     }
 
     /**
