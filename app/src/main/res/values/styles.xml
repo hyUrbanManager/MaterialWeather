@@ -11,7 +11,35 @@
     <!--设置starting windows 背景-->
     <style name="FirstTheme" parent="AppTheme.NoActionBar">
         <item name="android:windowNoTitle">true</item>
-        <item name="android:windowBackground">@mipmap/material_weather_background</item>
+        <item name="android:windowBackground">@mipmap/first_backpng</item>
+    </style>
+
+    <!--material 主题-->
+    <style name="SunnyTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- toolbar（actionbar）颜色 -->
+        <item name="colorPrimary">@color/l_primary</item>
+        <!-- 状态栏颜色 -->
+        <item name="colorPrimaryDark">@color/l_primary_dark</item>
+        <!-- 窗口的背景颜色 -->
+        <item name="android:windowBackground">@color/white</item>
+        <!--选中颜色-->
+        <item name="colorAccent">@color/l_accent</item>
+        <item name="android:colorFocusedHighlight">@color/l_primary_light</item>
+        <item name="divider">@color/l_divider</item>
+        <item name="icon">@color/l_icons</item>
+        <item name="android:textColorPrimary">@color/l_primary_text</item>
+        <item name="android:textColorSecondary">@color/l_secondary_text</item>
+    </style>
+
+    <style name="RainnyTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- toolbar（actionbar）颜色 -->
+        <item name="colorPrimary">@color/d_primary</item>
+        <!-- 状态栏颜色 -->
+        <item name="colorPrimaryDark">@color/d_primary_dark</item>
+        <!-- 窗口的背景颜色 -->
+        <item name="android:windowBackground">@color/white</item>
+        <!--选中颜色-->
+        <item name="colorAccent">@color/d_accent</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -49,5 +77,7 @@
     <!--AlertDialog样式-->
     <style name="myAlertDialog" parent="@android:style/Theme.Material.Light.Dialog.Alert">
     </style>
-    
+
+    <style name="MySearchViewStyle"></style>
+
 </resources>

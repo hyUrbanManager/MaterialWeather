@@ -105,7 +105,13 @@ public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInf
             toolbar.setTitle("未知城市");
         }
         setSupportActionBar(toolbar);
-
+        //返回监听，在setSupportActionBar之后
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ScrollingInfoActivity.this.finish();
+            }
+        });
 
     }
 

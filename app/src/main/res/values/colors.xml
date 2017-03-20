@@ -16,4 +16,25 @@
 
     <color name="grey_background">#EBEBEB</color>
 
+    <!--Material配色系列-->
+    <!--blue grey 暗色主题-->
+    <color name="d_primary">#9E9E9E</color>
+    <color name="d_primary_dark">#616161</color>
+    <color name="d_primary_light">#F5F5F5</color>
+    <color name="d_accent">#607D8B</color>
+    <color name="d_primary_text">#212121</color>
+    <color name="d_secondary_text">#757575</color>
+    <color name="d_icons">#212121</color>
+    <color name="d_divider">#BDBDBD</color>
+
+    <!--亮色主题-->
+    <color name="l_primary">#673AB7</color>
+    <color name="l_primary_dark">#512DA8</color>
+    <color name="l_primary_light">#D1C4E9</color>
+    <color name="l_accent">#FF4081</color>
+    <color name="l_primary_text">#212121</color>
+    <color name="l_secondary_text">#757575</color>
+    <color name="l_icons">#FFFFFF</color>
+    <color name="l_divider">#BDBDBD</color>
+
 </resources>

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
@@ -128,6 +129,7 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
     protected FloatingActionButton fab;
     public Snackbar mSnackbar;
     public UpdateView updateView;
+    private DrawerLayout mDrawer;
 
     /* 数据引用 */
     public List<Map<String, Object>> cityDataList = new ArrayList<>();
@@ -159,10 +161,10 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+                this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawer.setDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -301,11 +303,12 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
     @Override
     public void refreshCityList(boolean isAllReconnect) {
         //UI组件提醒，正在更新
-        if (Looper.myLooper() == Looper.getMainLooper()) {
-            showMessage("更新数据中...");
-        } else {
-            Utils.sendMessage(mHandler, PASS_STRING, "更新数据中...");
-        }
+        //暂时不提示更新
+//        if (Looper.myLooper() == Looper.getMainLooper()) {
+//            showMessage("更新数据中...");
+//        } else {
+//            Utils.sendMessage(mHandler, PASS_STRING, "更新数据中...");
+//        }
         //读到的数据个数，用于调用完成方法
         receiveCnt = 0;
         final List<String> mCityNameList = new ArrayList<>();
@@ -474,23 +477,31 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
 
         if (id == R.id.nav_city_manager) {
             //所选城市管理器，根据风格启动不同的Activity
-            Class<?> activityClass = CityManagerActivity.class;
-            Intent intent = new Intent(MainActivity.this, activityClass);
-            startActivity(intent);
+            mDrawer.closeDrawer(GravityCompat.START);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Class<?> activityClass = HeWeather5Map.style == HeWeather5Map.RAW_STYLE ?
+                            CityManagerActivityRaw.class : CityManagerActivityMaterial.class;
+                    Intent intent = new Intent(MainActivity.this, activityClass);
+                    startActivity(intent);
+                }
+            },200);
         } else if (id == R.id.nav_material_show) {
             //设置风格
             HeWeather5Map.style = HeWeather5Map.MATERIAL_STYLE;
             mPresenter.saveStyleOnSQLite(HeWeather5Map.style);
             Utils.d(TAG + " 设置了Material风格");
-            Utils.sendMessage(mHandler, PASS_STRING, "Material风格");
+            Snackbar.make(mDrawer, "Material风格", Snackbar.LENGTH_SHORT).show();
         } else if (id == R.id.nav_raw_data_show) {
             //设置风格
             HeWeather5Map.style = HeWeather5Map.RAW_STYLE;
             mPresenter.saveStyleOnSQLite(HeWeather5Map.style);
             Utils.d(TAG + " 设置了Raw风格");
-            Utils.sendMessage(mHandler, PASS_STRING, "Raw风格");
+            Snackbar.make(mDrawer, "Raw风格", Snackbar.LENGTH_SHORT).show();
         } else if (id == R.id.location_message) {
-            AlertDialog dialog = new AlertDialog.Builder(
+            mDrawer.closeDrawer(GravityCompat.START);
+            final AlertDialog dialog = new AlertDialog.Builder(
                     MainActivity.this)
                     .setTitle("当前地理位置")
                     .setMessage(locationMessage.toString())
@@ -501,17 +512,26 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
                         }
                     })
                     .create();
-            dialog.show();
-            //设置窗体
-            WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();
-            layoutParams.alpha = 0.8f;
-            dialog.getWindow().setAttributes(layoutParams);
-
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    dialog.show();
+                    //设置窗体
+                    WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();
+                    layoutParams.alpha = 0.8f;
+                    dialog.getWindow().setAttributes(layoutParams);
+                }
+            },200);
         } else if (id == R.id.nav_setting) {
 
         } else if (id == R.id.nav_about) {
             //Lib界面
-
+            mDrawer.closeDrawer(GravityCompat.START);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                }
+            },200);
         }
         return true;
     }

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.hy.materialweather.ui.activity.ListCityActivityMaterial">
+    tools:context="com.hy.materialweather.ui.activity.CityManagerActivityMaterial">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -19,14 +19,13 @@
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" >
 
-            <android.support.v7.widget.SearchView
-                android:id="@+id/searchView1"
-                app:defaultQueryHint="输入想要添加的城市"
+            <TextView
+                android:id="@+id/title"
+                android:textColor="@color/l_icons"
+                android:textSize="@dimen/Material_app_bar"
                 android:layout_gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-            </android.support.v7.widget.SearchView>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
         </android.support.v7.widget.Toolbar>
 

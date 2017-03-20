@@ -5,33 +5,32 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.hy.materialweather.R;
 import com.hy.materialweather.basemvpcomponent.MVPActivity;
 import com.hy.materialweather.model.HeWeather5Map;
-import com.hy.materialweather.model.json.HeWeather5;
-import com.hy.materialweather.model.json.Tmp;
 import com.hy.materialweather.presenter.CityManagerPresenter;
 import com.hy.materialweather.ui.baseui.CityManagerUI;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class CityManagerActivity extends MVPActivity<CityManagerUI, CityManagerPresenter>
+/**
+ * 使用RecyclerView
+ */
+public class CityManagerActivityMaterial extends MVPActivity<CityManagerUI, CityManagerPresenter>
         implements MVPActivity.MVPHandler.onHandleMessageListener,
         CityManagerUI, AdapterView.OnItemLongClickListener {
-    public final String TAG = CityManagerActivity.class.getName() + "类下";
+    public final String TAG = CityManagerActivityMaterial.class.getName() + "类下";
 
     private MVPHandler mHandler;
 
@@ -54,7 +53,7 @@ public class CityManagerActivity extends MVPActivity<CityManagerUI, CityManagerP
     }
 
     /* view引用 */
-    protected ListView mListView;
+    protected RecyclerView mRecyclerView;
     protected TextView title;
 
     /* 数据引用 */
@@ -74,27 +73,27 @@ public class CityManagerActivity extends MVPActivity<CityManagerUI, CityManagerP
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CityManagerActivity.this.finish();
+                CityManagerActivityMaterial.this.finish();
             }
         });
 
-        mListView = (ListView) findViewById(R.id.listView1);
+        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_city_manager);
+        setContentView(R.layout.activity_city_manager_material);
         //初始化View
         initView();
 
-        simpleAdapter = new SimpleAdapter(this,
-                mapList,
-                R.layout.material_simple_list_item,
-                new String[]{"icon", "text", "tmp"},
-                new int[]{R.id.image, R.id.text, R.id.tmp});
-        mListView.setAdapter(simpleAdapter);
-        mListView.setOnItemLongClickListener(this);
+//        simpleAdapter = new SimpleAdapter(this,
+//                mapList,
+//                R.layout.material_simple_list_item,
+//                new String[]{"icon", "text", "tmp"},
+//                new int[]{R.id.image, R.id.text, R.id.tmp});
+//        mRecyclerView.setAdapter(simpleAdapter);
+//        mRecyclerView.setOnItemLongClickListener(this);
     }
 
     @Override
@@ -102,18 +101,18 @@ public class CityManagerActivity extends MVPActivity<CityManagerUI, CityManagerP
         super.onStart();
 
         //从内存中更新list列表
-        Iterator<String> iterator = HeWeather5Map.chosenCities.iterator();
-        while (iterator.hasNext()) {
-            Map<String, Object> map = new HashMap<>();
-            String cityName = iterator.next();
-            map.put("icon", R.drawable.ic_city);
-            map.put("text", cityName);
-            HeWeather5 heWeather5 = HeWeather5Map.heWeather5HashMap.get(cityName);
-            Tmp tmp =  heWeather5 == null ? null : heWeather5.daily_forecast.get(0).tmp;
-            map.put("tmp", tmp == null ? "N/A" : tmp.min + "°C ~ " + tmp.max + "°C");
-            mapList.add(map);
-        }
-        simpleAdapter.notifyDataSetChanged();
+//        Iterator<String> iterator = HeWeather5Map.chosenCities.iterator();
+//        while (iterator.hasNext()) {
+//            Map<String, Object> map = new HashMap<>();
+//            String cityName = iterator.next();
+//            map.put("icon", R.drawable.ic_city);
+//            map.put("text", cityName);
+//            HeWeather5 heWeather5 = HeWeather5Map.heWeather5HashMap.get(cityName);
+//            Tmp tmp =  heWeather5 == null ? null : heWeather5.daily_forecast.get(0).tmp;
+//            map.put("tmp", tmp == null ? "N/A" : tmp.min + "°C ~ " + tmp.max + "°C");
+//            mapList.add(map);
+//        }
+//        simpleAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -142,11 +141,11 @@ public class CityManagerActivity extends MVPActivity<CityManagerUI, CityManagerP
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.operate) {
+        if (item.getItemId() == R.id.operate) {
             //更具风格不同启动不同的Activity
             Class<?> ac = HeWeather5Map.style == HeWeather5Map.RAW_STYLE ?
                     ListCityActivityRaw.class : ListCityActivityMaterial.class;
-            Intent intent = new Intent(CityManagerActivity.this, ac);
+            Intent intent = new Intent(CityManagerActivityMaterial.this, ac);
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);

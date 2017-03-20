@@ -6,12 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.hy.materialweather.ui.activity.CityManagerActivity"
+    tools:context="com.hy.materialweather.ui.activity.CityManagerActivityMaterial"
     tools:showIn="@layout/activity_city_manager">
 
     <ListView
         android:id="@+id/listView1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></ListView>
+        android:layout_height="match_parent"/>
 
 </RelativeLayout>

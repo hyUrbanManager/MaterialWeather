@@ -43,11 +43,11 @@
             android:name=".ui.activity.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/SunnyTheme" />
         <activity
             android:name=".ui.activity.ScrollingInfoActivity"
             android:label="@string/title_activity_scrolling_info"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/SunnyTheme">
 
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->
@@ -55,13 +55,13 @@
             <!-- </intent-filter> -->
         </activity>
         <activity
-            android:name=".ui.activity.CityManagerActivity"
+            android:name=".ui.activity.CityManagerActivityMaterial"
             android:label="@string/title_activity_city_manager"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/SunnyTheme" />
         <activity
             android:name=".ui.activity.ListCityActivityRaw"
             android:label="@string/title_activity_list_city"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/SunnyTheme">
             <intent-filter>
                 <action android:name="addcities" />
             </intent-filter>
@@ -75,7 +75,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.ListCityActivityMaterial"></activity>
+        <activity
+            android:name=".ui.activity.ListCityActivityMaterial"
+            android:label="Material"
+            android:theme="@style/SunnyTheme" />
+        <activity android:name=".ui.activity.CityManagerActivityRaw"
+            android:theme="@style/SunnyTheme"/>
     </application>
 
 </manifest>

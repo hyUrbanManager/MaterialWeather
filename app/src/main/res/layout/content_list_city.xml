@@ -9,9 +9,14 @@
     tools:context="com.hy.materialweather.ui.activity.ListCityActivityRaw"
     tools:showIn="@layout/activity_list_city">
 
+    <!--<ListView-->
+        <!--android:id="@+id/listView1"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"></ListView>-->
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <GridView
+        android:id="@+id/gridView1"
+        android:numColumns="4"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

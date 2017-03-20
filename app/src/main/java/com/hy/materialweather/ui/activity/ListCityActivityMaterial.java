@@ -4,7 +4,9 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
@@ -12,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Filter;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,7 +24,7 @@ import com.hy.materialweather.basemvpcomponent.MVPActivity;
 import com.hy.materialweather.model.HeWeather5Map;
 import com.hy.materialweather.model.json.BasicCity;
 import com.hy.materialweather.presenter.CityManagerPresenter;
-import com.hy.materialweather.ui.adapter.CitiesAdapterRaw;
+import com.hy.materialweather.ui.adapter.CitiesAdapterMaterial;
 import com.hy.materialweather.ui.baseui.CityManagerUI;
 
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import static com.hy.materialweather.Utils.d;
 import static com.hy.materialweather.model.HeWeather5Map.basicCities2560;
 
 /**
@@ -40,6 +42,7 @@ import static com.hy.materialweather.model.HeWeather5Map.basicCities2560;
 public class ListCityActivityMaterial extends MVPActivity<CityManagerUI, CityManagerPresenter>
         implements MVPActivity.MVPHandler.onHandleMessageListener,
         CityManagerUI, SearchView.OnQueryTextListener, AdapterView.OnItemClickListener{
+    public static final String TAG = ListCityActivityMaterial.class.getName();
 
     private MVPHandler mHandler;
 
@@ -57,6 +60,7 @@ public class ListCityActivityMaterial extends MVPActivity<CityManagerUI, CityMan
             case CLOSE_TOAST:
                 mToast.cancel();
                 break;
+            //把所有城市的数据装载
             case UPDATE_LIST_VIEW:
                 //添加ListView数据
                 Set<String> set = HeWeather5Map.basicCities2560.keySet();
@@ -68,7 +72,12 @@ public class ListCityActivityMaterial extends MVPActivity<CityManagerUI, CityMan
                     stringList.add(basicCity.cityZh);
                 }
 
-                citiesAdapterRaw.notifyDataSetChanged();
+                citiesAdapterMaterial.notifyDataSetChanged();
+                break;
+            //RecyclerView中，只更新一个
+            case NOTIFY_CHANGED_ONE_CITY:
+                int position = msg.what;
+                citiesAdapterMaterial.notifyItemInserted(position);
                 break;
         }
     }
@@ -79,12 +88,12 @@ public class ListCityActivityMaterial extends MVPActivity<CityManagerUI, CityMan
     }
 
     /* view引用 */
-    protected GridView mGridView;
+    protected RecyclerView mRecyclerView;
     protected Toast mToast;
     protected SearchView mSearchView;
 
     /* 数据引用 */
-    CitiesAdapterRaw citiesAdapterRaw;
+    CitiesAdapterMaterial citiesAdapterMaterial;
     List<String> stringList;
 
     @Override
@@ -102,9 +111,10 @@ public class ListCityActivityMaterial extends MVPActivity<CityManagerUI, CityMan
             }
         });
 
-        mGridView = (GridView) findViewById(R.id.gridView1);
-        mGridView.setTextFilterEnabled(true);
-        mGridView.setOnItemClickListener(this);
+        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+
+//        mRecyclerView.setTextFilterEnabled(true);
+//        mRecyclerView.setOnItemClickListener(this);
 
         mSearchView = (SearchView) findViewById(R.id.searchView1);
         mSearchView.setOnQueryTextListener(this);
@@ -116,14 +126,17 @@ public class ListCityActivityMaterial extends MVPActivity<CityManagerUI, CityMan
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_city);
+        setContentView(R.layout.activity_list_city_material);
         //初始化View组件
         initView();
 
         stringList = new ArrayList<>();
-        citiesAdapterRaw = new CitiesAdapterRaw(this, stringList);
+        citiesAdapterMaterial = new CitiesAdapterMaterial(this, stringList);
 
-        mGridView.setAdapter(citiesAdapterRaw);
+        //设置RecyclerView
+        mRecyclerView.setAdapter(citiesAdapterMaterial);
+        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(4,
+                StaggeredGridLayoutManager.VERTICAL));
 
         new Thread(new Runnable() {
             @Override
@@ -134,7 +147,7 @@ public class ListCityActivityMaterial extends MVPActivity<CityManagerUI, CityMan
                     HeWeather5Map.init2560Cities(ListCityActivityMaterial.this);
                 }
 
-                Log.d(ListCityActivityRaw.class.getName(),"ListView适配器数据的大小：" + stringList.size());
+                Utils.d(TAG + "ListView适配器数据的大小：" + stringList.size());
                 if(stringList.size() != 2560) {
                     stringList.clear();
                     mHandler.sendEmptyMessage(UPDATE_LIST_VIEW);
@@ -159,10 +172,9 @@ public class ListCityActivityMaterial extends MVPActivity<CityManagerUI, CityMan
     @Override
     public boolean onQueryTextChange(String newText) {
         Log.d(ListCityActivityRaw.class.getName(), "监听函数执行了");
-        mGridView.setFilterText(newText);
         //交给过滤器去过滤
         Filter filter;
-        filter = citiesAdapterRaw.getFilter();
+        filter = citiesAdapterMaterial.getFilter();
         filter.filter(newText);
 
         return true;
@@ -178,9 +190,8 @@ public class ListCityActivityMaterial extends MVPActivity<CityManagerUI, CityMan
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        mGridView.clearTextFilter();
-
-        String key = citiesAdapterRaw.getItem(position);
+//        String key = citiesAdapterMaterial.getItemViewType(position);
+        String key = null;
         final BasicCity basicCity = HeWeather5Map.basicCities2560.get(key);
 
         final View showView = LayoutInflater.from(this).inflate(R.layout.alert_dialog_basic_city_info, null);
@@ -213,7 +224,7 @@ public class ListCityActivityMaterial extends MVPActivity<CityManagerUI, CityMan
                             showMessage("添加成功");
                             //存入数据库
                             mPresenter.saveCitiesOnSQLite(HeWeather5Map.chosenCities);
-                            Utils.d("成功添加了一个请求城市");
+                            d("成功添加了一个请求城市");
                         }
                     }
                 })
