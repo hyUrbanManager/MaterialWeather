@@ -131,7 +131,7 @@ public class WeatherDataModelImpl implements WeatherDataModel {
             list = GsonUtils.parseJsonArrayWithGson(json, String.class);
             return list;
         }
-        return null;
+        return new ArrayList<>();
     }
 
     /**

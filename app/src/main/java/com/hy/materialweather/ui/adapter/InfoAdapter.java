@@ -10,9 +10,9 @@ import android.widget.TextView;
 import java.util.List;
 
 /**
- * Created by Administrator on 2017/3/20.
+ * 测试RecyclerView使用
  */
-
+@Deprecated
 public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.VH> {
 
     private Context context;

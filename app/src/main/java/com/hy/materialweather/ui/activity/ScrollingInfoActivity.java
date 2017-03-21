@@ -5,37 +5,30 @@ import android.os.Bundle;
 import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.ImageView;
 
 import com.hy.materialweather.R;
 import com.hy.materialweather.basemvpcomponent.MVPActivity;
 import com.hy.materialweather.model.DATA;
 import com.hy.materialweather.model.json.HeWeather5;
 import com.hy.materialweather.presenter.WeatherInfoPresenter;
-import com.hy.materialweather.ui.adapter.InfoAdapter;
 import com.hy.materialweather.ui.baseui.CityAllInfoUI;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInfoPresenter>
-        implements CityAllInfoUI {
+        implements MVPActivity.MVPHandler.onHandleMessageListener, CityAllInfoUI {
 
     private MVPHandler mHandler;
 
     @Override
     protected MVPHandler createHandler() {
-        return new MVPHandler(new MVPHandler.onHandleMessageListener() {
-            @Override
-            public void handleMessage(Message msg) {
-                switch (msg.what) {
-                }
-            }
-        });
+        return new MVPHandler(this);
+    }
+
+    @Override
+    public void handleMessage(Message msg) {
+
     }
 
     @Override
@@ -45,24 +38,17 @@ public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInf
     }
 
     /* View 引用*/
-    private RecyclerView mRecycleView;
     private Toolbar toolbar;
+    private ImageView imageView;
+
+    private Snackbar mSnackBar;
 
     /* 数据引用 */
-    List<String> list = new ArrayList<>();
-    InfoAdapter mAdapter;
-
 
     @Override
     protected void initView() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -73,7 +59,8 @@ public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInf
             }
         });
 
-        mRecycleView = (RecyclerView) findViewById(R.id.recyclerView);
+        imageView = (ImageView) findViewById(R.id.image);
+
     }
 
     @Override
@@ -86,13 +73,20 @@ public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInf
         //获取传递进来的数据
         Intent intent = getIntent();
         String cityName = intent.getStringExtra("city");
-        Toast.makeText(this, cityName, Toast.LENGTH_LONG).show();
 
         //查全局Map获得对象
         HeWeather5 heWeather5 = DATA.heWeather5HashMap.get(cityName);
         infoOnCard(heWeather5);
 
-        initRecyclerView();
+        if(heWeather5 == null) {
+            showMessage("诗句错误");
+        } else {
+            //加载数据
+            setDataOnBody(heWeather5);
+        }
+
+
+
     }
 
     @Override
@@ -112,21 +106,20 @@ public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInf
                 ScrollingInfoActivity.this.finish();
             }
         });
-
     }
 
     /**
-     * 初始化RecyclerView
+     * 给主体设置数据
      */
-    private void initRecyclerView() {
-        for (int i = 0; i < 50; i++) {
-            list.add("item " + i + " 热爱祖国");
-        }
-        mAdapter = new InfoAdapter(this, list);
+    private void setDataOnBody(HeWeather5 heWeather5) {
+        //顶上图片背景
+        imageView.setImageResource(DATA.convertToRes(Integer.parseInt(heWeather5.now.cond.code)));
 
-        mRecycleView.setAdapter(mAdapter);
-        mRecycleView.setLayoutManager(new LinearLayoutManager(this));
+    }
 
+    private void showMessage(String message) {
+        mSnackBar = Snackbar.make(getWindow().getDecorView(), message, Snackbar.LENGTH_LONG);
+        mSnackBar.show();
     }
 
 }

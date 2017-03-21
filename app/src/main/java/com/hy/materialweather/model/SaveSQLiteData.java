@@ -12,6 +12,7 @@ import static com.hy.materialweather.model.DATA.MATERIAL_STYLE;
 /**
  * 保存在SQLite上的数据
  */
+@Deprecated
 public class SaveSQLiteData {
 
     //当前定位的城市

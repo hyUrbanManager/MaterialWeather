@@ -23,10 +23,14 @@
     <dimen name="Material_super_large2">45sp</dimen>
     <dimen name="Material_super_large3">56sp</dimen>
     <dimen name="Material_super_large4">112sp</dimen>
+
     <dimen name="text_margin">16dp</dimen>
     <dimen name="app_bar_height">180dp</dimen>
 
+    <!--增高图片的高度-->
+    <dimen name="new_app_bar_height">200dp</dimen>
+
     <!--按下弹起的高度-->
-    <dimen name="touch_raise_size">30dp</dimen>
+    <dimen name="touch_raise_size">15dp</dimen>
 
 </resources>

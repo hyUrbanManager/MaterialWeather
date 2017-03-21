@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_selected="true" >
+        <set android:ordering="together">
+            <objectAnimator
+                android:duration="@android:integer/config_longAnimTime"
+                android:propertyName="translationZ"
+                android:valueTo="@dimen/touch_raise_size"
+                android:valueType="floatType" />
+
+            <objectAnimator
+                android:duration="@android:integer/config_longAnimTime"
+                android:propertyName="translationY"
+                android:valueTo="100dp"
+                android:valueType="floatType" />
+        </set>
+    </item>
+    <item>
+        <objectAnimator
+            android:duration="@android:integer/config_shortAnimTime"
+            android:propertyName="translationZ"
+            android:valueTo="0dp"
+            android:valueType="floatType" />
+    </item>
+</selector>
