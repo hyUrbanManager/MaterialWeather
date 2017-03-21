@@ -23,15 +23,19 @@ public interface WeatherDataModel {
     HeWeather5 parseWeahterJson(String json);
 
     //从数据库中取出数据
+    @Deprecated
     List<CityInfo> getWeatherFromSQLite(String city);
 
     //把城市信息存入数据库
+    @Deprecated
     boolean saveWeatherOnSQLite(List<CityInfo> cityInfo);
 
     //读取记录，用户要查看哪些城市
+    @Deprecated
     List<String> getCitiesOnSQLite();
 
     //存入记录，用户要查看哪些城市
+    @Deprecated
     void saveCitiesOnSQLite(List<String> list);
 
     //同步方法获取Key
@@ -44,8 +48,17 @@ public interface WeatherDataModel {
     boolean isKeyGet();
 
     //读取显示的风格
+    @Deprecated
     int getStyleOnSQLite();
 
     //保存显示的风格
+    @Deprecated
     void saveStyleOnSQLite(int style);
+
+    //把要保存的数据保存进SQLite
+    void saveOnSQLite();
+
+    //把保存的数据保从SQLite取出
+    void getOnSQLite();
+
 }

@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * 全局的数据列表
  */
-public class HeWeather5Map {
+public class DATA {
 
     //显示风格常量
     public static final int RAW_STYLE = 0;
@@ -32,20 +32,23 @@ public class HeWeather5Map {
     //当前定位的城市
     public static String locationCity;
 
-    //当前网络已经获取过的对象集合
+    //设置要求查看的城市
+    public static List<String> chosenCities = new ArrayList<>();
+
+    //已经获取过的城市集合
     public static Map<String, HeWeather5> heWeather5HashMap = new HashMap<>();
 
     //存在本地的节点,2560个城市，选择城市的时候再从String中读取 String大小，572K
     public static Map<String, BasicCity> basicCities2560 = null;
-
-    //设置要求查看的城市
-    public static List<String> chosenCities = new ArrayList<>();
 
     //天气状况代码
     public static SparseIntArray condMap = new SparseIntArray();
 
     //当前显示的风格
     public static int style = MATERIAL_STYLE;
+
+    //保存在SQLite中的数据
+    public static SaveSQLiteData sqLiteData;
 
     /**
      * 初始化天气代码和图片的对应表

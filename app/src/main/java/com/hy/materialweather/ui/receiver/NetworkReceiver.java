@@ -9,7 +9,7 @@ import android.os.Handler;
 import android.telephony.TelephonyManager;
 
 import com.hy.materialweather.Utils;
-import com.hy.materialweather.model.HeWeather5Map;
+import com.hy.materialweather.model.DATA;
 import com.hy.materialweather.ui.baseui.ListCityUI;
 
 /**
@@ -35,12 +35,12 @@ public class NetworkReceiver extends BroadcastReceiver{
                 @Override
                 public void run() {
                     //保存当前的网络类型
-                    int temp = HeWeather5Map.networkType;
-                    HeWeather5Map.networkType = getAPNType(context);
-                    if(temp == 0 && HeWeather5Map.networkType != 0) {
+                    int temp = DATA.networkType;
+                    DATA.networkType = getAPNType(context);
+                    if(temp == 0 && DATA.networkType != 0) {
                         Utils.sendEmptyMessage(mHandler, ListCityUI.RECEIVER_QUIRE_REFRESH);
                         Utils.d(TAG + " 变成有网");
-                    } else if(temp != 0 && HeWeather5Map.networkType == 0){
+                    } else if(temp != 0 && DATA.networkType == 0){
                         Utils.sendMessage(mHandler, ListCityUI.PASS_STRING, "你已经进入了没有网络的世界");
                         Utils.sendEmptyMessage(mHandler, ListCityUI.STOP_REFRESHING);
                         Utils.d(TAG + " 变成没网");

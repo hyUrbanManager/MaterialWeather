@@ -5,7 +5,7 @@ import android.content.Context;
 import com.hy.materialweather.Utils;
 import com.hy.materialweather.basemvpcomponent.BasePresenter;
 import com.hy.materialweather.basemvpcomponent.MVPActivity;
-import com.hy.materialweather.model.HeWeather5Map;
+import com.hy.materialweather.model.DATA;
 import com.hy.materialweather.model.WeatherDataModelImpl;
 import com.hy.materialweather.model.WeatherRequestPackage;
 import com.hy.materialweather.model.basemodel.WeatherDataModel;
@@ -51,7 +51,7 @@ public class WeatherCityPresenter extends BasePresenter<ListCityUI> {
      */
     public void weatherReportOnInternet(final WeatherRequestPackage requestPackage) {
         //首先检查Key，同步耗时方法
-        if (!HeWeather5Map.isKeyCorrect) {
+        if (!DATA.isKeyCorrect) {
             //异步方法获取key，再异步方法递交请求
             getKeyFromMyServer();
         }
@@ -86,16 +86,16 @@ public class WeatherCityPresenter extends BasePresenter<ListCityUI> {
                 //密码错误
                 Utils.sendMessage(mHandler, ListCityUI.PASS_STRING, "服务器获取key失败\n" + result);
                 Utils.d("获取key错误");
-                HeWeather5Map.isKeyCorrect = false;
+                DATA.isKeyCorrect = false;
             } else {
                 model.setKey(result);
                 Utils.d("获取key成功 " + result);
                 //首先设定为有效
-                HeWeather5Map.isKeyCorrect = true;
+                DATA.isKeyCorrect = true;
             }
         } catch (IOException e) {
             Utils.d(TAG + " 获取key失败" + e.getMessage());
-            HeWeather5Map.isKeyCorrect = false;
+            DATA.isKeyCorrect = false;
             Utils.sendMessage(mHandler, ListCityUI.PASS_STRING, "网络出错\n" + e.getMessage());
             Utils.sendEmptyMessage(mHandler, ListCityUI.STOP_REFRESHING);
         }
@@ -128,15 +128,15 @@ public class WeatherCityPresenter extends BasePresenter<ListCityUI> {
                     null, null,
                     new Now(new CondOne(null, null), null, null, null, null, null, null, null), null, null);
             viewInterface.addOneCity(h, requestPackage.list_position);
-            HeWeather5Map.isKeyCorrect = false;
+            DATA.isKeyCorrect = false;
             return;
 
         } else {
             //Key有效
-            HeWeather5Map.isKeyCorrect = true;
+            DATA.isKeyCorrect = true;
 
             //把数据保存到全局Map，当前获取到的实时信息
-            HeWeather5Map.heWeather5HashMap.put(heWeather5.basic.city, heWeather5);
+            DATA.heWeather5HashMap.put(heWeather5.basic.city, heWeather5);
 
             //把收到的数据保存在本地数据库
 
@@ -171,6 +171,7 @@ public class WeatherCityPresenter extends BasePresenter<ListCityUI> {
      *
      * @return
      */
+    @Deprecated
     public List<String> getCitiesOnSQLite() {
         return model.getCitiesOnSQLite();
     }
@@ -180,6 +181,7 @@ public class WeatherCityPresenter extends BasePresenter<ListCityUI> {
      *
      * @return
      */
+    @Deprecated
     public int getStyleOnSQLite() {
         return model.getStyleOnSQLite();
     }
@@ -189,6 +191,7 @@ public class WeatherCityPresenter extends BasePresenter<ListCityUI> {
      *
      * @param style
      */
+    @Deprecated
     public void saveStyleOnSQLite(int style) {
         model.saveStyleOnSQLite(style);
     }
@@ -198,8 +201,23 @@ public class WeatherCityPresenter extends BasePresenter<ListCityUI> {
      *
      * @param list
      */
+    @Deprecated
     public void saveCitiesOnSQLite(List<String> list) {
         model.saveCitiesOnSQLite(list);
+    }
+
+    /**
+     * 把要保存的数据保存进SQLite
+     */
+    void saveOnSQLite() {
+        model.saveOnSQLite();
+    }
+
+    /**
+     * 把保存的数据保从SQLite取出
+     */
+    void getOnSQLite() {
+        model.getOnSQLite();
     }
 
 }

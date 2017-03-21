@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.hy.materialweather.R;
 import com.hy.materialweather.basemvpcomponent.MVPActivity;
-import com.hy.materialweather.model.HeWeather5Map;
+import com.hy.materialweather.model.DATA;
 import com.hy.materialweather.model.json.HeWeather5;
 import com.hy.materialweather.presenter.WeatherInfoPresenter;
 import com.hy.materialweather.ui.adapter.InfoAdapter;
@@ -89,7 +89,7 @@ public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInf
         Toast.makeText(this, cityName, Toast.LENGTH_LONG).show();
 
         //查全局Map获得对象
-        HeWeather5 heWeather5 = HeWeather5Map.heWeather5HashMap.get(cityName);
+        HeWeather5 heWeather5 = DATA.heWeather5HashMap.get(cityName);
         infoOnCard(heWeather5);
 
         initRecyclerView();

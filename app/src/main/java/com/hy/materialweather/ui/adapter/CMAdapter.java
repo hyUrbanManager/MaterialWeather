@@ -5,7 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.hy.materialweather.model.HeWeather5Map;
+import com.hy.materialweather.model.DATA;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ public class CMAdapter extends RecyclerView.Adapter<CitiesAdapterMaterial.VH>{
 
     public CMAdapter(Context context) {
         this.context = context;
-        this.list = HeWeather5Map.chosenCities;
+        this.list = DATA.chosenCities;
     }
 
     @Override

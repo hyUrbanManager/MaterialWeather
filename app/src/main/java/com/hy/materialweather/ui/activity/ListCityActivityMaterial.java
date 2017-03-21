@@ -21,7 +21,7 @@ import android.widget.Toast;
 import com.hy.materialweather.R;
 import com.hy.materialweather.Utils;
 import com.hy.materialweather.basemvpcomponent.MVPActivity;
-import com.hy.materialweather.model.HeWeather5Map;
+import com.hy.materialweather.model.DATA;
 import com.hy.materialweather.model.json.BasicCity;
 import com.hy.materialweather.presenter.CityManagerPresenter;
 import com.hy.materialweather.ui.adapter.CitiesAdapterMaterial;
@@ -34,7 +34,7 @@ import java.util.Random;
 import java.util.Set;
 
 import static com.hy.materialweather.Utils.d;
-import static com.hy.materialweather.model.HeWeather5Map.basicCities2560;
+import static com.hy.materialweather.model.DATA.basicCities2560;
 
 /**
  * 使用瀑布流
@@ -63,12 +63,12 @@ public class ListCityActivityMaterial extends MVPActivity<CityManagerUI, CityMan
             //把所有城市的数据装载
             case UPDATE_LIST_VIEW:
                 //添加ListView数据
-                Set<String> set = HeWeather5Map.basicCities2560.keySet();
+                Set<String> set = DATA.basicCities2560.keySet();
                 Iterator<String> iterator = set.iterator();
 
                 while (iterator.hasNext()) {
                     String key = iterator.next();
-                    BasicCity basicCity = HeWeather5Map.basicCities2560.get(key);
+                    BasicCity basicCity = DATA.basicCities2560.get(key);
                     stringList.add(basicCity.cityZh);
                 }
 
@@ -144,7 +144,7 @@ public class ListCityActivityMaterial extends MVPActivity<CityManagerUI, CityMan
                 if (basicCities2560 == null) {
                     mHandler.sendEmptyMessage(SHOW_TOAST);
                     //解析超长字符串，耗时操作
-                    HeWeather5Map.init2560Cities(ListCityActivityMaterial.this);
+                    DATA.init2560Cities(ListCityActivityMaterial.this);
                 }
 
                 Utils.d(TAG + "ListView适配器数据的大小：" + stringList.size());
@@ -192,7 +192,7 @@ public class ListCityActivityMaterial extends MVPActivity<CityManagerUI, CityMan
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //        String key = citiesAdapterMaterial.getItemViewType(position);
         String key = null;
-        final BasicCity basicCity = HeWeather5Map.basicCities2560.get(key);
+        final BasicCity basicCity = DATA.basicCities2560.get(key);
 
         final View showView = LayoutInflater.from(this).inflate(R.layout.alert_dialog_basic_city_info, null);
         ImageView imag = (ImageView) showView.findViewById(R.id.image);
@@ -217,13 +217,13 @@ public class ListCityActivityMaterial extends MVPActivity<CityManagerUI, CityMan
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //是否包含该城市
-                        if(HeWeather5Map.chosenCities.contains(basicCity.cityZh)) {
+                        if(DATA.chosenCities.contains(basicCity.cityZh)) {
                             showMessage("该城市已被加入，请选择其他城市");
                         } else {
-                            HeWeather5Map.chosenCities.add(basicCity.cityZh);
+                            DATA.chosenCities.add(basicCity.cityZh);
                             showMessage("添加成功");
                             //存入数据库
-                            mPresenter.saveCitiesOnSQLite(HeWeather5Map.chosenCities);
+                            mPresenter.saveCitiesOnSQLite(DATA.chosenCities);
                             d("成功添加了一个请求城市");
                         }
                     }

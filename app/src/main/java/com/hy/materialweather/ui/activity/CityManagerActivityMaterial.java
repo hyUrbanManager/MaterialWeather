@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.hy.materialweather.R;
 import com.hy.materialweather.basemvpcomponent.MVPActivity;
-import com.hy.materialweather.model.HeWeather5Map;
+import com.hy.materialweather.model.DATA;
 import com.hy.materialweather.presenter.CityManagerPresenter;
 import com.hy.materialweather.ui.baseui.CityManagerUI;
 
@@ -101,13 +101,13 @@ public class CityManagerActivityMaterial extends MVPActivity<CityManagerUI, City
         super.onStart();
 
         //从内存中更新list列表
-//        Iterator<String> iterator = HeWeather5Map.chosenCities.iterator();
+//        Iterator<String> iterator = DATA.chosenCities.iterator();
 //        while (iterator.hasNext()) {
 //            Map<String, Object> map = new HashMap<>();
 //            String cityName = iterator.next();
 //            map.put("icon", R.drawable.ic_city);
 //            map.put("text", cityName);
-//            HeWeather5 heWeather5 = HeWeather5Map.heWeather5HashMap.get(cityName);
+//            HeWeather5 heWeather5 = DATA.heWeather5HashMap.get(cityName);
 //            Tmp tmp =  heWeather5 == null ? null : heWeather5.daily_forecast.get(0).tmp;
 //            map.put("tmp", tmp == null ? "N/A" : tmp.min + "°C ~ " + tmp.max + "°C");
 //            mapList.add(map);
@@ -122,8 +122,8 @@ public class CityManagerActivityMaterial extends MVPActivity<CityManagerUI, City
     protected void onPause() {
         super.onPause();
         //保存到内存数据里，和当前定位的城市
-        mPresenter.setLocationCity(HeWeather5Map.locationCity);
-        mPresenter.saveCitiesOnSQLite(HeWeather5Map.chosenCities);
+        mPresenter.setLocationCity(DATA.locationCity);
+        mPresenter.saveCitiesOnSQLite(DATA.chosenCities);
     }
 
     @Override
@@ -143,7 +143,7 @@ public class CityManagerActivityMaterial extends MVPActivity<CityManagerUI, City
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.operate) {
             //更具风格不同启动不同的Activity
-            Class<?> ac = HeWeather5Map.style == HeWeather5Map.RAW_STYLE ?
+            Class<?> ac = DATA.style == DATA.RAW_STYLE ?
                     ListCityActivityRaw.class : ListCityActivityMaterial.class;
             Intent intent = new Intent(CityManagerActivityMaterial.this, ac);
             startActivity(intent);
@@ -165,8 +165,8 @@ public class CityManagerActivityMaterial extends MVPActivity<CityManagerUI, City
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //内存中删除，再保存入数据库
-                        HeWeather5Map.chosenCities.remove(position);
-                        mPresenter.saveCitiesOnSQLite(HeWeather5Map.chosenCities);
+                        DATA.chosenCities.remove(position);
+                        mPresenter.saveCitiesOnSQLite(DATA.chosenCities);
                         //更新列表
                         mapList.remove(position);
                         simpleAdapter.notifyDataSetChanged();
