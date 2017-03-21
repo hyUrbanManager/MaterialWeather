@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/deadCond"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="空气："
+            android:textColor="@color/l_primary_text"
+            android:textSize="@dimen/Material_small_title" />
+
+        <LinearLayout
+            android:id="@+id/deadLin3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/deadCond"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:text="一氧化碳CO"
+                android:textColor="@color/l_primary_text"
+                android:textSize="@dimen/Material_small_title" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:text="二氧化氮NO2"
+                android:textColor="@color/l_primary_text"
+                android:textSize="@dimen/Material_small_title" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:text="臭氧O3"
+                android:textColor="@color/l_primary_text"
+                android:textSize="@dimen/Material_small_title" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:text="pm10"
+                android:textColor="@color/l_primary_text"
+                android:textSize="@dimen/Material_small_title" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:text="pm2.5"
+                android:textColor="@color/l_primary_text"
+                android:textSize="@dimen/Material_small_title" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:text="二氧化硫SO2"
+                android:textColor="@color/l_primary_text"
+                android:textSize="@dimen/Material_small_title" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:text="等级"
+                android:textColor="@color/l_primary_text"
+                android:textSize="@dimen/Material_app_bar" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/deadLin4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/deadCond"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/co"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:text="60ug/cm3"
+                android:textColor="@color/l_primary_text"
+                android:textSize="@dimen/Material_small_title" />
+
+            <TextView
+                android:id="@+id/no2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:text="60ug/cm3"
+                android:textColor="@color/l_primary_text"
+                android:textSize="@dimen/Material_small_title" />
+
+            <TextView
+                android:id="@+id/o3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:text="60ug/cm3"
+                android:textColor="@color/l_primary_text"
+                android:textSize="@dimen/Material_small_title" />
+
+
+            <TextView
+                android:id="@+id/pm10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:text="60ug/cm3"
+                android:textColor="@color/l_primary_text"
+                android:textSize="@dimen/Material_small_title" />
+
+            <TextView
+                android:id="@+id/pm2_5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:text="60ug/cm3"
+                android:textColor="@color/l_primary_text"
+                android:textSize="@dimen/Material_small_title" />
+
+            <TextView
+                android:id="@+id/so2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:text="60ug/cm3"
+                android:textColor="@color/l_primary_text"
+                android:textSize="@dimen/Material_small_title" />
+
+            <TextView
+                android:id="@+id/level"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="良"
+                android:textColor="@color/l_primary_text"
+                android:textSize="@dimen/Material_app_bar" />
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

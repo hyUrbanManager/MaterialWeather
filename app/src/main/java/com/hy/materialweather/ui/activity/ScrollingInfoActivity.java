@@ -8,6 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.hy.materialweather.R;
 import com.hy.materialweather.basemvpcomponent.MVPActivity;
@@ -78,15 +79,6 @@ public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInf
         HeWeather5 heWeather5 = DATA.heWeather5HashMap.get(cityName);
         infoOnCard(heWeather5);
 
-        if(heWeather5 == null) {
-            showMessage("诗句错误");
-        } else {
-            //加载数据
-            setDataOnBody(heWeather5);
-        }
-
-
-
     }
 
     @Override
@@ -94,9 +86,12 @@ public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInf
 
         //设置标题栏
         try {
-            toolbar.setTitle((heWeather5.basic.prov == null ? "" : heWeather5.basic.prov) + heWeather5.basic.city);
+            toolbar.setTitle((heWeather5.basic.prov == null ? "" : heWeather5.basic.prov)
+                    + heWeather5.basic.city);
         } catch (NullPointerException e) {
             toolbar.setTitle("未知城市");
+            showMessage("数据错误");
+            return;
         }
         setSupportActionBar(toolbar);
         //返回监听，在setSupportActionBar之后
@@ -106,6 +101,9 @@ public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInf
                 ScrollingInfoActivity.this.finish();
             }
         });
+
+        setDataOnBody(heWeather5);
+
     }
 
     /**
@@ -114,6 +112,48 @@ public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInf
     private void setDataOnBody(HeWeather5 heWeather5) {
         //顶上图片背景
         imageView.setImageResource(DATA.convertToRes(Integer.parseInt(heWeather5.now.cond.code)));
+
+        TextView text1, text2, text3;
+
+        //设置经纬度
+        text1 = (TextView) findViewById(R.id.jingweidu);
+        text2 = (TextView) findViewById(R.id.date);
+        text1.setText("经度：" + heWeather5.basic.lat + "  纬度：" + heWeather5.basic.lon);
+        text2.setText("更新时间： " + heWeather5.basic.update.loc);
+
+        //设置温度
+        text1 = (TextView) findViewById(R.id.todayTmp);
+        text2 = (TextView) findViewById(R.id.tomorrowTmp);
+        text3 = (TextView) findViewById(R.id.afterTomorrowTmp);
+        text1.setText(heWeather5.daily_forecast.get(0).tmp.max + "/" + heWeather5.daily_forecast.get(0).tmp.min + "\u2103");
+        text2.setText(heWeather5.daily_forecast.get(1).tmp.max + "/" + heWeather5.daily_forecast.get(1).tmp.min + "\u2103");
+        text3.setText(heWeather5.daily_forecast.get(2).tmp.max + "/" + heWeather5.daily_forecast.get(2).tmp.min + "\u2103");
+
+        //设置空气
+        text1 = (TextView) findViewById(R.id.co);
+        text2 = (TextView) findViewById(R.id.no2);
+        text3 = (TextView) findViewById(R.id.o3);
+        text1.setText((heWeather5.aqi.city.co != null ? heWeather5.aqi.city.co : 0) + " ug/cm3");
+        text2.setText((heWeather5.aqi.city.no2 != null ? heWeather5.aqi.city.no2 : 0) + " ug/cm3");
+        text3.setText((heWeather5.aqi.city.o3 != null ? heWeather5.aqi.city.o3 : 0) + " ug/cm3");
+        text1 = (TextView) findViewById(R.id.pm10);
+        text2 = (TextView) findViewById(R.id.pm2_5);
+        text3 = (TextView) findViewById(R.id.so2);
+        text1.setText((heWeather5.aqi.city.pm10 != null ? heWeather5.aqi.city.pm10 : 0) + " ug/cm3");
+        text2.setText((heWeather5.aqi.city.pm25 != null ? heWeather5.aqi.city.pm25 : 0) + " ug/cm3");
+        text3.setText((heWeather5.aqi.city.so2 != null ? heWeather5.aqi.city.so2 : 0) + " ug/cm3");
+        text1 = (TextView) findViewById(R.id.level);
+        text1.setText(heWeather5.aqi.city.qlty);
+
+        //日升日落，杂项
+        text1 = (TextView) findViewById(R.id.sunRise);
+        text2 = (TextView) findViewById(R.id.sunSet);
+        text1.setText(heWeather5.daily_forecast.get(0).astro.sr);
+        text2.setText(heWeather5.daily_forecast.get(0).astro.ss);
+        text1 = (TextView) findViewById(R.id.moonRise);
+        text2 = (TextView) findViewById(R.id.moonSet);
+        text1.setText(heWeather5.daily_forecast.get(0).astro.mr);
+        text2.setText(heWeather5.daily_forecast.get(0).astro.ms);
 
     }
 

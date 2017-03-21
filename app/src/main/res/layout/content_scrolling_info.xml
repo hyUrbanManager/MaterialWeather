@@ -8,5 +8,26 @@
     tools:context="com.hy.materialweather.ui.activity.ScrollingInfoActivity"
     tools:showIn="@layout/activity_scrolling_info">
 
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include layout="@layout/content_info_location" />
+
+            <include layout="@layout/content_info_weather" />
+
+            <include layout="@layout/content_info_cond" />
+
+            <include layout="@layout/content_info_other"/>
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
 
 </android.support.v4.widget.NestedScrollView>

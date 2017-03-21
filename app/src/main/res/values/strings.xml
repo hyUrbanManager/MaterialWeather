@@ -2608,4 +2608,7 @@
     <string name="title_activity_city_manager">CityManagerActivity</string>
     <string name="title_activity_list_city">ListCityActivity</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>
