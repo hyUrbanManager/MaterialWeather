@@ -244,7 +244,7 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
                     public void run() {
                         startActivity(intent);
                     }
-                }, 500);
+                }, 200);
             }
         });
 

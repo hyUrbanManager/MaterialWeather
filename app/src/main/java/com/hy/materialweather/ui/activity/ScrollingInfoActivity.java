@@ -125,36 +125,68 @@ public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInf
         text1 = (TextView) findViewById(R.id.todayTmp);
         text2 = (TextView) findViewById(R.id.tomorrowTmp);
         text3 = (TextView) findViewById(R.id.afterTomorrowTmp);
-        text1.setText(heWeather5.daily_forecast.get(0).tmp.max + "/" + heWeather5.daily_forecast.get(0).tmp.min + "\u2103");
-        text2.setText(heWeather5.daily_forecast.get(1).tmp.max + "/" + heWeather5.daily_forecast.get(1).tmp.min + "\u2103");
-        text3.setText(heWeather5.daily_forecast.get(2).tmp.max + "/" + heWeather5.daily_forecast.get(2).tmp.min + "\u2103");
+        try {
+            text1.setText(heWeather5.daily_forecast.get(0).tmp.max + "/" + heWeather5.daily_forecast.get(0).tmp.min + "\u2103");
+            text2.setText(heWeather5.daily_forecast.get(1).tmp.max + "/" + heWeather5.daily_forecast.get(1).tmp.min + "\u2103");
+            text3.setText(heWeather5.daily_forecast.get(2).tmp.max + "/" + heWeather5.daily_forecast.get(2).tmp.min + "\u2103");
+        } catch (NullPointerException e) {
+            text1.setText("0/0\u2103");
+            text2.setText("0/0\u2103");
+            text3.setText("0/0\u2103");
+        }
 
         //设置空气
         text1 = (TextView) findViewById(R.id.co);
         text2 = (TextView) findViewById(R.id.no2);
         text3 = (TextView) findViewById(R.id.o3);
-        text1.setText((heWeather5.aqi.city.co != null ? heWeather5.aqi.city.co : 0) + " ug/cm3");
-        text2.setText((heWeather5.aqi.city.no2 != null ? heWeather5.aqi.city.no2 : 0) + " ug/cm3");
-        text3.setText((heWeather5.aqi.city.o3 != null ? heWeather5.aqi.city.o3 : 0) + " ug/cm3");
+        try {
+            text1.setText((heWeather5.aqi.city.co != null ? heWeather5.aqi.city.co : 0) + " ug/cm3");
+            text2.setText((heWeather5.aqi.city.no2 != null ? heWeather5.aqi.city.no2 : 0) + " ug/cm3");
+            text3.setText((heWeather5.aqi.city.o3 != null ? heWeather5.aqi.city.o3 : 0) + " ug/cm3");
+        } catch (NullPointerException e) {
+            text1.setText("0 ug/cm3");
+            text2.setText("0 ug/cm3");
+            text3.setText("0 ug/cm3");
+        }
+
         text1 = (TextView) findViewById(R.id.pm10);
         text2 = (TextView) findViewById(R.id.pm2_5);
         text3 = (TextView) findViewById(R.id.so2);
-        text1.setText((heWeather5.aqi.city.pm10 != null ? heWeather5.aqi.city.pm10 : 0) + " ug/cm3");
-        text2.setText((heWeather5.aqi.city.pm25 != null ? heWeather5.aqi.city.pm25 : 0) + " ug/cm3");
-        text3.setText((heWeather5.aqi.city.so2 != null ? heWeather5.aqi.city.so2 : 0) + " ug/cm3");
+        try {
+            text1.setText((heWeather5.aqi.city.pm10 != null ? heWeather5.aqi.city.pm10 : 0) + " ug/cm3");
+            text2.setText((heWeather5.aqi.city.pm25 != null ? heWeather5.aqi.city.pm25 : 0) + " ug/cm3");
+            text3.setText((heWeather5.aqi.city.so2 != null ? heWeather5.aqi.city.so2 : 0) + " ug/cm3");
+        } catch (NullPointerException e) {
+            text1.setText("0 ug/cm3");
+            text2.setText("0 ug/cm3");
+            text3.setText("0 ug/cm3");
+        }
         text1 = (TextView) findViewById(R.id.level);
-        text1.setText(heWeather5.aqi.city.qlty);
+        try {
+            text1.setText(heWeather5.aqi.city.qlty);
+        } catch (NullPointerException e) {
+            text1.setText("未知");
+        }
 
         //日升日落，杂项
         text1 = (TextView) findViewById(R.id.sunRise);
         text2 = (TextView) findViewById(R.id.sunSet);
-        text1.setText(heWeather5.daily_forecast.get(0).astro.sr);
-        text2.setText(heWeather5.daily_forecast.get(0).astro.ss);
+        try {
+            text1.setText(heWeather5.daily_forecast.get(0).astro.sr);
+            text2.setText(heWeather5.daily_forecast.get(0).astro.ss);
+        } catch (NullPointerException e) {
+            text1.setText("00:00");
+            text2.setText("00:00");
+        }
         text1 = (TextView) findViewById(R.id.moonRise);
         text2 = (TextView) findViewById(R.id.moonSet);
-        text1.setText(heWeather5.daily_forecast.get(0).astro.mr);
-        text2.setText(heWeather5.daily_forecast.get(0).astro.ms);
-
+        try {
+            text1.setText(heWeather5.daily_forecast.get(0).astro.mr);
+            text2.setText(heWeather5.daily_forecast.get(0).astro.ms);
+        } catch (NullPointerException e) {
+            text1.setText("00:00");
+            text2.setText("00:00");
+        }
     }
 
     private void showMessage(String message) {
