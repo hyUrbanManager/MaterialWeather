@@ -24,6 +24,14 @@
 
             <include layout="@layout/content_info_cond" />
 
+            <com.hy.materialweather.ui.view.CHeightViewPager
+                android:id="@+id/viewPager"
+                android:layout_marginTop="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </com.hy.materialweather.ui.view.CHeightViewPager>
+
             <include layout="@layout/content_info_other"/>
 
         </LinearLayout>

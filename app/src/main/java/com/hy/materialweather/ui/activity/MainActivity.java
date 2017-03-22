@@ -396,6 +396,11 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
 
     }
 
+    @Override
+    public void loadBackground() {
+//        Glide.with(this).load()
+    }
+
     /**
      * 把内存中的数据显示在ListView上
      * 异步或同步线程中运行
@@ -546,20 +551,23 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
                     startActivity(intent);
                 }
             }, 200);
-        } else if (id == R.id.nav_material_show) {
-            //设置风格
-            DATA.style = DATA.MATERIAL_STYLE;
-            mPresenter.saveStyleOnSQLite(DATA.style);
-            Utils.d(TAG + " 设置了Material风格");
-            mSnackbar = Snackbar.make(mDrawer, "Material风格", Snackbar.LENGTH_SHORT);
-            mSnackbar.show();
-        } else if (id == R.id.nav_raw_data_show) {
-            //设置风格
-            DATA.style = DATA.RAW_STYLE;
-            mPresenter.saveStyleOnSQLite(DATA.style);
-            Utils.d(TAG + " 设置了Raw风格");
-            mSnackbar = Snackbar.make(mDrawer, "Raw风格", Snackbar.LENGTH_SHORT);
-            mSnackbar.show();
+
+            //暂时去掉风格选择
+//        } else if (id == R.id.nav_material_show) {
+//            //设置风格
+//            DATA.style = DATA.MATERIAL_STYLE;
+//            mPresenter.saveStyleOnSQLite(DATA.style);
+//            Utils.d(TAG + " 设置了Material风格");
+//            mSnackbar = Snackbar.make(mDrawer, "Material风格", Snackbar.LENGTH_SHORT);
+//            mSnackbar.show();
+//        } else if (id == R.id.nav_raw_data_show) {
+//            //设置风格
+//            DATA.style = DATA.RAW_STYLE;
+//            mPresenter.saveStyleOnSQLite(DATA.style);
+//            Utils.d(TAG + " 设置了Raw风格");
+//            mSnackbar = Snackbar.make(mDrawer, "Raw风格", Snackbar.LENGTH_SHORT);
+//            mSnackbar.show();
+
         } else if (id == R.id.location_message) {
             mDrawer.closeDrawer(GravityCompat.START);
             final AlertDialog dialog = new AlertDialog.Builder(

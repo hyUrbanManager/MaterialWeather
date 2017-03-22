@@ -7,6 +7,7 @@ import com.hy.materialweather.model.json.HeWeather5;
  */
 public interface ListCityUI extends FinalMessageWhatInt {
 
+    //显示消息
     void showMessage(String message);
 
     //显示列表在index位置加入城市
@@ -17,5 +18,8 @@ public interface ListCityUI extends FinalMessageWhatInt {
 
     //刷新城市列表，从网络更新
     void refreshCityList(boolean isAllReconnect);
+
+    //加载背景
+    void loadBackground();
 
 }
