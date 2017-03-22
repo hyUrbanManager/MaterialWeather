@@ -33,8 +33,6 @@ public class CityManagerActivityRaw extends MVPActivity<CityManagerUI, CityManag
         CityManagerUI, AdapterView.OnItemLongClickListener {
     public final String TAG = CityManagerActivityMaterial.class.getName() + "类下";
 
-    private MVPHandler mHandler;
-
     @Override
     protected MVPHandler createHandler() {
         return new MVPHandler(this);

@@ -14,7 +14,7 @@
         <item name="android:windowBackground">@mipmap/first_backpng</item>
     </style>
 
-    <!--material 主题-->
+    <!--material 主题 目前主要使用的-->
     <style name="SunnyTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- toolbar（actionbar）颜色 -->
         <item name="colorPrimary">@color/l_primary</item>
@@ -29,6 +29,8 @@
         <item name="icon">@color/l_icons</item>
         <item name="android:textColorPrimary">@color/l_primary_text</item>
         <item name="android:textColorSecondary">@color/l_secondary_text</item>
+        <!--状态栏透明-->
+        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
     <style name="RainnyTheme" parent="Theme.AppCompat.Light.NoActionBar">

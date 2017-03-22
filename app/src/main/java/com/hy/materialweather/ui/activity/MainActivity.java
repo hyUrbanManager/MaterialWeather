@@ -64,9 +64,6 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
         NavigationView.OnNavigationItemSelectedListener, ListCityUI, BDLocationListener {
     public final String TAG = MainActivity.class.getName() + "类下";
 
-    //自己创建的Handler
-    protected MVPHandler mHandler;
-
     @Override
     protected MVPHandler createHandler() {
         return new MVPHandler(this);
@@ -162,7 +159,7 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
     @Override
     protected void initView() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("");
+        toolbar.setTitle("Material 天气");
         setSupportActionBar(toolbar);
 
         //添加城市
@@ -191,8 +188,11 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        //初始化ListView，设置首页Adapter的4个要修改的属性
+        //初始化ListView，和布局Layout
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipRefreshLayout);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.l_primary_dark,
+                R.color.l_primary,
+                R.color.l_primary_light);
 
         mListView = (ListView) findViewById(R.id.listView1);
         cityAdapter = new MainCardAdapter(this,

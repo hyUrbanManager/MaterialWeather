@@ -20,8 +20,6 @@ import com.hy.materialweather.ui.baseui.CityAllInfoUI;
 public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInfoPresenter>
         implements MVPActivity.MVPHandler.onHandleMessageListener, CityAllInfoUI {
 
-    private MVPHandler mHandler;
-
     @Override
     protected MVPHandler createHandler() {
         return new MVPHandler(this);
@@ -59,6 +57,7 @@ public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInf
                         .setAction("Action", null).show();
             }
         });
+        fab.setVisibility(View.INVISIBLE);
 
         imageView = (ImageView) findViewById(R.id.image);
 
@@ -87,11 +86,11 @@ public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInf
         //设置标题栏
         try {
             toolbar.setTitle((heWeather5.basic.prov == null ? "" : heWeather5.basic.prov)
-                    + heWeather5.basic.city);
+                    + heWeather5.basic.city + "   "
+                    + heWeather5.now.tmp + "\u2103");
         } catch (NullPointerException e) {
-            toolbar.setTitle("未知城市");
-            showMessage("数据错误");
-            return;
+            toolbar.setTitle("来自天国的城市");
+            showMessage("数据错误，来自天国的城市");
         }
         setSupportActionBar(toolbar);
         //返回监听，在setSupportActionBar之后
@@ -111,15 +110,24 @@ public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInf
      */
     private void setDataOnBody(HeWeather5 heWeather5) {
         //顶上图片背景
-        imageView.setImageResource(DATA.convertToRes(Integer.parseInt(heWeather5.now.cond.code)));
+        try {
+            imageView.setImageResource(DATA.convertToRes(Integer.parseInt(heWeather5.now.cond.code)));
+        } catch (NullPointerException e) {
+
+        }
 
         TextView text1, text2, text3;
 
         //设置经纬度
         text1 = (TextView) findViewById(R.id.jingweidu);
         text2 = (TextView) findViewById(R.id.date);
-        text1.setText("经度：" + heWeather5.basic.lat + "  纬度：" + heWeather5.basic.lon);
-        text2.setText("更新时间： " + heWeather5.basic.update.loc);
+        try {
+            text1.setText("经度：" + heWeather5.basic.lat + "  纬度：" + heWeather5.basic.lon);
+            text2.setText("更新时间： " + heWeather5.basic.update.loc);
+        } catch (NullPointerException e) {
+            text1.setText("经度：0.00  纬度：0.00");
+            text2.setText("更新时间： 1970.1.1 00:00:00" );
+        }
 
         //设置温度
         text1 = (TextView) findViewById(R.id.todayTmp);

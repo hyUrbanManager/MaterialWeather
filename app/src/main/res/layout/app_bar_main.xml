@@ -19,21 +19,9 @@
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
-            <!--通过插入TextView来实现title居中-->
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Material Weahter"
-                android:textColor="@color/l_icons"
-                android:textSize="@dimen/Material_app_bar" />
-
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
-
-    <!--<include layout="@layout/content_main" />-->
 
     <!--城市列表-->
     <android.support.v4.widget.SwipeRefreshLayout

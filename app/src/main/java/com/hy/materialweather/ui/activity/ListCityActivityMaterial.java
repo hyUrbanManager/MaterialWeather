@@ -44,8 +44,6 @@ public class ListCityActivityMaterial extends MVPActivity<CityManagerUI, CityMan
         CityManagerUI, SearchView.OnQueryTextListener, AdapterView.OnItemClickListener{
     public static final String TAG = ListCityActivityMaterial.class.getName();
 
-    private MVPHandler mHandler;
-
     @Override
     protected MVPHandler createHandler() {
         return new MVPHandler(this);

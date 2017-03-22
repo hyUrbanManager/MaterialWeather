@@ -28,7 +28,10 @@
     <dimen name="app_bar_height">180dp</dimen>
 
     <!--增高图片的高度-->
-    <dimen name="new_app_bar_height">200dp</dimen>
+    <dimen name="new_app_bar_height">250dp</dimen>
+
+    <!--主页面卡片高度-->
+    <dimen name="main_card_view_height">150dp</dimen>
 
     <!--按下弹起的高度-->
     <dimen name="touch_raise_size">15dp</dimen>

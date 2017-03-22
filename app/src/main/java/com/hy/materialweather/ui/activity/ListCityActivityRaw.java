@@ -38,8 +38,6 @@ public class ListCityActivityRaw extends MVPActivity<CityManagerUI, CityManagerP
         implements MVPActivity.MVPHandler.onHandleMessageListener,
         CityManagerUI, SearchView.OnQueryTextListener, AdapterView.OnItemClickListener{
 
-    private MVPHandler mHandler;
-
     @Override
     protected MVPHandler createHandler() {
         return new MVPHandler(this);

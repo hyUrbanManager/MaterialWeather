@@ -34,9 +34,9 @@ public abstract class MVPActivity<V, P extends BasePresenter<V>> extends AppComp
     //Presenter对象，管理者
     protected P mPresenter;
 
-    //Handler管理者，要创建在继承的Activity
+    //Handler管理者，要初始化在继承的Activity
     //一定要给mHandler赋值！不要只是单纯的调用create方法而忘记赋值！
-//    protected MVPHandler<V> mHandler;
+    protected MVPHandler mHandler;
 
     //创建方法，留给子类去实现
     protected abstract MVPHandler createHandler();
@@ -51,6 +51,9 @@ public abstract class MVPActivity<V, P extends BasePresenter<V>> extends AppComp
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //添加Activity进入管理
+        ActivityController.addActivity(this);
+
         //初始化Presenter
         mPresenter = createPresenterRefHandler();
         mPresenter.attachView((V)this);
@@ -59,6 +62,10 @@ public abstract class MVPActivity<V, P extends BasePresenter<V>> extends AppComp
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        //删除管理里面的该Activity
+        ActivityController.removeActivity(this);
+
         //解除绑定，没有内存泄漏
         mPresenter.detachView();
     }
