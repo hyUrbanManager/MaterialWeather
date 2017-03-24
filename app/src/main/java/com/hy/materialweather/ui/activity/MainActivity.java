@@ -604,6 +604,8 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    Intent intent = new Intent(MainActivity.this, AboutActivity.class);
+                    startActivity(intent);
                 }
             }, 200);
         }

@@ -122,7 +122,9 @@ public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInf
         PagerAdapterDaily adapter = new PagerAdapterDaily(manager);
         for (int i = 0; i < 3; i++) {
             DailyForecastFragment fragment = new DailyForecastFragment();
-            fragment.setData(heWeather5.daily_forecast.get(i));
+            if(heWeather5 != null && heWeather5.daily_forecast != null) {
+                fragment.setData(heWeather5.daily_forecast.get(i));
+            }
             listDaily.add(fragment);
         }
         viewPager.setAdapter(adapter);

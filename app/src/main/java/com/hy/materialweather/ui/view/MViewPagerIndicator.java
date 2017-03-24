@@ -70,6 +70,7 @@ public class MViewPagerIndicator extends View {
             accent_color = ta.getColor(R.styleable.MViewPagerIndicator_circleColor, Color.BLACK);
         }
         textPaint = new Paint();
+        textPaint.setStrokeWidth(10);
         textPaint.setColor(text_color);
         textPaint.setTextSize(TEXT_SIZE);
 

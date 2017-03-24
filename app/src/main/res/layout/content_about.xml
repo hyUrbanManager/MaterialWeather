@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.hy.materialweather.ui.activity.AboutActivity"
+    tools:showIn="@layout/activity_about">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/text1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"
+            android:text="@string/about_text" />
+
+        <Button
+            android:id="@+id/bt_blog"
+            android:layout_below="@+id/text1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:drawablePadding="12dp"
+            android:drawableStart="@drawable/ic_menu_heart"
+            android:gravity="start|center_vertical"
+            android:paddingEnd="12dp"
+            android:paddingStart="12dp"
+            android:text="查看个人博客"
+            android:textColor="@color/l_primary_text"/>
+
+    </RelativeLayout>
+
+</android.support.v4.widget.NestedScrollView>

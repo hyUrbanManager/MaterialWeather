@@ -39,15 +39,17 @@
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="9VzoD6hiShdnsRiHE8qBzkQ8yyzCPAM0" />
 
-        <!--桌面小部件-->
-        <receiver android:name=".ui.widget.WeatherWidgetProvider"
+        <!-- 桌面小部件 -->
+        <receiver
+            android:name=".ui.widget.WeatherWidgetProvider"
             android:label="@string/app_name">
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/weather_widget_provider_info"/>
+                android:resource="@xml/weather_widget_provider_info" />
+
             <intent-filter>
-                <action android:name="com.hy.materialweather.action.click"/>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="com.hy.materialweather.action.click" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
         </receiver>
 
@@ -91,7 +93,12 @@
             android:name=".ui.activity.ListCityActivityMaterial"
             android:label="Material"
             android:theme="@style/SunnyTheme" />
-        <activity android:name=".ui.activity.CityManagerActivityRaw"
+        <activity
+            android:name=".ui.activity.CityManagerActivityRaw"
+            android:theme="@style/SunnyTheme" />
+        <activity
+            android:name=".ui.activity.AboutActivity"
+            android:label="@string/title_activity_about"
             android:theme="@style/SunnyTheme"/>
     </application>
 

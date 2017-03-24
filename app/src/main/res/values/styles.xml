@@ -77,8 +77,7 @@
     </style>
 
     <!--AlertDialog样式-->
-    <style name="myAlertDialog" parent="@android:style/Theme.Material.Light.Dialog.Alert">
-    </style>
+    <style name="myAlertDialog" parent="@android:style/Theme.Material.Light.Dialog.Alert"></style>
 
     <style name="MySearchViewStyle"></style>
 

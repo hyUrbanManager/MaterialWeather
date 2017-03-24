@@ -30,7 +30,7 @@ public class DailyForecastFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Utils.d(TAG + " onCreateView");
-        if(root != null) {
+        if (root != null) {
             return root;
         }
         root = inflater.inflate(R.layout.content_info_other, container, false);
@@ -49,7 +49,7 @@ public class DailyForecastFragment extends Fragment {
         sc = (TextView) root.findViewById(R.id.sc);
         spd = (TextView) root.findViewById(R.id.spd);
 
-        if (dailyForecast.astro != null) {
+        if (dailyForecast != null && dailyForecast.astro != null) {
             mr.setText(dailyForecast.astro.mr == null ? "00:00" : dailyForecast.astro.mr);
             ms.setText(dailyForecast.astro.ms == null ? "00:00" : dailyForecast.astro.ms);
             sr.setText(dailyForecast.astro.sr == null ? "00:00" : dailyForecast.astro.sr);
@@ -61,12 +61,19 @@ public class DailyForecastFragment extends Fragment {
             ss.setText("00:00");
         }
 
-        hum.setText((dailyForecast.hum == null ? "0" : dailyForecast.hum) + "% 相对湿度");
-        pop.setText((dailyForecast.pop == null ? "0" : dailyForecast.pop) + "% 降水概率");
-        pres.setText((dailyForecast.pres == null ? "0" : dailyForecast.pres) + "hpa 气压");
-        vis.setText((dailyForecast.vis == null ? "0" : dailyForecast.vis) + "km 能见度");
+        if(dailyForecast != null) {
+            hum.setText((dailyForecast.hum == null ? "0" : dailyForecast.hum) + "% 相对湿度");
+            pop.setText((dailyForecast.pop == null ? "0" : dailyForecast.pop) + "% 降水概率");
+            pres.setText((dailyForecast.pres == null ? "0" : dailyForecast.pres) + "hpa 气压");
+            vis.setText((dailyForecast.vis == null ? "0" : dailyForecast.vis) + "km 能见度");
+        } else {
+            hum.setText("0% 相对湿度");
+            pop.setText("0% 降水概率");
+            pres.setText("0hpa 气压");
+            vis.setText("0km 能见度");
+        }
 
-        if (dailyForecast.cond != null) {
+        if (dailyForecast != null && dailyForecast.cond != null) {
             cond.setText(dailyForecast.cond.txt_d == null ? "未知" : dailyForecast.cond.txt_d);
             cond.append(" -- ");
             cond.append(dailyForecast.cond.txt_n == null ? "未知" : dailyForecast.cond.txt_n);
@@ -74,14 +81,14 @@ public class DailyForecastFragment extends Fragment {
             cond.setText("未知 -- 未知");
         }
 
-        if (dailyForecast.wind != null) {
+        if (dailyForecast != null && dailyForecast.wind != null) {
             dir.setText(dailyForecast.wind.dir == null ? "未知风向" : dailyForecast.wind.dir);
             sc.setText(dailyForecast.wind.sc == null ? "未知风力" : dailyForecast.wind.sc);
             spd.setText((dailyForecast.wind.spd == null ? "0" : dailyForecast.wind.spd) + "km每小时");
         } else {
             dir.setText("未知风向");
             sc.setText("未知风力");
-            spd.setText(dailyForecast.wind.spd);
+            spd.setText("0km每小时");
         }
         return root;
     }
