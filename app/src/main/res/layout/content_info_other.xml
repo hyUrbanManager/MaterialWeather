@@ -1,108 +1,210 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="8dp">
+    android:layout_height="match_parent"
+    android:padding="16dp">
 
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/deadLin1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="16dp">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/deadTmp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="日升"
+            android:textColor="@color/l_secondary_text"
+            android:textSize="@dimen/Material_small_tip" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="日落"
+            android:textColor="@color/l_secondary_text"
+            android:textSize="@dimen/Material_small_tip" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="月升"
+            android:textColor="@color/l_secondary_text"
+            android:textSize="@dimen/Material_small_tip" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="月落"
+            android:textColor="@color/l_secondary_text"
+            android:textSize="@dimen/Material_small_tip" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/deadLin2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/deadLin1"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/sunRise"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="04:19"
+            android:textColor="@color/l_secondary_text"
+            android:textSize="@dimen/Material_small_title" />
+
+        <TextView
+            android:id="@+id/sunSet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="04:19"
+            android:textColor="@color/l_secondary_text"
+            android:textSize="@dimen/Material_small_title" />
+
+        <TextView
+            android:id="@+id/moonRise"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="04:19"
+            android:textColor="@color/l_secondary_text"
+            android:textSize="@dimen/Material_small_title" />
+
+        <TextView
+            android:id="@+id/moonSet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="04:19"
+            android:textColor="@color/l_secondary_text"
+            android:textSize="@dimen/Material_small_title" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="100dp"
+        android:layout_below="@+id/deadLin2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:background="@color/l_divider" />
+
+    <LinearLayout
+        android:id="@+id/deadLin3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/deadLin2"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal">
 
         <LinearLayout
-            android:id="@+id/deadLin1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/deadTmp"
-            android:orientation="horizontal">
+            android:layout_weight="1"
+            android:orientation="vertical">
 
             <TextView
+                android:id="@+id/cond"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="日升"
-                android:textColor="@color/l_secondary_text"
-                android:textSize="@dimen/Material_small_tip" />
+                android:layout_gravity="center"
+                android:text="多云 -- 小雨"
+                android:textColor="@color/l_primary_text"
+                android:textSize="@dimen/Material_small_title" />
 
             <TextView
+                android:id="@+id/dir"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="日落"
-                android:textColor="@color/l_secondary_text"
-                android:textSize="@dimen/Material_small_tip" />
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:text="无持续风向"
+                android:textColor="@color/l_primary_text"
+                android:textSize="@dimen/Material_small_title" />
 
             <TextView
+                android:id="@+id/sc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="月升"
-                android:textColor="@color/l_secondary_text"
-                android:textSize="@dimen/Material_small_tip" />
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:text="微风"
+                android:textColor="@color/l_primary_text"
+                android:textSize="@dimen/Material_small_title" />
 
             <TextView
+                android:id="@+id/spd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="月落"
-                android:textColor="@color/l_secondary_text"
-                android:textSize="@dimen/Material_small_tip" />
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:text="7公里每小时"
+                android:textColor="@color/l_primary_text"
+                android:textSize="@dimen/Material_small_title" />
+
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/deadLin2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/deadLin1"
-            android:layout_marginTop="8dp"
-            android:orientation="horizontal">
+            android:layout_weight="1"
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/sunRise"
+                android:id="@+id/hum"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="04:19"
-                android:textColor="@color/l_secondary_text"
+                android:layout_gravity="center"
+                android:text="65%相对湿度"
+                android:textColor="@color/l_primary_text"
                 android:textSize="@dimen/Material_small_title" />
 
             <TextView
-                android:id="@+id/sunSet"
+                android:id="@+id/pop"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="04:19"
-                android:textColor="@color/l_secondary_text"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:text="0% 降水概率"
+                android:textColor="@color/l_primary_text"
                 android:textSize="@dimen/Material_small_title" />
 
             <TextView
-                android:id="@+id/moonRise"
+                android:id="@+id/pres"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="04:19"
-                android:textColor="@color/l_secondary_text"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:text="1012hpa 气压"
+                android:textColor="@color/l_primary_text"
                 android:textSize="@dimen/Material_small_title" />
 
             <TextView
-                android:id="@+id/moonSet"
+                android:id="@+id/vis"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="04:19"
-                android:textColor="@color/l_secondary_text"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:text="能见度 10km"
+                android:textColor="@color/l_primary_text"
                 android:textSize="@dimen/Material_small_title" />
         </LinearLayout>
+    </LinearLayout>
 
-
-
-    </RelativeLayout>
-</android.support.v7.widget.CardView>
+</RelativeLayout>

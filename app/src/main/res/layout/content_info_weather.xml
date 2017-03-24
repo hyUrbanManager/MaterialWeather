@@ -15,6 +15,7 @@
             android:layout_height="wrap_content"
             android:text="温度："
             android:textColor="@color/l_primary_text"
+            android:visibility="gone"
             android:textSize="@dimen/Material_small_title" />
 
         <LinearLayout
@@ -22,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/deadTmp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="0dp"
             android:orientation="horizontal">
 
             <TextView
@@ -98,6 +99,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
+            android:visibility="gone"
             android:src="@drawable/ic_local_cafe_black_24dp" />
 
     </RelativeLayout>

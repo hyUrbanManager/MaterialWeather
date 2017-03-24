@@ -5,15 +5,19 @@
     android:layout_marginTop="8dp">
 
     <RelativeLayout
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:paddingLeft="32dp"
+        android:paddingRight="32dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="16dp">
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/deadCond"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="空气："
+            android:visibility="gone"
             android:textColor="@color/l_primary_text"
             android:textSize="@dimen/Material_small_title" />
 

@@ -12,4 +12,11 @@
             <enum name="cropOutside" value="1" />
         </attr>
     </declare-styleable>
+
+    <declare-styleable name="MViewPagerIndicator">
+        <attr name="num" format="integer" />
+        <attr name="textColor" format="color" />
+        <attr name="circleColor" format="color" />
+    </declare-styleable>
+
 </resources>

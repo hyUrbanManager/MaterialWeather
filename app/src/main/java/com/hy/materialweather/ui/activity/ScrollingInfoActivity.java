@@ -8,12 +8,14 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hy.materialweather.R;
+import com.hy.materialweather.Utils;
 import com.hy.materialweather.basemvpcomponent.MVPActivity;
 import com.hy.materialweather.model.DATA;
 import com.hy.materialweather.model.json.HeWeather5;
@@ -21,12 +23,14 @@ import com.hy.materialweather.presenter.WeatherInfoPresenter;
 import com.hy.materialweather.ui.baseui.CityAllInfoUI;
 import com.hy.materialweather.ui.fragment.DailyForecastFragment;
 import com.hy.materialweather.ui.view.CHeightViewPager;
+import com.hy.materialweather.ui.view.MViewPagerIndicator;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInfoPresenter>
         implements MVPActivity.MVPHandler.onHandleMessageListener, CityAllInfoUI {
+    private static final String TAG = ScrollingInfoActivity.class.getName() + " ";
 
     @Override
     protected MVPHandler createHandler() {
@@ -68,6 +72,7 @@ public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInf
     private Toolbar toolbar;
     private ImageView imageView;
     private CHeightViewPager viewPager;
+    private MViewPagerIndicator indicator;
 
     private Snackbar mSnackBar;
 
@@ -93,6 +98,8 @@ public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInf
 
         //初始化ViewPager1
         viewPager = (CHeightViewPager) findViewById(R.id.viewPager);
+
+        indicator = (MViewPagerIndicator) findViewById(R.id.indicator);
     }
 
     @Override
@@ -103,7 +110,7 @@ public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInf
         initView();
 
         //获取传递进来的数据
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         String cityName = intent.getStringExtra("city");
 
         //查全局Map获得对象
@@ -115,17 +122,38 @@ public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInf
         PagerAdapterDaily adapter = new PagerAdapterDaily(manager);
         for (int i = 0; i < 3; i++) {
             DailyForecastFragment fragment = new DailyForecastFragment();
+            fragment.setData(heWeather5.daily_forecast.get(i));
             listDaily.add(fragment);
         }
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(0);
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                Utils.d(TAG + "ViewPager当前是第 " + position + " 页");
+                //通知自定义view当前的位置
+                if (position >= 0 && position < 3) {
+                    indicator.setPage(position);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
     }
 
 
     @Override
     public void infoOnCard(HeWeather5 heWeather5) {
-
         //设置标题栏
         try {
             toolbar.setTitle((heWeather5.basic.prov == null ? "" : heWeather5.basic.prov)
@@ -145,7 +173,6 @@ public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInf
         });
 
         setDataOnBody(heWeather5);
-
     }
 
     /**
@@ -222,24 +249,6 @@ public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInf
         }
 
         //日升日落，杂项
-//        text1 = (TextView) findViewById(R.id.sunRise);
-//        text2 = (TextView) findViewById(R.id.sunSet);
-//        try {
-//            text1.setText(heWeather5.daily_forecast.get(0).astro.sr);
-//            text2.setText(heWeather5.daily_forecast.get(0).astro.ss);
-//        } catch (NullPointerException e) {
-//            text1.setText("00:00");
-//            text2.setText("00:00");
-//        }
-//        text1 = (TextView) findViewById(R.id.moonRise);
-//        text2 = (TextView) findViewById(R.id.moonSet);
-//        try {
-//            text1.setText(heWeather5.daily_forecast.get(0).astro.mr);
-//            text2.setText(heWeather5.daily_forecast.get(0).astro.ms);
-//        } catch (NullPointerException e) {
-//            text1.setText("00:00");
-//            text2.setText("00:00");
-//        }
 
         setSuggestion(heWeather5);
     }

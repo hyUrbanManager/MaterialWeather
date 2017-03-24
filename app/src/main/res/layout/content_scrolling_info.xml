@@ -2,9 +2,9 @@
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:padding="8dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="8dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.hy.materialweather.ui.activity.ScrollingInfoActivity"
     tools:showIn="@layout/activity_scrolling_info">
@@ -18,17 +18,30 @@
 
         <include layout="@layout/content_info_weather" />
 
+        <!--自定义指示器-->
+        <com.hy.materialweather.ui.view.MViewPagerIndicator
+            android:id="@+id/indicator"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:textColor="@color/l_primary_dark"
+            app:circleColor="@color/l_accent"
+            app:num="3" />
+
+        <android.support.v7.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <com.hy.materialweather.ui.view.CHeightViewPager
+                android:id="@+id/viewPager"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </android.support.v7.widget.CardView>
+
         <include layout="@layout/content_info_cond" />
 
-        <com.hy.materialweather.ui.view.CHeightViewPager
-            android:id="@+id/viewPager"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp">
-
-        </com.hy.materialweather.ui.view.CHeightViewPager>
-
-        <include layout="@layout/content_info_suggestion"/>
+        <include layout="@layout/content_info_suggestion" />
 
     </LinearLayout>
 

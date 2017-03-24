@@ -11,9 +11,9 @@
 
         <ImageView
             android:id="@+id/image1"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@mipmap/materialweather" />
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_air" />
 
         <TextView
             android:id="@+id/air"
@@ -38,11 +38,11 @@
 
         <ImageView
             android:id="@+id/image2"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_below="@+id/image1"
             android:layout_marginTop="24dp"
-            android:src="@mipmap/materialweather" />
+            android:src="@drawable/ic_comf" />
 
         <TextView
             android:id="@+id/comf"
@@ -67,11 +67,11 @@
 
         <ImageView
             android:id="@+id/image3"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_below="@+id/image2"
             android:layout_marginTop="24dp"
-            android:src="@mipmap/materialweather" />
+            android:src="@drawable/ic_cw" />
 
         <TextView
             android:id="@+id/cw"
@@ -96,11 +96,11 @@
 
         <ImageView
             android:id="@+id/image4"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_below="@+id/image3"
             android:layout_marginTop="24dp"
-            android:src="@mipmap/materialweather" />
+            android:src="@drawable/ic_drsg" />
 
         <TextView
             android:id="@+id/drsg"
@@ -125,11 +125,11 @@
 
         <ImageView
             android:id="@+id/image5"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_below="@+id/image4"
             android:layout_marginTop="24dp"
-            android:src="@mipmap/materialweather" />
+            android:src="@drawable/ic_flu" />
 
         <TextView
             android:id="@+id/flu"
@@ -154,11 +154,11 @@
 
         <ImageView
             android:id="@+id/image6"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_below="@+id/image5"
             android:layout_marginTop="24dp"
-            android:src="@mipmap/materialweather" />
+            android:src="@drawable/ic_sport" />
 
         <TextView
             android:id="@+id/sport"
@@ -183,11 +183,11 @@
 
         <ImageView
             android:id="@+id/image7"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_below="@+id/image6"
             android:layout_marginTop="24dp"
-            android:src="@mipmap/materialweather" />
+            android:src="@drawable/ic_trav" />
 
         <TextView
             android:id="@+id/trav"
@@ -212,11 +212,11 @@
 
         <ImageView
             android:id="@+id/image8"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_below="@+id/image7"
             android:layout_marginTop="24dp"
-            android:src="@mipmap/materialweather" />
+            android:src="@drawable/ic_uv" />
 
         <TextView
             android:id="@+id/uv"
