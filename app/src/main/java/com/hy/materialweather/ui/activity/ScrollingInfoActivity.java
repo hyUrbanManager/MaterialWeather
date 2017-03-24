@@ -151,6 +151,7 @@ public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInf
     /**
      * 给主体设置数据
      */
+    @SuppressWarnings("uncheck")
     private void setDataOnBody(HeWeather5 heWeather5) {
         //顶上图片背景
         try {
@@ -166,7 +167,8 @@ public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInf
         text2 = (TextView) findViewById(R.id.date);
         try {
             text1.setText("经度：" + heWeather5.basic.lat + "  纬度：" + heWeather5.basic.lon);
-            text2.setText("更新时间： " + heWeather5.basic.update.loc);
+            text2.setText("更新时间： ");
+            text2.append(heWeather5.basic.update.loc);
         } catch (NullPointerException e) {
             text1.setText("经度：0.00  纬度：0.00");
             text2.setText("更新时间： 1970.1.1 00:00:00");
@@ -238,6 +240,93 @@ public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInf
 //            text1.setText("00:00");
 //            text2.setText("00:00");
 //        }
+
+        setSuggestion(heWeather5);
+    }
+
+    private void setSuggestion(HeWeather5 heWeather5) {
+        TextView text1, text2;
+        //设置建议指数
+        text1 = (TextView) findViewById(R.id.air);
+        text2 = (TextView) findViewById(R.id.airDesc);
+        try {
+            text1.setText("空气指数---");
+            text1.append(heWeather5.suggestion.air.brf);
+            text2.setText(heWeather5.suggestion.air.txt);
+        } catch (NullPointerException e) {
+            text1.setText("空气指数---暂无信息");
+            text2.setText("暂无信息");
+        }
+        text1 = (TextView) findViewById(R.id.comf);
+        text2 = (TextView) findViewById(R.id.comfDesc);
+        try {
+            text1.setText("舒适指数---");
+            text1.append(heWeather5.suggestion.comf.brf);
+            text2.setText(heWeather5.suggestion.comf.txt);
+        } catch (NullPointerException e) {
+            text1.setText("舒适指数---暂无信息");
+            text2.setText("暂无信息");
+        }
+        text1 = (TextView) findViewById(R.id.cw);
+        text2 = (TextView) findViewById(R.id.cwDesc);
+        try {
+            text1.setText("洗车指数---");
+            text1.append(heWeather5.suggestion.cw.brf);
+            text2.setText(heWeather5.suggestion.cw.txt);
+        } catch (NullPointerException e) {
+            text1.setText("洗车指数---暂无信息");
+            text2.setText("暂无信息");
+        }
+        text1 = (TextView) findViewById(R.id.drsg);
+        text2 = (TextView) findViewById(R.id.drsgDesc);
+        try {
+            text1.setText("穿衣指数---");
+            text1.append(heWeather5.suggestion.drsg.brf);
+            text2.setText(heWeather5.suggestion.drsg.txt);
+        } catch (NullPointerException e) {
+            text1.setText("穿衣指数---暂无信息");
+            text2.setText("暂无信息");
+        }
+        text1 = (TextView) findViewById(R.id.flu);
+        text2 = (TextView) findViewById(R.id.fluDesc);
+        try {
+            text1.setText("感冒指数---");
+            text1.append(heWeather5.suggestion.flu.brf);
+            text2.setText(heWeather5.suggestion.flu.txt);
+        } catch (NullPointerException e) {
+            text1.setText("感冒指数---暂无信息");
+            text2.setText("暂无信息");
+        }
+        text1 = (TextView) findViewById(R.id.sport);
+        text2 = (TextView) findViewById(R.id.sportDesc);
+        try {
+            text1.setText("运动指数---");
+            text1.append(heWeather5.suggestion.sport.brf);
+            text2.setText(heWeather5.suggestion.sport.txt);
+        } catch (NullPointerException e) {
+            text1.setText("运动指数---暂无信息");
+            text2.setText("暂无信息");
+        }
+        text1 = (TextView) findViewById(R.id.trav);
+        text2 = (TextView) findViewById(R.id.travDesc);
+        try {
+            text1.setText("旅游指数---");
+            text1.append(heWeather5.suggestion.trav.brf);
+            text2.setText(heWeather5.suggestion.trav.txt);
+        } catch (NullPointerException e) {
+            text1.setText("旅游指数---暂无信息");
+            text2.setText("暂无信息");
+        }
+        text1 = (TextView) findViewById(R.id.uv);
+        text2 = (TextView) findViewById(R.id.uvDesc);
+        try {
+            text1.setText("紫外线指数---");
+            text1.append(heWeather5.suggestion.uv.brf);
+            text2.setText(heWeather5.suggestion.uv.txt);
+        } catch (NullPointerException e) {
+            text1.setText("紫外线指数---暂无信息");
+            text2.setText("暂无信息");
+        }
     }
 
     private void showMessage(String message) {

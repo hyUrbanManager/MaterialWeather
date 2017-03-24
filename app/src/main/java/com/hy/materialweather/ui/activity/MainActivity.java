@@ -142,15 +142,16 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
     public UpdateView updateView;
     private DrawerLayout mDrawer;
 
+    /* 广播监听 */
+    private NetworkReceiver mReceiver;
+
     /* 手势监控 */
     private GestureDetector detector;
 
     /* 数据引用 */
     public List<Map<String, Object>> cityDataList = new ArrayList<>();
     public MainCardAdapter cityAdapter;
-
     int receiveCnt = 0;
-
     private StringBuilder locationMessage;
 
     /**
@@ -229,7 +230,7 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
         //动态注册广播接收者
         IntentFilter mFilter = new IntentFilter();
         mFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-        NetworkReceiver mReceiver = new NetworkReceiver(mHandler);
+        mReceiver = new NetworkReceiver(mHandler);
         registerReceiver(mReceiver, mFilter);
 
         //设置listView监听
@@ -292,6 +293,10 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        //把chosenCities保存
+        mPresenter.saveCitiesOnSQLite(DATA.chosenCities);
+        //网络监听器取消
+        unregisterReceiver(mReceiver);
     }
 
     @Override

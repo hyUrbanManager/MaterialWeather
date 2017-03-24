@@ -192,8 +192,9 @@ public class WeatherDataModelImpl implements WeatherDataModel {
      * 耗时方法。
      *
      * @return
-     * @throws IOException
+    * @throws IOException
      */
+    @Override
     public Response getKeyFromMyServer() throws IOException {
         //获取Url
         String url = myServerAdreess;
@@ -216,6 +217,7 @@ public class WeatherDataModelImpl implements WeatherDataModel {
     /**
      * 数据模型里设置ApiKey
      */
+    @Override
     public void setKey(String key) {
         this.weatherKey = key;
     }
@@ -225,6 +227,7 @@ public class WeatherDataModelImpl implements WeatherDataModel {
      *
      * @return
      */
+    @Override
     public boolean isKeyGet() {
         return !(this.weatherKey == NO_KEY);
     }

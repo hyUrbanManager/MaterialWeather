@@ -15,12 +15,47 @@ import java.io.IOException;
 /**
  * 派生工具
  */
-public class Utils implements Closeable {
-
+public class Utils {
     public static final String TAG = Utils.class.getName() + " 测试工具类输出信息：";
 
-    @Override
-    public void close() throws IOException {
+    //打印日志的级别
+    public static final int VERBOSE = 1;
+    public static final int DEBUG = 2;
+    public static final int INFO = 3;
+    public static final int WARN = 4;
+    public static final int ERROR = 5;
+    public static final int NOTHING = 6;
+
+    public static final int level = VERBOSE;
+
+    /**
+     * 输出工具
+     *
+     * @param message
+     */
+    public static final void d(String message) {
+        if (level <= DEBUG) {
+            Log.d(TAG, message);
+        }
+    }
+
+    /**
+     * 输出工具
+     *
+     * @param message
+     */
+    public static final void e(String message) {
+        if (level <= ERROR) {
+            Log.e(TAG, message);
+        }
+    }
+
+    /**
+     * 输出工具
+     */
+    public static final void dCurrentThread() {
+        Log.d(TAG, "当前进程：" + Thread.currentThread().getName());
+        Log.d(TAG, "当前时间：" + SystemClock.currentThreadTimeMillis());
 
     }
 
@@ -58,6 +93,7 @@ public class Utils implements Closeable {
 
     /**
      * 关闭异常
+     *
      * @param resource
      */
     public static final void close(Closeable resource) {
@@ -69,36 +105,12 @@ public class Utils implements Closeable {
     }
 
     /**
-     * 输出工具
-     * @param message
-     */
-    public static final void d(String message) {
-        Log.d(TAG, message);
-    }
-
-    /**
-     * 输出工具
-     * @param message
-     */
-    public static final void e(String message) {
-        Log.e(TAG, message);
-    }
-
-    /**
-     * 输出工具
-     */
-    public static final void dCurrentThread() {
-        Log.d(TAG, "当前进程：" + Thread.currentThread().getName());
-        Log.d(TAG, "当前时间：" + SystemClock.currentThreadTimeMillis());
-
-    }
-
-    /**
      * SnackBar
+     *
      * @param decorView
      * @param message
      */
     public static void SnackBarTip(View decorView, String message) {
-        Snackbar.make(decorView, message,Snackbar.LENGTH_LONG).show();
+        Snackbar.make(decorView, message, Snackbar.LENGTH_LONG).show();
     }
 }

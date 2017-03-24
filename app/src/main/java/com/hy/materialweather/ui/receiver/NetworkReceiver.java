@@ -13,9 +13,8 @@ import com.hy.materialweather.model.DATA;
 import com.hy.materialweather.ui.baseui.ListCityUI;
 
 /**
- * Created by Administrator on 2017/3/20.
+ * 网络状态改变监听器
  */
-
 public class NetworkReceiver extends BroadcastReceiver{
     public static final String TAG = NetworkReceiver.class.getName();
 
