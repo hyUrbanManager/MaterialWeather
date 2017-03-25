@@ -177,8 +177,7 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
             @Override
             public void onClick(View view) {
                 //根据风格不同启动不同的Activity
-                Class<?> ac = DATA.style == DATA.RAW_STYLE ?
-                        ListCityActivityRaw.class : ListCityActivityMaterial.class;
+                Class<?> ac = ListCityActivity.class;
                 Intent intent = new Intent(MainActivity.this, ac);
                 startActivity(intent);
             }
@@ -543,7 +542,6 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
         if (id == R.id.heart) {
             //初始化提示框
             AlertDialog mAlertDialog = new AlertDialog.Builder(this)
-                    .setTitle(R.string.about_title)
                     .setMessage(R.string.about_message)
                     .setPositiveButton(R.string.about_positive_button, new DialogInterface.OnClickListener() {
                         @Override
@@ -577,29 +575,11 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Class<?> activityClass = DATA.style == DATA.RAW_STYLE ?
-                            CityManagerActivityRaw.class : CityManagerActivityMaterial.class;
+                    Class<?> activityClass = CityManagerActivity.class;
                     Intent intent = new Intent(MainActivity.this, activityClass);
                     startActivity(intent);
                 }
             }, 200);
-
-            //暂时去掉风格选择
-//        } else if (id == R.id.nav_material_show) {
-//            //设置风格
-//            DATA.style = DATA.MATERIAL_STYLE;
-//            mPresenter.saveStyleOnSQLite(DATA.style);
-//            Utils.d(TAG + " 设置了Material风格");
-//            mSnackbar = Snackbar.make(mDrawer, "Material风格", Snackbar.LENGTH_SHORT);
-//            mSnackbar.show();
-//        } else if (id == R.id.nav_raw_data_show) {
-//            //设置风格
-//            DATA.style = DATA.RAW_STYLE;
-//            mPresenter.saveStyleOnSQLite(DATA.style);
-//            Utils.d(TAG + " 设置了Raw风格");
-//            mSnackbar = Snackbar.make(mDrawer, "Raw风格", Snackbar.LENGTH_SHORT);
-//            mSnackbar.show();
-
         } else if (id == R.id.location_message) {
             mDrawer.closeDrawer(GravityCompat.START);
             final AlertDialog dialog = new AlertDialog.Builder(

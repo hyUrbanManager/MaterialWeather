@@ -69,11 +69,7 @@
             <!-- </intent-filter> -->
         </activity>
         <activity
-            android:name=".ui.activity.CityManagerActivityMaterial"
-            android:label="@string/title_activity_city_manager"
-            android:theme="@style/SunnyTheme" />
-        <activity
-            android:name=".ui.activity.ListCityActivityRaw"
+            android:name=".ui.activity.ListCityActivity"
             android:label="@string/title_activity_list_city"
             android:theme="@style/SunnyTheme">
             <intent-filter>
@@ -90,11 +86,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activity.ListCityActivityMaterial"
-            android:label="Material"
-            android:theme="@style/SunnyTheme" />
-        <activity
-            android:name=".ui.activity.CityManagerActivityRaw"
+            android:name=".ui.activity.CityManagerActivity"
             android:theme="@style/SunnyTheme" />
         <activity
             android:name=".ui.activity.AboutActivity"

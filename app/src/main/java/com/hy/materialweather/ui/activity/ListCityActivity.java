@@ -4,16 +4,18 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.AnimationSet;
+import android.view.animation.LayoutAnimationController;
 import android.widget.AdapterView;
 import android.widget.Filter;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,7 +26,7 @@ import com.hy.materialweather.basemvpcomponent.MVPActivity;
 import com.hy.materialweather.model.DATA;
 import com.hy.materialweather.model.json.BasicCity;
 import com.hy.materialweather.presenter.CityManagerPresenter;
-import com.hy.materialweather.ui.adapter.CitiesAdapterMaterial;
+import com.hy.materialweather.ui.adapter.CitiesAdapterRaw;
 import com.hy.materialweather.ui.baseui.CityManagerUI;
 
 import java.util.ArrayList;
@@ -33,16 +35,11 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import static com.hy.materialweather.Utils.d;
 import static com.hy.materialweather.model.DATA.basicCities2560;
 
-/**
- * 使用瀑布流
- */
-public class ListCityActivityMaterial extends MVPActivity<CityManagerUI, CityManagerPresenter>
+public class ListCityActivity extends MVPActivity<CityManagerUI, CityManagerPresenter>
         implements MVPActivity.MVPHandler.onHandleMessageListener,
-        CityManagerUI, SearchView.OnQueryTextListener, AdapterView.OnItemClickListener{
-    public static final String TAG = ListCityActivityMaterial.class.getName();
+        CityManagerUI, SearchView.OnQueryTextListener, AdapterView.OnItemClickListener {
 
     @Override
     protected MVPHandler createHandler() {
@@ -58,8 +55,7 @@ public class ListCityActivityMaterial extends MVPActivity<CityManagerUI, CityMan
             case CLOSE_TOAST:
                 mToast.cancel();
                 break;
-            //把所有城市的数据装载
-            case UPDATE_LIST_VIEW:
+            case NOTIFY_CHANGED_ONE_CITY:
                 //添加ListView数据
                 Set<String> set = DATA.basicCities2560.keySet();
                 Iterator<String> iterator = set.iterator();
@@ -70,15 +66,11 @@ public class ListCityActivityMaterial extends MVPActivity<CityManagerUI, CityMan
                     stringList.add(basicCity.cityZh);
                 }
 
-                citiesAdapterMaterial.notifyDataSetChanged();
-                break;
-            //RecyclerView中，只更新一个
-            case NOTIFY_CHANGED_ONE_CITY:
-                int position = msg.what;
-                citiesAdapterMaterial.notifyItemInserted(position);
+                citiesAdapterRaw.notifyDataSetChanged();
                 break;
         }
     }
+
     @Override
     protected CityManagerPresenter createPresenterRefHandler() {
         mHandler = createHandler();
@@ -86,12 +78,12 @@ public class ListCityActivityMaterial extends MVPActivity<CityManagerUI, CityMan
     }
 
     /* view引用 */
-    protected RecyclerView mRecyclerView;
+    protected GridView mGridView;
     protected Toast mToast;
     protected SearchView mSearchView;
 
     /* 数据引用 */
-    CitiesAdapterMaterial citiesAdapterMaterial;
+    CitiesAdapterRaw citiesAdapterRaw;
     List<String> stringList;
 
     @Override
@@ -105,15 +97,24 @@ public class ListCityActivityMaterial extends MVPActivity<CityManagerUI, CityMan
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ListCityActivityMaterial.this.finish();
+                ListCityActivity.this.finish();
             }
         });
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        mGridView = (GridView) findViewById(R.id.gridView1);
+        mGridView.setTextFilterEnabled(true);
+        //设置子项入场动画
+        AlphaAnimation alphaAnimation = new AlphaAnimation(0.2f, 1.0f);
+        AnimationSet set = new AnimationSet(false);
+        set.addAnimation(alphaAnimation);
+        set.setDuration(200);
 
-//        mRecyclerView.setTextFilterEnabled(true);
-//        mRecyclerView.setOnItemClickListener(this);
+        LayoutAnimationController controller = new LayoutAnimationController(set);
+        controller.setDelay(0.3f);
+        controller.setOrder(LayoutAnimationController.ORDER_NORMAL);
+        mGridView.setLayoutAnimation(controller);
 
+        //设置搜索
         mSearchView = (SearchView) findViewById(R.id.searchView1);
         mSearchView.setOnQueryTextListener(this);
 
@@ -124,17 +125,16 @@ public class ListCityActivityMaterial extends MVPActivity<CityManagerUI, CityMan
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_city_material);
+        setContentView(R.layout.activity_list_city);
+
         //初始化View组件
         initView();
 
         stringList = new ArrayList<>();
-        citiesAdapterMaterial = new CitiesAdapterMaterial(this, stringList);
+        citiesAdapterRaw = new CitiesAdapterRaw(this, stringList);
 
-        //设置RecyclerView
-        mRecyclerView.setAdapter(citiesAdapterMaterial);
-        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(4,
-                StaggeredGridLayoutManager.VERTICAL));
+        mGridView.setAdapter(citiesAdapterRaw);
+        mGridView.setOnItemClickListener(this);
 
         new Thread(new Runnable() {
             @Override
@@ -142,13 +142,13 @@ public class ListCityActivityMaterial extends MVPActivity<CityManagerUI, CityMan
                 if (basicCities2560 == null) {
                     mHandler.sendEmptyMessage(SHOW_TOAST);
                     //解析超长字符串，耗时操作
-                    DATA.init2560Cities(ListCityActivityMaterial.this);
+                    DATA.init2560Cities(ListCityActivity.this);
                 }
 
-                Utils.d(TAG + "ListView适配器数据的大小：" + stringList.size());
-                if(stringList.size() != 2560) {
+                Log.d(ListCityActivity.class.getName(), "ListView适配器数据的大小：" + stringList.size());
+                if (stringList.size() != 2560) {
                     stringList.clear();
-                    mHandler.sendEmptyMessage(UPDATE_LIST_VIEW);
+                    mHandler.sendEmptyMessage(NOTIFY_CHANGED_ONE_CITY);
                 }
                 mHandler.sendEmptyMessage(CLOSE_TOAST);
             }
@@ -169,10 +169,11 @@ public class ListCityActivityMaterial extends MVPActivity<CityManagerUI, CityMan
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        Log.d(ListCityActivityRaw.class.getName(), "监听函数执行了");
+        Log.d(ListCityActivity.class.getName(), "监听函数执行了");
+        mGridView.setFilterText(newText);
         //交给过滤器去过滤
         Filter filter;
-        filter = citiesAdapterMaterial.getFilter();
+        filter = citiesAdapterRaw.getFilter();
         filter.filter(newText);
 
         return true;
@@ -188,8 +189,9 @@ public class ListCityActivityMaterial extends MVPActivity<CityManagerUI, CityMan
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//        String key = citiesAdapterMaterial.getItemViewType(position);
-        String key = null;
+        mGridView.clearTextFilter();
+
+        String key = citiesAdapterRaw.getItem(position);
         final BasicCity basicCity = DATA.basicCities2560.get(key);
 
         final View showView = LayoutInflater.from(this).inflate(R.layout.alert_dialog_basic_city_info, null);
@@ -215,14 +217,14 @@ public class ListCityActivityMaterial extends MVPActivity<CityManagerUI, CityMan
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //是否包含该城市
-                        if(DATA.chosenCities.contains(basicCity.cityZh)) {
+                        if (DATA.chosenCities.contains(basicCity.cityZh)) {
                             showMessage("该城市已被加入，请选择其他城市");
                         } else {
                             DATA.chosenCities.add(basicCity.cityZh);
                             showMessage("添加成功");
                             //存入数据库
                             mPresenter.saveCitiesOnSQLite(DATA.chosenCities);
-                            d("成功添加了一个请求城市");
+                            Utils.d("成功添加了一个请求城市");
                         }
                     }
                 })
