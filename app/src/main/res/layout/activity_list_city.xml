@@ -32,6 +32,11 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_list_city" />
+    <GridView
+        android:id="@+id/gridView1"
+        android:listSelector="@drawable/cities_shape"
+        android:numColumns="4"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </android.support.design.widget.CoordinatorLayout>

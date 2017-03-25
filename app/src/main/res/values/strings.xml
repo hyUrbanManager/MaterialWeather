@@ -2627,5 +2627,7 @@
 
         "Bold, graphic, intentional.\n\n"
     </string>
+    <string name="transition_image">image</string>
+    <string name="transition_text">text</string>
 
 </resources>

@@ -10,6 +10,9 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.AnimationSet;
+import android.view.animation.LayoutAnimationController;
 import android.widget.AdapterView;
 import android.widget.Filter;
 import android.widget.GridView;
@@ -36,7 +39,7 @@ import static com.hy.materialweather.model.DATA.basicCities2560;
 
 public class ListCityActivityRaw extends MVPActivity<CityManagerUI, CityManagerPresenter>
         implements MVPActivity.MVPHandler.onHandleMessageListener,
-        CityManagerUI, SearchView.OnQueryTextListener, AdapterView.OnItemClickListener{
+        CityManagerUI, SearchView.OnQueryTextListener, AdapterView.OnItemClickListener {
 
     @Override
     protected MVPHandler createHandler() {
@@ -67,6 +70,7 @@ public class ListCityActivityRaw extends MVPActivity<CityManagerUI, CityManagerP
                 break;
         }
     }
+
     @Override
     protected CityManagerPresenter createPresenterRefHandler() {
         mHandler = createHandler();
@@ -99,8 +103,18 @@ public class ListCityActivityRaw extends MVPActivity<CityManagerUI, CityManagerP
 
         mGridView = (GridView) findViewById(R.id.gridView1);
         mGridView.setTextFilterEnabled(true);
-        mGridView.setOnItemClickListener(this);
+        //设置子项入场动画
+        AlphaAnimation alphaAnimation = new AlphaAnimation(0.2f, 1.0f);
+        AnimationSet set = new AnimationSet(false);
+        set.addAnimation(alphaAnimation);
+        set.setDuration(200);
 
+        LayoutAnimationController controller = new LayoutAnimationController(set);
+        controller.setDelay(0.3f);
+        controller.setOrder(LayoutAnimationController.ORDER_NORMAL);
+        mGridView.setLayoutAnimation(controller);
+
+        //设置搜索
         mSearchView = (SearchView) findViewById(R.id.searchView1);
         mSearchView.setOnQueryTextListener(this);
 
@@ -112,6 +126,7 @@ public class ListCityActivityRaw extends MVPActivity<CityManagerUI, CityManagerP
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_city);
+
         //初始化View组件
         initView();
 
@@ -119,6 +134,7 @@ public class ListCityActivityRaw extends MVPActivity<CityManagerUI, CityManagerP
         citiesAdapterRaw = new CitiesAdapterRaw(this, stringList);
 
         mGridView.setAdapter(citiesAdapterRaw);
+        mGridView.setOnItemClickListener(this);
 
         new Thread(new Runnable() {
             @Override
@@ -129,8 +145,8 @@ public class ListCityActivityRaw extends MVPActivity<CityManagerUI, CityManagerP
                     DATA.init2560Cities(ListCityActivityRaw.this);
                 }
 
-                Log.d(ListCityActivityRaw.class.getName(),"ListView适配器数据的大小：" + stringList.size());
-                if(stringList.size() != 2560) {
+                Log.d(ListCityActivityRaw.class.getName(), "ListView适配器数据的大小：" + stringList.size());
+                if (stringList.size() != 2560) {
                     stringList.clear();
                     mHandler.sendEmptyMessage(NOTIFY_CHANGED_ONE_CITY);
                 }
@@ -201,7 +217,7 @@ public class ListCityActivityRaw extends MVPActivity<CityManagerUI, CityManagerP
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //是否包含该城市
-                        if(DATA.chosenCities.contains(basicCity.cityZh)) {
+                        if (DATA.chosenCities.contains(basicCity.cityZh)) {
                             showMessage("该城市已被加入，请选择其他城市");
                         } else {
                             DATA.chosenCities.add(basicCity.cityZh);
