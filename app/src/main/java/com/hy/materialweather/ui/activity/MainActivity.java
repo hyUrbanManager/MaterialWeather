@@ -25,6 +25,11 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
+import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -204,6 +209,21 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
         mListView.setDivider(null);
         mListView.setDividerHeight(30);
         mListView.setAdapter(cityAdapter);
+
+        //ListView选项的设置入场动画
+        Animation animation1 = AnimationUtils.loadAnimation(this, R.anim.card_list_view_up);
+        AnimationSet set = new AnimationSet(false);
+        Animation translate = new TranslateAnimation(0, 0,
+                Utils.getScreenDisplay(this).heightPixels - 200, 0);
+
+        set.addAnimation(animation1);
+        set.addAnimation(translate);
+        set.setDuration(800);
+
+        LayoutAnimationController controller = new LayoutAnimationController(set);
+        controller.setDelay(0.5f);
+        controller.setOrder(LayoutAnimationController.ORDER_NORMAL);
+        mListView.setLayoutAnimation(controller);
 
         mSnackbar = Snackbar.make(fab, "更新数据中", Snackbar.LENGTH_LONG);
 
@@ -577,7 +597,6 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
             mDrawer.closeDrawer(GravityCompat.START);
             final AlertDialog dialog = new AlertDialog.Builder(
                     MainActivity.this)
-                    .setTitle("当前地理位置")
                     .setMessage(locationMessage != null ? locationMessage.toString() : "什么也没有")
                     .setPositiveButton("重新获取位置", new DialogInterface.OnClickListener() {
                         @Override
@@ -706,10 +725,10 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
 //        locationMessage.append("\nerror code : ");
 //        locationMessage.append(location.getLocType());    //获取类型类型
 
-        locationMessage.append("\nlatitude : ");
+        locationMessage.append("\n纬度 : ");
         locationMessage.append(location.getLatitude());    //获取纬度信息
 
-        locationMessage.append("\nlontitude : ");
+        locationMessage.append("\n经度 : ");
         locationMessage.append(location.getLongitude());    //获取经度信息
 
 //        locationMessage.append("\nradius : ");
@@ -718,60 +737,60 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
         if (location.getLocType() == BDLocation.TypeGpsLocation) {
 
             // GPS定位结果
-            locationMessage.append("\nspeed : ");
+            locationMessage.append("\n移速 : ");
             locationMessage.append(location.getSpeed());    // 单位：公里每小时
 
-            locationMessage.append("\nsatellite : ");
+            locationMessage.append("\n连接到卫星数 : ");
             locationMessage.append(location.getSatelliteNumber());    //获取卫星数
 
-            locationMessage.append("\nheight : ");
+            locationMessage.append("\n海拔 : ");
             locationMessage.append(location.getAltitude());    //获取海拔高度信息，单位米
 
-            locationMessage.append("\ndirection : ");
+            locationMessage.append("\n方向 : ");
             locationMessage.append(location.getDirection());    //获取方向信息，单位度
 
-            locationMessage.append("\naddr : ");
+            locationMessage.append("\n地址 : ");
             locationMessage.append(location.getAddrStr());    //获取地址信息
 
-            locationMessage.append("\ndescribe : ");
+            locationMessage.append("\n描述 : ");
             locationMessage.append("gps定位成功");
 
         } else if (location.getLocType() == BDLocation.TypeNetWorkLocation) {
 
             // 网络定位结果
-            locationMessage.append("\naddr : ");
+            locationMessage.append("\n地址 : ");
             locationMessage.append(location.getAddrStr());    //获取地址信息
 
-            locationMessage.append("\noperationers : ");
+            locationMessage.append("\n运营商 : ");
             locationMessage.append(location.getOperators());    //获取运营商信息
 
-            locationMessage.append("\ndescribe : ");
+            locationMessage.append("\n描述 : ");
             locationMessage.append("网络定位成功");
 
         } else if (location.getLocType() == BDLocation.TypeOffLineLocation) {
 
             // 离线定位结果
-            locationMessage.append("\ndescribe : ");
+            locationMessage.append("\n描述 : ");
             locationMessage.append("离线定位成功，离线定位结果也是有效的");
 
         } else if (location.getLocType() == BDLocation.TypeServerError) {
 
-            locationMessage.append("\ndescribe : ");
+            locationMessage.append("\n描述 : ");
             locationMessage.append("服务端网络定位失败，可以反馈IMEI号和大体定位时间到loc-bugs@baidu.com，会有人追查原因");
 
         } else if (location.getLocType() == BDLocation.TypeNetWorkException) {
 
-            locationMessage.append("\ndescribe : ");
+            locationMessage.append("\n描述 : ");
             locationMessage.append("网络不同导致定位失败，请检查网络是否通畅");
 
         } else if (location.getLocType() == BDLocation.TypeCriteriaException) {
 
-            locationMessage.append("\ndescribe : ");
+            locationMessage.append("\n描述 : ");
             locationMessage.append("无法获取有效定位依据导致定位失败，一般是由于手机的原因，处于飞行模式下一般会造成这种结果，可以试着重启手机");
 
         }
 
-        locationMessage.append("\nlocationdescribe : ");
+        locationMessage.append("\n地理位置 : ");
         locationMessage.append(location.getLocationDescribe());    //位置语义化信息
 
         List<Poi> list = location.getPoiList();    // POI数据

@@ -195,7 +195,7 @@ public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInf
         text1 = (TextView) findViewById(R.id.jingweidu);
         text2 = (TextView) findViewById(R.id.date);
         try {
-            text1.setText("经度：" + heWeather5.basic.lat + "  纬度：" + heWeather5.basic.lon);
+            text1.setText("经度：" + heWeather5.basic.lat + "       纬度：" + heWeather5.basic.lon);
             text2.setText("更新时间： ");
             text2.append(heWeather5.basic.update.loc);
         } catch (NullPointerException e) {

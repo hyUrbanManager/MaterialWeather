@@ -5,8 +5,10 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.support.design.widget.Snackbar;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import java.io.Closeable;
@@ -113,4 +115,16 @@ public class Utils {
     public static void SnackBarTip(View decorView, String message) {
         Snackbar.make(decorView, message, Snackbar.LENGTH_LONG).show();
     }
+
+    /**
+     * 获取屏幕的大小，通过width和height获取像素
+     */
+    public static DisplayMetrics getScreenDisplay(Context context) {
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics dm = new DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(dm);
+        Utils.d(TAG + "获取了一次屏幕大小 " + dm.widthPixels + " , " + dm.heightPixels);
+        return dm;
+    }
+
 }

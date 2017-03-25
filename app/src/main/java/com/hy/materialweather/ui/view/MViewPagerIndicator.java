@@ -6,6 +6,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -47,11 +48,11 @@ public class MViewPagerIndicator extends View {
     protected int num;
 
     //初始常量
-    public final int TEXT_SIZE = 36;
+    public final int TEXT_SIZE = 48;
     public final int RADIUS_PADDING = 25;
     public final int radius = 20;
-    public final int HEIGHT = 50;
-    public final int WIDTH = 172;
+    public final int HEIGHT = 60;
+    public final int WIDTH = TEXT_SIZE * 2 + RADIUS_PADDING * 4;
 
     public final String[] indicators = new String[]{"今天", "明天", "后天"};
 
@@ -70,9 +71,9 @@ public class MViewPagerIndicator extends View {
             accent_color = ta.getColor(R.styleable.MViewPagerIndicator_circleColor, Color.BLACK);
         }
         textPaint = new Paint();
-        textPaint.setStrokeWidth(10);
-        textPaint.setColor(text_color);
         textPaint.setTextSize(TEXT_SIZE);
+        textPaint.setTypeface(Typeface.MONOSPACE);
+        textPaint.setColor(text_color);
 
         picturePaint = new Paint();
         picturePaint.setAntiAlias(true);
