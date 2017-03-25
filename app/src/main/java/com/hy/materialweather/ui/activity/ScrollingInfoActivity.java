@@ -170,7 +170,7 @@ public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInf
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ScrollingInfoActivity.this.finish();
+                onBackPressed();
             }
         });
 

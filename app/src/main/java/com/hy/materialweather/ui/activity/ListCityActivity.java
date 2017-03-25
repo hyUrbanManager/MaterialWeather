@@ -97,7 +97,7 @@ public class ListCityActivity extends MVPActivity<CityManagerUI, CityManagerPres
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ListCityActivity.this.finish();
+                onBackPressed();
             }
         });
 

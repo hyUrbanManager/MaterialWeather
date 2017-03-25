@@ -72,7 +72,7 @@ public class CityManagerActivity extends MVPActivity<CityManagerUI, CityManagerP
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CityManagerActivity.this.finish();
+                onBackPressed();
             }
         });
 

@@ -14,7 +14,6 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.util.Pair;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -39,6 +38,7 @@ import android.widget.ListView;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.Poi;
+import com.hy.materialweather.AnimUtils;
 import com.hy.materialweather.R;
 import com.hy.materialweather.Utils;
 import com.hy.materialweather.basemvpcomponent.MVPActivity;
@@ -173,15 +173,6 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
 
         //添加城市
         fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //根据风格不同启动不同的Activity
-                Class<?> ac = ListCityActivity.class;
-                Intent intent = new Intent(MainActivity.this, ac);
-                startActivity(intent);
-            }
-        });
 
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -263,15 +254,27 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
                 final Intent intent = new Intent(MainActivity.this, ScrollingInfoActivity.class);
                 intent.putExtra("city", cityName);
                 //设置转场特效，CardView和图片一起带入
-                Pair<View, String> imagePair = Pair.create(view, getString(R.string.transition_image));
-                Pair<View, String> textPair = Pair.create(view.findViewById(R.id.city), getString(R.string.transition_text));
-
                 ActivityOptionsCompat compat = ActivityOptionsCompat.makeSceneTransitionAnimation(
                         MainActivity.this,
-                        imagePair,
-                        textPair
+                        view,
+                        getString(R.string.transition_image)
                 );
                 ActivityCompat.startActivity(MainActivity.this, intent, compat.toBundle());
+            }
+        });
+
+        //设置fab监听添加城市
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //根据风格不同启动不同的Activity
+                Class<?> ac = ListCityActivity.class;
+                Intent intent = new Intent(MainActivity.this, ac);
+//                ActivityOptionsCompat compat = ActivityOptionsCompat.makeScaleUpAnimation(view,
+//                        view.getWidth() / 2, view.getHeight() / 2, 0, 0);
+//                ActivityCompat.startActivity(MainActivity.this, intent, compat.toBundle());
+                AnimUtils.startActivity(MainActivity.this, intent, view,
+                        R.color.l_accent);
             }
         });
 

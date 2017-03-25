@@ -31,6 +31,9 @@
         <item name="android:textColorSecondary">@color/l_secondary_text</item>
         <!--状态栏透明-->
         <item name="android:statusBarColor">@android:color/transparent</item>
+        <!--设置动画自定义transition-->
+        <!--<item name="android:windowEnterTransition">@transition/image_open</item>-->
+        <!--<item name="android:windowExitTransition">@transition/image_open</item>-->
     </style>
 
     <style name="RainnyTheme" parent="Theme.AppCompat.Light.NoActionBar">
