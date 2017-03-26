@@ -643,8 +643,6 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
                     dialog.getWindow().setAttributes(layoutParams);
                 }
             }, 200);
-        } else if (id == R.id.nav_setting) {
-
         } else if (id == R.id.nav_about) {
             //Lib界面
             mDrawer.closeDrawer(GravityCompat.START);
