@@ -11,7 +11,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.hy.materialweather.R;
-import com.hy.materialweather.Utils;
+import com.hy.materialweather.uitls.Utils;
 
 /**
  * ViewPager 自定义指示器

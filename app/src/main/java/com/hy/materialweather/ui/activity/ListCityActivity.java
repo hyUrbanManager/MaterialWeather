@@ -21,7 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hy.materialweather.R;
-import com.hy.materialweather.Utils;
+import com.hy.materialweather.uitls.Utils;
 import com.hy.materialweather.basemvpcomponent.MVPActivity;
 import com.hy.materialweather.model.DATA;
 import com.hy.materialweather.model.json.BasicCity;

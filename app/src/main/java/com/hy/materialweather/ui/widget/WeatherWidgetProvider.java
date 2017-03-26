@@ -8,7 +8,7 @@ import android.content.Intent;
 import android.widget.RemoteViews;
 
 import com.hy.materialweather.R;
-import com.hy.materialweather.Utils;
+import com.hy.materialweather.uitls.Utils;
 import com.hy.materialweather.model.WeatherDataModelImpl;
 import com.hy.materialweather.model.basemodel.WeatherDataModel;
 import com.hy.materialweather.ui.activity.MainActivity;

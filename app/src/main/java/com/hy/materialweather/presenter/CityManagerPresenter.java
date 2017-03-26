@@ -2,7 +2,7 @@ package com.hy.materialweather.presenter;
 
 import android.content.Context;
 
-import com.hy.materialweather.Utils;
+import com.hy.materialweather.uitls.Utils;
 import com.hy.materialweather.basemvpcomponent.BasePresenter;
 import com.hy.materialweather.basemvpcomponent.MVPActivity;
 import com.hy.materialweather.model.DATA;

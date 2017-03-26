@@ -2,7 +2,7 @@ package com.hy.materialweather.presenter;
 
 import android.content.Context;
 
-import com.hy.materialweather.Utils;
+import com.hy.materialweather.uitls.Utils;
 import com.hy.materialweather.basemvpcomponent.BasePresenter;
 import com.hy.materialweather.basemvpcomponent.MVPActivity;
 import com.hy.materialweather.model.DATA;
@@ -89,7 +89,7 @@ public class WeatherCityPresenter extends BasePresenter<ListCityUI> {
                 DATA.isKeyCorrect = false;
             } else {
                 model.setKey(result);
-                Utils.d("获取key成功 " + result);
+                Utils.d("获取key成功 " + result + "  当前线程:" + Thread.currentThread().getName());
                 //首先设定为有效
                 DATA.isKeyCorrect = true;
             }

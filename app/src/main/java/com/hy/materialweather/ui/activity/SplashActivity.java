@@ -5,7 +5,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 
-import com.hy.materialweather.Utils;
+import com.hy.materialweather.uitls.Utils;
 
 import java.lang.ref.WeakReference;
 

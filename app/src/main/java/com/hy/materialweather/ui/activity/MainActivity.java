@@ -12,8 +12,6 @@ import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -32,15 +30,14 @@ import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.view.animation.TranslateAnimation;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.Poi;
-import com.hy.materialweather.AnimUtils;
 import com.hy.materialweather.R;
-import com.hy.materialweather.Utils;
 import com.hy.materialweather.basemvpcomponent.MVPActivity;
 import com.hy.materialweather.model.BaiduLocation;
 import com.hy.materialweather.model.DATA;
@@ -51,6 +48,8 @@ import com.hy.materialweather.ui.adapter.MainCardAdapter;
 import com.hy.materialweather.ui.baseui.ListCityUI;
 import com.hy.materialweather.ui.receiver.NetworkReceiver;
 import com.hy.materialweather.ui.view.UpdateView;
+import com.hy.materialweather.uitls.AnimUtils;
+import com.hy.materialweather.uitls.Utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -132,6 +131,7 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
                 break;
             case RECEIVER_QUIRE_REFRESH:
                 refreshCityList(true);
+                mSwipeRefreshLayout.setRefreshing(true);
                 break;
         }
     }
@@ -254,12 +254,42 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
                 final Intent intent = new Intent(MainActivity.this, ScrollingInfoActivity.class);
                 intent.putExtra("city", cityName);
                 //设置转场特效，CardView和图片一起带入
-                ActivityOptionsCompat compat = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        MainActivity.this,
-                        view,
-                        getString(R.string.transition_image)
-                );
-                ActivityCompat.startActivity(MainActivity.this, intent, compat.toBundle());
+//                ActivityOptionsCompat compat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+//                        MainActivity.this,
+//                        view,
+//                        getString(R.string.transition_image)
+//                );
+//                ActivityCompat.startActivity(MainActivity.this, intent, compat.toBundle());
+                //普通进入
+                startActivity(intent);
+            }
+        });
+        //设置fab的show和hide
+        mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            boolean showFlg = true;
+            boolean hideFlg = false;
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if (firstVisibleItem == 0) {
+                    if (showFlg == false) {
+                        showFlg = true;
+                        hideFlg = false;
+                        AnimUtils.show(fab, 0 ,200);
+                        Utils.d(TAG + "fab显示动画");
+                    }
+                } else {
+                    if (hideFlg == false) {
+                        showFlg = false;
+                        hideFlg = true;
+                        AnimUtils.hide(fab, 0 ,200);
+                        Utils.d(TAG + "fab隐藏动画");
+                    }
+                }
             }
         });
 
@@ -270,9 +300,6 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
                 //根据风格不同启动不同的Activity
                 Class<?> ac = ListCityActivity.class;
                 Intent intent = new Intent(MainActivity.this, ac);
-//                ActivityOptionsCompat compat = ActivityOptionsCompat.makeScaleUpAnimation(view,
-//                        view.getWidth() / 2, view.getHeight() / 2, 0, 0);
-//                ActivityCompat.startActivity(MainActivity.this, intent, compat.toBundle());
                 AnimUtils.startActivity(MainActivity.this, intent, view,
                         R.color.l_accent);
             }
@@ -292,9 +319,9 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
         baiduLocation = new BaiduLocation(getApplicationContext(), this);
         startLocation();
 
-        //刷新数据列表
-        refreshCityList(false);
-        mSwipeRefreshLayout.setRefreshing(true);
+        //刷新数据列表，因为打开app会收到网络变化请求，直接刷新数据，所以这里无须刷新
+//        refreshCityList(false);
+//        mSwipeRefreshLayout.setRefreshing(true);
     }
 
     private BaiduLocation baiduLocation;
@@ -407,7 +434,6 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
                 if (DATA.heWeather5HashMap.containsKey(cityName)) {
                     Log.d(TAG, "获取 " + cityName + " 城市内存中的天气数据");
                     //前面内存处理，无须在add
-//                        addOneCity(DATA.heWeather5HashMap.get(cityName), i++);
                     receiveCnt++;
                 } else {
                     //要申请网络的保存下来
@@ -439,6 +465,7 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
      * 把内存中的数据显示在ListView上
      * 异步或同步线程中运行
      */
+
     private void memoryDataOnListView() {
         //分配list空间，内存中有数据显示内存数据，否则显示默认未知的信息
         cityDataList.clear();

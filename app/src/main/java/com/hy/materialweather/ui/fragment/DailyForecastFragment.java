@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.hy.materialweather.R;
-import com.hy.materialweather.Utils;
+import com.hy.materialweather.uitls.Utils;
 import com.hy.materialweather.model.json.DailyForecast;
 
 /**

@@ -6,7 +6,7 @@ import android.content.res.Resources;
 import android.util.Log;
 
 import com.hy.materialweather.R;
-import com.hy.materialweather.Utils;
+import com.hy.materialweather.uitls.Utils;
 import com.hy.materialweather.model.basemodel.WeatherDataModel;
 import com.hy.materialweather.model.json.CityInfo;
 import com.hy.materialweather.model.json.GsonUtils;
@@ -26,7 +26,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import static android.R.id.list;
-import static com.hy.materialweather.Utils.d;
+import static com.hy.materialweather.uitls.Utils.d;
 import static com.hy.materialweather.model.json.GsonUtils.getObjectList;
 
 /**

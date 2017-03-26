@@ -8,7 +8,7 @@ import android.net.NetworkInfo;
 import android.os.Handler;
 import android.telephony.TelephonyManager;
 
-import com.hy.materialweather.Utils;
+import com.hy.materialweather.uitls.Utils;
 import com.hy.materialweather.model.DATA;
 import com.hy.materialweather.ui.baseui.ListCityUI;
 

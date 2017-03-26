@@ -12,7 +12,7 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.hy.materialweather.R;
-import com.hy.materialweather.Utils;
+import com.hy.materialweather.uitls.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
