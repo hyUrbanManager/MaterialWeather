@@ -5,7 +5,7 @@
 
     <ImageView
         android:id="@+id/image"
-        android:src="@drawable/ic_city"
+        android:src="@drawable/city_little"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="8dp"

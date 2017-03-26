@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -32,6 +33,7 @@ import android.view.animation.LayoutAnimationController;
 import android.view.animation.TranslateAnimation;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.baidu.location.BDLocation;
@@ -118,6 +120,8 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
             case CLEAR_ADAPTER:
                 cityDataList.clear();
                 cityAdapter.notifyDataSetChanged();
+                //显示emptyView
+                emptyView.setVisibility(View.VISIBLE);
                 break;
             //异步刷新列表数据
             case UPDATE_LIST_VIEW:
@@ -149,6 +153,7 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
     public Snackbar mSnackbar;
     public UpdateView updateView;
     private DrawerLayout mDrawer;
+    private LinearLayout emptyView;
 
     /* 广播监听 */
     private NetworkReceiver mReceiver;
@@ -222,6 +227,8 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
 
         updateView = (UpdateView) findViewById(R.id.updateView);
         updateView.hide();
+
+        emptyView = (LinearLayout) findViewById(R.id.empty);
     }
 
     @Override
@@ -390,6 +397,10 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
      */
     @Override
     public void refreshCityList(boolean isAllReconnect) {
+        //清空emptyView
+        if(emptyView.getVisibility() == View.VISIBLE) {
+            emptyView.setVisibility(View.INVISIBLE);
+        }
 
         //如果没网，直接提示失败，慎重
 
@@ -572,17 +583,17 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
         if (id == R.id.heart) {
             //初始化提示框
             AlertDialog mAlertDialog = new AlertDialog.Builder(this)
+                    .setTitle(R.string.about_title)
                     .setMessage(R.string.about_message)
                     .setPositiveButton(R.string.about_positive_button, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    })
-                    .setNegativeButton(R.string.about_negative_button, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
+                            //打开github
+                            Intent intent = new Intent();
+                            intent.setAction("android.intent.action.VIEW");
+                            Uri uri = Uri.parse(AboutActivity.github);
+                            intent.setData(uri);
+                            startActivity(intent);
                         }
                     })
                     .create();

@@ -36,9 +36,9 @@
     <string name="style_key">style_key</string>
 
     <!--关于作者，GitHub-->
-    <string name="about_message">给作者一个鼓励呗</string>
+    <string name="about_title">"给作者一个鼓励呗"</string>
+    <string name="about_message">"进入网页后记得点击右上角STAR按钮哟"</string>
     <string name="about_positive_button">好</string>
-    <string name="about_negative_button">不了，谢谢</string>
 
     <string name="cities_json">
 [
@@ -2611,21 +2611,22 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_about"></string>
     <string name="about_text">
-        "很高兴认识你！.\n\n"
-
-        "A material metaphor is the unifying theory of a rationalized space and a system of motion."
-        "The material is grounded in tactile reality, inspired by the study of paper and ink, yet "
-        "technologically advanced and open to imagination and magic.\n"
-        "Surfaces and edges of the material provide visual cues that are grounded in reality. The "
-        "use of familiar tactile attributes helps users quickly understand affordances. Yet the "
-        "flexibility of the material creates new affordances that supercede those in the physical "
-        "world, without breaking the rules of physics.\n"
-        "The fundamentals of light, surface, and movement are key to conveying how objects move, "
-        "interact, and exist in space and in relation to each other. Realistic lighting shows "
-        "seams, divides space, and indicates moving parts.\n\n"
-
-        "Bold, graphic, intentional.\n\n"
+        "很高兴认识你!\n"
+        "开源天气软件 material 天气 version 1.0\n"
+        "material 天气 如其名，使用谷歌Material Design 设计风格着手设计，单纯的展示各个城市的天气。"
+        "这么多天气软件，你选择了我，这是我的幸运。\n"
+        "在项目编写的过程中，我也曾遇到各种各样棘手的问题。那个时候的我，可能是这个时候的你。在开源代码中，"
+        "希望你可以找到一些启发。"
     </string>
+
+    <string name="open_source_text">
+        "开源工具箱\n"
+        "okhttp3 com.squareup.okhttp3:okhttp:3.6.0\n"
+        "gson com.google.code.gson:gson:2.8.0\n"
+        "百度地图提供定位数据\n"
+        "和风天气提供天气预报数据\n"
+    </string>
+
     <string name="transition_image">image</string>
     <string name="transition_text">text</string>
 

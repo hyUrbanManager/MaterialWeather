@@ -104,7 +104,7 @@ public class CityManagerActivity extends MVPActivity<CityManagerUI, CityManagerP
         while (iterator.hasNext()) {
             Map<String, Object> map = new HashMap<>();
             String cityName = iterator.next();
-            map.put("icon", R.drawable.ic_city);
+            map.put("icon", R.drawable.city_little);
             map.put("text", cityName);
             HeWeather5 heWeather5 = DATA.heWeather5HashMap.get(cityName);
             Tmp tmp =  heWeather5 == null ? null : heWeather5.daily_forecast.get(0).tmp;

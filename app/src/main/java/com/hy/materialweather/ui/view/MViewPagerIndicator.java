@@ -50,7 +50,7 @@ public class MViewPagerIndicator extends View {
     //初始常量
     public final int TEXT_SIZE = 48;
     public final int RADIUS_PADDING = 25;
-    public final int radius = 20;
+    public final int radius = 15;
     public final int HEIGHT = 60;
     public final int WIDTH = TEXT_SIZE * 2 + RADIUS_PADDING * 4;
 

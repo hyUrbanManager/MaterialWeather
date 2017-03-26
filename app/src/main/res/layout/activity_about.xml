@@ -23,22 +23,24 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <ImageView
-                android:src="@drawable/forest_background"
-                android:scaleType="centerCrop"
-                android:fitsSystemWindows="true"
+                android:id="@+id/imageView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:fitsSystemWindows="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/falls_background"
                 app:layout_collapseMode="parallax"
                 app:layout_collapseParallaxMultiplier="0.2" />
 
             <TextView
-                android:textColor="@color/l_icons"
-                android:textSize="@dimen/Material_article_button"
-                android:text="当前版本: 1.0"
+                android:id="@+id/text1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="bottom|center"
                 android:layout_marginBottom="8dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:text="当前版本: 1.0"
+                android:textColor="@color/l_icons"
+                android:textSize="@dimen/Material_article_button" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"

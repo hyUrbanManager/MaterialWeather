@@ -5,35 +5,118 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.hy.materialweather.ui.activity.AboutActivity"
-    tools:showIn="@layout/activity_about">
+    tools:context="com.hy.materialweather.ui.activity.AboutActivity">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/text1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_marginTop="32dp"
+            android:text="@string/about_text"
+            android:textColor="@color/l_secondary_text"
+            android:textSize="@dimen/Material_article_button" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/l_divider" />
+
+        <GridLayout
+            android:id="@+id/grid"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/text_margin"
-            android:text="@string/about_text" />
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:columnCount="2">
 
-        <Button
-            android:id="@+id/bt_blog"
-            android:layout_below="@+id/text1"
-            android:layout_width="wrap_content"
+            <Button
+                android:id="@+id/source"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:drawablePadding="12dp"
+                android:drawableStart="@drawable/ic_source"
+                android:gravity="start|center_vertical"
+                android:onClick="onClick"
+                android:paddingEnd="12dp"
+                android:paddingStart="12dp"
+                android:text="项目源代码"
+                android:textColor="@color/l_secondary_text" />
+
+            <Button
+                android:id="@+id/feedback"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:drawablePadding="12dp"
+                android:drawableStart="@drawable/ic_feedback"
+                android:gravity="start|center_vertical"
+                android:onClick="onClick"
+                android:paddingEnd="12dp"
+                android:paddingStart="12dp"
+                android:text="意见错误反馈"
+                android:textColor="@color/l_secondary_text" />
+
+            <Button
+                android:id="@+id/update"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:drawablePadding="12dp"
+                android:drawableStart="@drawable/ic_update"
+                android:gravity="start|center_vertical"
+                android:onClick="onClick"
+                android:paddingEnd="12dp"
+                android:paddingStart="12dp"
+                android:text="检查软件更新"
+                android:textColor="@color/l_secondary_text" />
+
+            <Button
+                android:id="@+id/web"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:drawablePadding="12dp"
+                android:drawableStart="@drawable/ic_website"
+                android:gravity="start|center_vertical"
+                android:onClick="onClick"
+                android:paddingEnd="12dp"
+                android:paddingStart="12dp"
+                android:text="访问个人网站"
+                android:textColor="@color/l_secondary_text" />
+
+
+        </GridLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/l_divider" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:drawablePadding="12dp"
-            android:drawableStart="@drawable/ic_menu_heart"
-            android:gravity="start|center_vertical"
-            android:paddingEnd="12dp"
-            android:paddingStart="12dp"
-            android:text="查看个人博客"
-            android:textColor="@color/l_primary_text"/>
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/open_source_text"
+            android:textColor="@color/l_secondary_text"
+            android:textSize="@dimen/Material_article_button" />
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>
