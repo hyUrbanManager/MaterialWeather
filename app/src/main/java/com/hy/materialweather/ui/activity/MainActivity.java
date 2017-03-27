@@ -397,11 +397,6 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
      */
     @Override
     public void refreshCityList(boolean isAllReconnect) {
-        //清空emptyView
-        if(emptyView.getVisibility() == View.VISIBLE) {
-            emptyView.setVisibility(View.INVISIBLE);
-        }
-
         //如果没网，直接提示失败，慎重
 
         //读到的数据个数，用于调用完成方法
@@ -424,6 +419,10 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
         }
         Log.d(TAG, "数据列表有城市，查看内存数据，没有再提交网络申请 " + cityDataList.size());
 
+        //清空emptyView
+        if(emptyView.getVisibility() == View.VISIBLE) {
+            emptyView.setVisibility(View.INVISIBLE);
+        }
         memoryDataOnListView(); //先把内存中信息显示
 
         Log.d(TAG, "分配List空间，空间为 " + cityDataList.size() + " " + DATA.chosenCities.size());
