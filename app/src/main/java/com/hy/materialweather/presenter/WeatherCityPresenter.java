@@ -140,17 +140,6 @@ public class WeatherCityPresenter extends BasePresenter<ListCityUI> {
 
             //把收到的数据保存在本地数据库
 
-
-            //发送数据对象给UI界面，UI细致化处理界面数据
-            StringBuilder sb = new StringBuilder();
-            sb.append(heWeather5.toString());
-            sb.append("\n\n" + "成功获取到对象");
-
-            //报异常的语句，解决
-            sb.append(heWeather5.basic.city);
-            sb.append(heWeather5.daily_forecast.get(0).wind);
-            sb.append('\n' + heWeather5.suggestion.sport.txt);
-
             Utils.sendEmptyMessage(mHandler, ListCityUI.CLOSE_TOAST);
 
             viewInterface.addOneCity(heWeather5, requestPackage.list_position);

@@ -77,6 +77,16 @@
             android:textColor="@color/l_primary"
             android:text="pm2.5 : 77 ug /cm3" />
 
+        <!--预警！-->
+        <ImageView
+            android:id="@+id/alarm"
+            android:visibility="invisible"
+            android:layout_marginTop="16dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/ic_error_black_24dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp" />
+
     </RelativeLayout>
 
 

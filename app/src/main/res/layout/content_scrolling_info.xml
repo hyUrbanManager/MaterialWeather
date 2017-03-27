@@ -10,11 +10,14 @@
     tools:showIn="@layout/activity_scrolling_info">
 
     <LinearLayout
+        android:id="@+id/line1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
         <include layout="@layout/content_info_location" />
+
+        <!--此处动态添加Fragment-->
 
         <include layout="@layout/content_info_weather" />
 

@@ -8,7 +8,7 @@ public class HeWeather5 implements Serializable {
     /**
      * 警报
      */
-    public final List<Alarms> alarms;
+    public List<Alarms> alarms;
 
     /**
      *

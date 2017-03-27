@@ -37,4 +37,8 @@
     <color name="l_icons">#FFFFFF</color>
     <color name="l_divider">#BDBDBD</color>
 
+    <!-- A light Holo shade of red -->
+    <color name="holo_red_light">#ffff4444</color>
+
+
 </resources>

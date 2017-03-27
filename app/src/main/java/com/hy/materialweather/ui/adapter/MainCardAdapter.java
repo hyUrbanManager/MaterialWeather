@@ -1,6 +1,7 @@
 package com.hy.materialweather.ui.adapter;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.hy.materialweather.R;
 import com.hy.materialweather.model.DATA;
 
 import java.util.List;
@@ -26,6 +28,9 @@ public class MainCardAdapter extends BaseAdapter {
     private int resource;
     private String[] from;
     private int[] to;
+
+    //是否有预警
+    private boolean isAlarm;
 
     /**
      * Constructor
@@ -74,6 +79,7 @@ public class MainCardAdapter extends BaseAdapter {
         final TextView vpm2_5;
         final ImageView vcond;
         final RelativeLayout vbackground;
+        final ImageView alarm;
 
         VH(View root) {
             this.vcity = (TextView) root.findViewById(to[0]);
@@ -82,6 +88,7 @@ public class MainCardAdapter extends BaseAdapter {
             this.vpm2_5 = (TextView) root.findViewById(to[3]);
             this.vcond = (ImageView) root.findViewById(to[4]);
             this.vbackground = (RelativeLayout) root.findViewById(to[5]);
+            this.alarm = (ImageView) root.findViewById(R.id.alarm);
         }
     }
 
@@ -108,6 +115,18 @@ public class MainCardAdapter extends BaseAdapter {
         holder.vcond.setImageResource((Integer) map.get(from[4]));
 
         holder.vbackground.setBackgroundResource(DATA.convertToRes((Integer) map.get(from[5])));
+
+        isAlarm = (boolean)map.get(from[6]);
+        if(isAlarm) {
+            //字体变成红色预警
+            int color = ContextCompat.getColor(context, R.color.holo_red_light);
+//            holder.vcity.setTextColor(color);
+//            holder.vtmp.setTextColor(color);
+//            holder.vdesc.setTextColor(color);
+//            holder.vpm2_5.setTextColor(color);
+            //预警图标显示
+            holder.alarm.setVisibility(View.VISIBLE);
+        }
 
         return convertView;
     }

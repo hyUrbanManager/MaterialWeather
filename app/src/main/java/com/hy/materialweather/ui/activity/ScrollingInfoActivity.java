@@ -10,20 +10,23 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hy.materialweather.R;
-import com.hy.materialweather.uitls.Utils;
 import com.hy.materialweather.basemvpcomponent.MVPActivity;
 import com.hy.materialweather.model.DATA;
+import com.hy.materialweather.model.json.Alarms;
 import com.hy.materialweather.model.json.HeWeather5;
 import com.hy.materialweather.presenter.WeatherInfoPresenter;
 import com.hy.materialweather.ui.baseui.CityAllInfoUI;
 import com.hy.materialweather.ui.fragment.DailyForecastFragment;
 import com.hy.materialweather.ui.view.CHeightViewPager;
 import com.hy.materialweather.ui.view.MViewPagerIndicator;
+import com.hy.materialweather.uitls.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -201,6 +204,25 @@ public class ScrollingInfoActivity extends MVPActivity<CityAllInfoUI, WeatherInf
         } catch (NullPointerException e) {
             text1.setText("经度：0.00  纬度：0.00");
             text2.setText("更新时间： 1970.1.1 00:00:00");
+        }
+
+        //设置预警
+        if(heWeather5.alarms != null) {
+            for(Alarms alarm : heWeather5.alarms) {
+//                AlarmFragment alarmFragment = new AlarmFragment();
+//                alarmFragment.setTitle(alarm.title);
+//                alarmFragment.setTxt(alarm.txt);
+//                //添加Fragment
+//                FragmentManager manager = getSupportFragmentManager();
+//                manager.beginTransaction().add(R.id.line1, alarmFragment).commit();
+                LinearLayout linearLayout = (LinearLayout) findViewById(R.id.line1);
+                View rootView = LayoutInflater.from(this).inflate(R.layout.content_info_alarm, linearLayout, false);
+                TextView titleView = (TextView) rootView.findViewById(R.id.title);
+                titleView.setText(alarm.title);
+                TextView txtView = (TextView) rootView.findViewById(R.id.text);
+                txtView.setText(alarm.txt);
+                linearLayout.addView(rootView, 1);
+            }
         }
 
         //设置温度

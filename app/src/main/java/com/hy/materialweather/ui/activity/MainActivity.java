@@ -1,9 +1,13 @@
 package com.hy.materialweather.ui.activity;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,12 +22,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -44,6 +47,7 @@ import com.hy.materialweather.basemvpcomponent.MVPActivity;
 import com.hy.materialweather.model.BaiduLocation;
 import com.hy.materialweather.model.DATA;
 import com.hy.materialweather.model.WeatherRequestPackage;
+import com.hy.materialweather.model.json.Alarms;
 import com.hy.materialweather.model.json.HeWeather5;
 import com.hy.materialweather.presenter.WeatherCityPresenter;
 import com.hy.materialweather.ui.adapter.MainCardAdapter;
@@ -107,6 +111,8 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
                 //设置背景，输入的是天气的代码
                 map.put("background", Integer.parseInt(p.heWeather5.now.cond.code == null ?
                         "999" : p.heWeather5.now.cond.code));
+                //添加是否有预警，true表示有，false表示没有
+                map.put("alarm", p.heWeather5.alarms != null);
 
                 cityDataList.set(p.list_position, map);
                 cityAdapter.notifyDataSetChanged();
@@ -158,9 +164,6 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
     /* 广播监听 */
     private NetworkReceiver mReceiver;
 
-    /* 手势监控 */
-    private GestureDetector detector;
-
     /* 数据引用 */
     public List<Map<String, Object>> cityDataList = new ArrayList<>();
     public MainCardAdapter cityAdapter;
@@ -187,7 +190,6 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
 
         //打开手势滑动
         mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-        detector = new GestureDetector(this, new GestureListener());
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -202,7 +204,7 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
         cityAdapter = new MainCardAdapter(this,
                 cityDataList,
                 R.layout.citys_cardview2,
-                new String[]{"city", "tmp", "desc", "pm2_5", "cond", "background"},
+                new String[]{"city", "tmp", "desc", "pm2_5", "cond", "background", "alarm"},
                 new int[]{R.id.city, R.id.tmp, R.id.desc, R.id.pm2_5, R.id.cond, R.id.relativeLayout});
         mListView.setDivider(null);
         mListView.setDividerHeight(30);
@@ -275,6 +277,7 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
         mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             boolean showFlg = true;
             boolean hideFlg = false;
+
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
 
@@ -286,14 +289,14 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
                     if (showFlg == false) {
                         showFlg = true;
                         hideFlg = false;
-                        AnimUtils.show(fab, 0 ,200);
+                        AnimUtils.show(fab, 0, 200);
                         Utils.d(TAG + "fab显示动画");
                     }
                 } else {
                     if (hideFlg == false) {
                         showFlg = false;
                         hideFlg = true;
-                        AnimUtils.hide(fab, 0 ,200);
+                        AnimUtils.hide(fab, 0, 200);
                         Utils.d(TAG + "fab隐藏动画");
                     }
                 }
@@ -369,13 +372,47 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
     }
 
     /**
-     * 把一个城市的信息展现在卡片上，异步线程调用
+     * 把一个城市的信息展现在卡片上，异步线程调用。
+     * 如果有Alarms数据报警，则显示在notification里面
      *
      * @param heWeather5
      */
     @Override
     public void addOneCity(HeWeather5 heWeather5, int list_position) {
         Utils.sendMessage(mHandler, NOTIFY_CHANGED_ONE_CITY, new Package(heWeather5, list_position));
+        //测试用例
+        heWeather5.alarms = new ArrayList<>();
+        heWeather5.alarms.add(
+                new Alarms("蓝色",
+                        "预警中",
+                        "山东省青岛市气象台发布大风蓝色预警",
+                        "青岛市气象台2016年08月29日15时24分继续发布大风蓝色预警信号：预计今天下午到明天，" +
+                                "我市北风风力海上6到7级阵风9级，陆地4到5阵风7级，请注意防范。",
+                        "大风"));
+
+        //显示报警数据
+        if (heWeather5.alarms != null) {
+            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            int id = list_position * 10;
+            //遍历预警，发布Notification。每个城市最多10个预警
+            for (Alarms alarm : heWeather5.alarms) {
+                Intent intent = new Intent(this, ScrollingInfoActivity.class);
+                intent.putExtra("city", heWeather5.basic.city);
+                PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                Notification notification = new NotificationCompat.Builder(this)
+                        .setContentTitle(alarm.level + alarm.type + alarm.stat)
+                        .setStyle(new NotificationCompat.BigTextStyle().bigText(alarm.txt))
+                        .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.materialweather))
+                        .setSmallIcon(R.mipmap.materialweather)
+                        .setPriority(Notification.PRIORITY_MAX)
+                        .setContentIntent(pendingIntent)
+                        .setAutoCancel(true)
+                        .build();
+                manager.notify(id++, notification);
+                Utils.d(TAG + "发布了预警 " + alarm.title);
+            }
+        }
     }
 
     /**
@@ -420,7 +457,7 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
         Log.d(TAG, "数据列表有城市，查看内存数据，没有再提交网络申请 " + cityDataList.size());
 
         //清空emptyView
-        if(emptyView.getVisibility() == View.VISIBLE) {
+        if (emptyView.getVisibility() == View.VISIBLE) {
             emptyView.setVisibility(View.INVISIBLE);
         }
         memoryDataOnListView(); //先把内存中信息显示
@@ -497,6 +534,9 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
                 //设置背景，输入的是天气的代码
                 map.put("background", Integer.parseInt(heWeather5.now.cond.code == null ?
                         "999" : heWeather5.now.cond.code));
+                //添加是否有预警，true表示有，false表示没有
+                map.put("alarm", heWeather5.alarms != null);
+
             } else {
                 map.put("tmp", "wait");
                 map.put("desc", "wait");
@@ -504,6 +544,8 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
                 map.put("cond", DATA.condMap.get(999));
                 //设置背景，输入的是天气的代码
                 map.put("background", 100);
+                //添加是否有预警，true表示有，false表示没有
+                map.put("alarm", false);
             }
             Log.d(TAG, "预显示的城市名： " + map.get("city"));
             cityDataList.add(map);
@@ -544,7 +586,7 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
         } else if (mSwipeRefreshLayout.isRefreshing()) {
             mSwipeRefreshLayout.setRefreshing(false);
         } else {
-            //真的要退出吗？
+            //真的要退出吗？双击返回可以退出，SnackBar退出键可以退出
             if (quitSnackBar == null) {
                 quitSnackBar = Snackbar.make(fab, "真的要退出吗", Snackbar.LENGTH_SHORT)
                         .setAction("退出", new View.OnClickListener() {
@@ -558,6 +600,7 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
             }
             if (quitSnackBar.isShown()) {
                 quitSnackBar.dismiss();
+                MainActivity.this.finish();
             } else {
                 quitSnackBar.show();
             }
@@ -624,7 +667,7 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
             mDrawer.closeDrawer(GravityCompat.START);
             final AlertDialog dialog = new AlertDialog.Builder(
                     MainActivity.this)
-                    .setMessage(locationMessage != null ? locationMessage.toString() : "什么也没有")
+                    .setMessage(locationMessage != null ? locationMessage.toString() : "定位失败")
                     .setPositiveButton("重新获取位置", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -654,60 +697,6 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
             }, 200);
         }
         return true;
-    }
-
-    private class GestureListener implements GestureDetector.OnGestureListener {
-
-        @Override
-        public boolean onDown(MotionEvent e) {
-            return false;
-        }
-
-        @Override
-        public void onShowPress(MotionEvent e) {
-        }
-
-        @Override
-        public boolean onSingleTapUp(MotionEvent e) {
-            return false;
-        }
-
-        @Override
-        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-            return false;
-        }
-
-        @Override
-        public void onLongPress(MotionEvent e) {
-        }
-
-        @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            float x = e2.getX() - e1.getX();
-            float y = e2.getY() - e1.getY();
-            Utils.d(TAG + x + "  " + y);
-            if (Math.abs(x) < Math.abs(y)) {
-                return true;
-            }
-            if (x > 0) {
-                mDrawer.openDrawer(GravityCompat.START);
-            } else if (x < 0) {
-                mDrawer.closeDrawer(GravityCompat.START);
-            }
-            return true;
-        }
-    }
-
-    /**
-     * 添加手势监听
-     *
-     * @param event
-     * @return
-     */
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        return super.onTouchEvent(event);
-//        return detector.onTouchEvent(event);
     }
 
     /**
