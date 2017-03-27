@@ -381,14 +381,14 @@ public class MainActivity extends MVPActivity<ListCityUI, WeatherCityPresenter>
     public void addOneCity(HeWeather5 heWeather5, int list_position) {
         Utils.sendMessage(mHandler, NOTIFY_CHANGED_ONE_CITY, new Package(heWeather5, list_position));
         //测试用例
-        heWeather5.alarms = new ArrayList<>();
-        heWeather5.alarms.add(
-                new Alarms("蓝色",
-                        "预警中",
-                        "山东省青岛市气象台发布大风蓝色预警",
-                        "青岛市气象台2016年08月29日15时24分继续发布大风蓝色预警信号：预计今天下午到明天，" +
-                                "我市北风风力海上6到7级阵风9级，陆地4到5阵风7级，请注意防范。",
-                        "大风"));
+//        heWeather5.alarms = new ArrayList<>();
+//        heWeather5.alarms.add(
+//                new Alarms("蓝色",
+//                        "预警中",
+//                        "山东省青岛市气象台发布大风蓝色预警",
+//                        "青岛市气象台2016年08月29日15时24分继续发布大风蓝色预警信号：预计今天下午到明天，" +
+//                                "我市北风风力海上6到7级阵风9级，陆地4到5阵风7级，请注意防范。",
+//                        "大风"));
 
         //显示报警数据
         if (heWeather5.alarms != null) {

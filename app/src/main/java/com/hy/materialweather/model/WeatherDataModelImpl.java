@@ -70,7 +70,7 @@ public class WeatherDataModelImpl implements WeatherDataModel {
         cities_manager = resources.getString(R.string.cities_manager);
         style_key = resources.getString(R.string.style_key);
 
-        myServerAdreess = resources.getString(R.string.myserveraddress);
+        myServerAdreess = resources.getString(R.string.myserverkeyaddress);
 
         //获取文件，文件名为App的名字
         mPreferences = context.getSharedPreferences(resources.getString(R.string.app_name)

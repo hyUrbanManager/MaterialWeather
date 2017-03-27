@@ -1,6 +1,8 @@
 package com.hy.materialweather.uitls;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
@@ -125,6 +127,21 @@ public class Utils {
         wm.getDefaultDisplay().getMetrics(dm);
         Utils.d(TAG + "获取了一次屏幕大小 " + dm.widthPixels + " , " + dm.heightPixels);
         return dm;
+    }
+
+    /**
+     * 获取当前版本号
+     */
+    public static int getAppVersion(Context context) {
+        PackageManager pm = context.getPackageManager();
+        int version = 0;
+        try {
+            PackageInfo pi = pm.getPackageInfo(context.getPackageName(), 0);
+            version = pi.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            Utils.d(TAG + "获取版本号发生异常");
+        }
+        return version;
     }
 
 }

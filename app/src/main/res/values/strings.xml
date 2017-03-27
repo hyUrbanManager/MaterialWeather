@@ -8,8 +8,10 @@
 
     <!--风和天气Url和Key，采用Post的方式-->
     <string name="weatherUrl">https://free-api.heweather.com/v5/</string>
-
-    <string name="myserveraddress">http://apphuangye.cn/getWeatherApi.php</string>
+    <!--我的服务器key地址-->
+    <string name="myserverkeyaddress">http://apphuangye.cn/getWeatherApi.php</string>
+    <!--我的服务器版本号地址-->
+    <string name="myserverversionaddress">http://apphuangye.cn/version.php</string>
 
     <string-array name="weatherUrlAppend">
         <item>forecast</item>
